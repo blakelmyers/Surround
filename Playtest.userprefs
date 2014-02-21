@@ -1,9 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Camera Scripts\ThirdPersonCamera.js">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ControllerScripts\ThirdPersonController.js">
     <Files>
-      <File FileName="Assets\Scripts\Camera Scripts\ThirdPersonCamera.js" Line="31" Column="31" />
-      <File FileName="Assets\Scripts\ControllerScripts\ThirdPersonControllerPrefab.js" Line="18" Column="26" />
+      <File FileName="Assets\Scripts\ControllerScripts\ThirdPersonController.js" Line="8" Column="46" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

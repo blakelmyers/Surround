@@ -26,6 +26,11 @@ enum CharacterState {
 	Jumping = 4,
 }
 
+enum TextureType {
+    Grass = 0,
+    Fire = 1,
+}
+
 private var _characterState : CharacterState;
 
 // The speed when walking
@@ -287,7 +292,7 @@ function DidJump ()
 	lastJumpButtonTime = -10;
 	numberOfDinosaurs++;
 	
-	if(getTerrainTextureAt(transform.position) == 1)
+	if(getTerrainTextureAt(transform.position) == TextureType.Fire)
 	{
 	   Instantiate(dinosaurCloneFire, 
 	      (Vector3((transform.position.x-(5)*moveDirection.x), 
