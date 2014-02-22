@@ -103,10 +103,6 @@ private var isControllable = true;
 function Start ()
 {
     checkTimer = Time.time + spawnTime;
-    
-    Debug.Log("starting");
-    Debug.Log(Time.time);
-    Debug.Log(checkTimer);
 }
 function Awake ()
 {
