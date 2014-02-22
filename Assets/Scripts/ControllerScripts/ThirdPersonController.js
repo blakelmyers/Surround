@@ -8,6 +8,8 @@ public var runAnimation : AnimationClip;
 public var jumpPoseAnimation : AnimationClip;
 public var dinosaurClone : Transform;
 public var dinosaurCloneFire : Transform;
+public var spawnTime : float; //for 5 second
+public var checkTimer : float;
 
 public var walkMaxAnimationSpeed : float = 0.75;
 public var trotMaxAnimationSpeed : float = 1.0;
@@ -28,7 +30,7 @@ enum CharacterState {
 
 enum TextureType {
     Grass = 0,
-    Fire = 1,
+    Berries = 1,
 }
 
 private var _characterState : CharacterState;
@@ -98,6 +100,14 @@ private var lastGroundedTime = 0.0;
 
 private var isControllable = true;
 
+function Start ()
+{
+    checkTimer = Time.time + spawnTime;
+    
+    Debug.Log("starting");
+    Debug.Log(Time.time);
+    Debug.Log(checkTimer);
+}
 function Awake ()
 {
 	moveDirection = transform.TransformDirection(Vector3.forward);
@@ -106,12 +116,6 @@ function Awake ()
 	if(!_animation)
 		Debug.Log("The character you would like to control doesn't have animations. Moving her might look weird.");
 	
-	/*
-public var idleAnimation : AnimationClip;
-public var walkAnimation : AnimationClip;
-public var runAnimation : AnimationClip;
-public var jumpPoseAnimation : AnimationClip;	
-	*/
 	if(!idleAnimation) {
 		_animation = null;
 		Debug.Log("No idle animation found. Turning off animations.");
@@ -128,7 +132,7 @@ public var jumpPoseAnimation : AnimationClip;
 		_animation = null;
 		Debug.Log("No jump animation found and the character has canJump enabled. Turning off animations.");
 	}
-			
+	
 }
 
 
@@ -290,22 +294,6 @@ function DidJump ()
 	lastJumpTime = Time.time;
 	lastJumpStartHeight = transform.position.y;
 	lastJumpButtonTime = -10;
-	numberOfDinosaurs++;
-	
-	if(getTerrainTextureAt(transform.position) == TextureType.Fire)
-	{
-	   Instantiate(dinosaurCloneFire, 
-	      (Vector3((transform.position.x-(5)*moveDirection.x), 
-	      (transform.position.y-(5)*moveDirection.y), 
-	      (transform.position.z-(5)*moveDirection.z))), Quaternion.identity);
-	}
-	else
-    {	
-	   Instantiate(dinosaurClone, 
-	      (Vector3((transform.position.x-(5)*moveDirection.x), 
-	      (transform.position.y-(5)*moveDirection.y), 
-	      (transform.position.z-(5)*moveDirection.z))), Quaternion.identity);
-	}
 	
 	_characterState = CharacterState.Jumping;
 }
@@ -410,6 +398,40 @@ function Update() {
 			SendMessage("DidLand", SendMessageOptions.DontRequireReceiver);
 		}
 	}
+	
+    if(Time.time >= checkTimer) //if the current time elapsed is equal to or greater than the timer
+    {
+        checkTimer += spawnTime; //set the timer again
+        
+	    if(getTerrainTextureAt(transform.position) == TextureType.Berries)
+	    {
+	        numberOfDinosaurs++;
+	        numberOfDinosaurs++;
+	
+	       Instantiate(dinosaurCloneFire, 
+	          (Vector3((transform.position.x-(5)*moveDirection.x), 
+	          (transform.position.y-(5)*moveDirection.y), 
+	          (transform.position.z-(5)*moveDirection.z))), Quaternion.identity);
+	      
+	       Instantiate(dinosaurCloneFire, 
+	          (Vector3((transform.position.x-(10)*moveDirection.x), 
+	          (transform.position.y-(10)*moveDirection.y), 
+	          (transform.position.z-(10)*moveDirection.z))), Quaternion.identity);
+	    }
+	    else
+        {	
+           numberOfDinosaurs++;
+        
+	       Instantiate(dinosaurClone, 
+	          (Vector3((transform.position.x-(5)*moveDirection.x), 
+	          (transform.position.y-(5)*moveDirection.y), 
+	          (transform.position.z-(5)*moveDirection.z))), Quaternion.identity);
+	    }
+    }
+
+    
+
+	
 }
 
 function OnControllerColliderHit (hit : ControllerColliderHit )
