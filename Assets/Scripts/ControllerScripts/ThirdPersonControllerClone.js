@@ -6,30 +6,21 @@ public var idleAnimation : AnimationClip;
 public var walkAnimation : AnimationClip;
 public var runAnimation : AnimationClip;
 public var jumpPoseAnimation : AnimationClip;
-public var dinosaurClone : Transform;
-public var spawnTime : float; //for 5 second
-public var checkTimer : float;
 
 public var walkMaxAnimationSpeed : float = 0.75;
 public var trotMaxAnimationSpeed : float = 1.0;
 public var runMaxAnimationSpeed : float = 1.0;
 public var jumpAnimationSpeed : float = 1.15;
 public var landAnimationSpeed : float = 1.0;
-public var numberOfDinosaurs : int = 1;
 
 private var _animation : Animation;
 
-enum CharacterState {
+enum CharacterStatePrefab {
 	Idle = 0,
 	Walking = 1,
 	Trotting = 2,
 	Running = 3,
 	Jumping = 4,
-}
-
-enum TextureType {
-    Grass = 0,
-    Berries = 1,
 }
 
 private var _characterState : CharacterState;
@@ -99,24 +90,25 @@ private var lastGroundedTime = 0.0;
 
 private var isControllable = true;
 
-function Start ()
-{
-    checkTimer = Time.time + spawnTime;
-}
 function Awake ()
 {
-    if(!networkView.isMine){
+   if(!networkView.isMine){
 		//We aren't the network owner, disable this script
 		//RPC's and OnSerializeNetworkView will STILL get trough!
 		enabled=false;	
 	}
-	
 	moveDirection = transform.TransformDirection(Vector3.forward);
 	
 	_animation = GetComponent(Animation);
 	if(!_animation)
 		Debug.Log("The character you would like to control doesn't have animations. Moving her might look weird.");
 	
+	/*
+public var idleAnimation : AnimationClip;
+public var walkAnimation : AnimationClip;
+public var runAnimation : AnimationClip;
+public var jumpPoseAnimation : AnimationClip;	
+	*/
 	if(!idleAnimation) {
 		_animation = null;
 		Debug.Log("No idle animation found. Turning off animations.");
@@ -133,35 +125,7 @@ function Awake ()
 		_animation = null;
 		Debug.Log("No jump animation found and the character has canJump enabled. Turning off animations.");
 	}
-	
-}
-
-function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo)
-{
-	if (stream.isWriting){
-		//Executed on the owner of the networkview; 
-		//The server sends it's position over the network
-		
-		var pos : Vector3 = transform.position;		
-		stream.Serialize(pos);//"Encode" it, and send it
-				
-	}else{
-		//Executed on the others; 
-		//The clients receive a position and set the object to it
-		
-		var posReceive : Vector3 = Vector3.zero;
-		stream.Serialize(posReceive); //"Decode" it and receive it
-		transform.position = posReceive;
-		
-	}
-}
-
-@RPC
-function SetPosition(newPos : Vector3){
-	//This RPC is in this case always called by the server,
-	// but executed on all clients
-	
-	transform.position=newPos;	
+			
 }
 
 
@@ -268,6 +232,13 @@ function UpdateSmoothedMovementDirection ()
 		
 }
 
+@RPC
+function SetPosition(newPos : Vector3){
+	//This RPC is in this case always called by the server,
+	// but executed on all clients
+	
+	transform.position=newPos;	
+}
 
 function ApplyJumping ()
 {
@@ -324,13 +295,12 @@ function DidJump ()
 	lastJumpStartHeight = transform.position.y;
 	lastJumpButtonTime = -10;
 	
+
 	_characterState = CharacterState.Jumping;
 }
 
 function Update() {
- if(networkView.isMine)
- {
-	
+	if(networkView.isMine){
 	if (!isControllable)
 	{
 		// kill all inputs if not controllable.
@@ -429,28 +399,30 @@ function Update() {
 			SendMessage("DidLand", SendMessageOptions.DontRequireReceiver);
 		}
 	}
- }
-    if(numberOfDinosaurs < 11)
-    {
-       if(Time.time >= checkTimer) //if the current time elapsed is equal to or greater than the timer
-       {
-           checkTimer += spawnTime; //set the timer again
-        
-	    
-              numberOfDinosaurs++;
-              var myNewTrans : Transform;
-              myNewTrans = Network.Instantiate(dinosaurClone, transform.position, transform.rotation, 0);
-//	        Network.Instantiate(dinosaurClone, 
-//	          (Vector3((transform.position.x-(5)*moveDirection.x), 
-//	          (transform.position.y-(5)*moveDirection.y), 
-//	          (transform.position.z-(5)*moveDirection.z))), 0);
-	    
-       }
-   }
-    
-
-	
+	}
 }
+
+function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo)
+{
+	if (stream.isWriting){
+		//Executed on the owner of the networkview; 
+		//The server sends it's position over the network
+		
+		var pos : Vector3 = transform.position;		
+		stream.Serialize(pos);//"Encode" it, and send it
+				
+	}else{
+		//Executed on the others; 
+		//The clients receive a position and set the object to it
+		
+		var posReceive : Vector3 = Vector3.zero;
+		stream.Serialize(posReceive); //"Decode" it and receive it
+		transform.position = posReceive;
+		
+	}
+}
+
+
 
 function OnControllerColliderHit (hit : ControllerColliderHit )
 {
@@ -459,42 +431,6 @@ function OnControllerColliderHit (hit : ControllerColliderHit )
 		return;
 }
 
-function getTerrainTextureAt(position : Vector3)
-    {
-       // Set up:
-       var retval : int;
-       var selectedTexture : Texture;
-       var TS : Vector3; // terrain size
-       var AS : Vector2; // control texture size
- 
-       TS = Terrain.activeTerrain.terrainData.size;
-       AS.x = Terrain.activeTerrain.terrainData.alphamapWidth;
-       AS.y = Terrain.activeTerrain.terrainData.alphamapHeight;
- 
- 
-       // Lookup texture we are standing on:
-       var AX : int;
-       AX =  (position.x/TS.x )*AS.x + 0.5f ;
-       var AY : int;
-       AY =  (position.z/TS.z )*AS.y + 0.5f;
-       var TerrCntrl : float[,,] = Terrain.activeTerrain.terrainData.GetAlphamaps(AX, AY,1 ,1);
- 
-       var TD : TerrainData = Terrain.activeTerrain.terrainData;
- 
-       var i : int;
-       for(i = 0; i < TD.splatPrototypes.Length; i++ )
-       {
-         if( TerrCntrl[0,0,i] > .5f )
-         {
-           retval = i;
-         }
- 
-       }
- 
- 
-       return retval;
-    }
-    
 function GetSpeed () {
 	return moveSpeed;
 }
