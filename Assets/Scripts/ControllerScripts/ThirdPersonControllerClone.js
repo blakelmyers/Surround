@@ -322,6 +322,15 @@ function Update() {
 	// Apply jumping logic
 	ApplyJumping ();
 	
+	if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
+	{
+	   walkSpeed = 20;
+	}
+	else
+	{
+	   walkSpeed = 40;
+	}
+	
 	// Calculate actual motion
 	var movement = moveDirection * moveSpeed + Vector3 (0, verticalSpeed, 0) + inAirVelocity;
 	movement *= Time.deltaTime;
@@ -433,6 +442,42 @@ function OnControllerColliderHit (hit : ControllerColliderHit )
 
 function GetSpeed () {
 	return moveSpeed;
+}
+
+function GetTerrainTextureAt(position : Vector3)
+{
+       // Set up:
+       var retval : int;
+       var selectedTexture : Texture;
+       var TS : Vector3; // terrain size
+       var AS : Vector2; // control texture size
+ 
+       TS = Terrain.activeTerrain.terrainData.size;
+       AS.x = Terrain.activeTerrain.terrainData.alphamapWidth;
+       AS.y = Terrain.activeTerrain.terrainData.alphamapHeight;
+ 
+ 
+       // Lookup texture we are standing on:
+       var AX : int;
+       AX =  (position.x/TS.x )*AS.x + 0.5f ;
+       var AY : int;
+       AY =  (position.z/TS.z )*AS.y + 0.5f;
+       var TerrCntrl : float[,,] = Terrain.activeTerrain.terrainData.GetAlphamaps(AX, AY,1 ,1);
+ 
+       var TD : TerrainData = Terrain.activeTerrain.terrainData;
+ 
+       var i : int;
+       for(i = 0; i < TD.splatPrototypes.Length; i++ )
+       {
+         if( TerrCntrl[0,0,i] > .5f )
+         {
+           retval = i;
+         }
+ 
+       }
+ 
+ 
+       return retval;
 }
 
 function IsJumping () {

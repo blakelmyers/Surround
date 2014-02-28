@@ -405,6 +405,7 @@ function GetSpeed () {
 	return moveSpeed;
 }
 
+
 function IsJumping () {
 	return jumping;
 }

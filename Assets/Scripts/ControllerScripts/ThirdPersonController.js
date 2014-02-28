@@ -29,7 +29,7 @@ enum CharacterState {
 
 enum TextureType {
     Grass = 0,
-    Berries = 1,
+    Sand = 1,
 }
 
 private var _characterState : CharacterState;
@@ -352,6 +352,14 @@ function Update() {
 	// Apply jumping logic
 	ApplyJumping ();
 	
+	if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
+	{
+	   walkSpeed = 20;
+	}
+	else
+	{
+	   walkSpeed = 40;
+	}
 	// Calculate actual motion
 	var movement = moveDirection * moveSpeed + Vector3 (0, verticalSpeed, 0) + inAirVelocity;
 	movement *= Time.deltaTime;
@@ -459,8 +467,8 @@ function OnControllerColliderHit (hit : ControllerColliderHit )
 		return;
 }
 
-function getTerrainTextureAt(position : Vector3)
-    {
+function GetTerrainTextureAt(position : Vector3)
+{
        // Set up:
        var retval : int;
        var selectedTexture : Texture;
@@ -493,12 +501,13 @@ function getTerrainTextureAt(position : Vector3)
  
  
        return retval;
-    }
+}
     
 function GetSpeed () {
 	return moveSpeed;
 }
 
+   
 function IsJumping () {
 	return jumping;
 }
