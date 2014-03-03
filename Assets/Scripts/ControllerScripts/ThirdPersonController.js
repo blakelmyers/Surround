@@ -9,7 +9,7 @@ public var jumpPoseAnimation : AnimationClip;
 public var dinosaurClone : Transform;
 public var spawnTime : float; //for 5 second
 public var checkTimer : float;
-public var maxSpawn : int = 5;
+public var movementActive : boolean = true;
 
 public var walkMaxAnimationSpeed : float = 0.75;
 public var trotMaxAnimationSpeed : float = 1.0;
@@ -27,12 +27,12 @@ enum CharacterState {
 	Running = 3,
 	Jumping = 4,
 }
-
+/*
 enum TextureType {
     Grass = 0,
     Sand = 1,
 }
-
+*/
 private var _characterState : CharacterState;
 
 // The speed when walking
@@ -136,18 +136,7 @@ function Awake ()
 	}
 	
 }
-/*
-function OnTriggerEnter(collisionInfo : Collider)
-{
-       if(collisionInfo.gameObject.tag == "Server" && this.gameObject.tag != "Server")
-       {
-       	Debug.Log("hit Server");
-       }
-       else if(collisionInfo.gameObject.tag == "Client" && this.gameObject.tag != "Client")
-       {
-       Debug.Log("hit client");
-       }
-}*/
+
 function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo)
 {
 	if (stream.isWriting){
@@ -339,22 +328,68 @@ function DidJump ()
 	_characterState = CharacterState.Jumping;
 }
 
-function Update() {
- if(networkView.isMine)
- {
-	
-	if (!isControllable)
-	{
-		// kill all inputs if not controllable.
-		Input.ResetInputAxes();
-	}
 
+function Update() {
+
+	var speed = 100.0;
+	
+	if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
+	{
+	   speed = 40;
+	}
+	else
+	{
+	   speed = 80;
+}
+        if(networkView.isMine)
+        {
+	
+	        if (!isControllable)
+	        {
+		        // kill all inputs if not controllable.
+		        Input.ResetInputAxes();
+	        }
+                
+                if(Input.GetMouseButtonDown(1))
+    {
+    movementActive = !movementActive;
+    }
+if (movementActive == true)
+{
+	// Generate a plane that intersects the transform's position with an upwards normal.
+    var playerPlane = new Plane(Vector3.up, transform.position);
+ 
+    // Generate a ray from the cursor position
+    var ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+ 
+    // Determine the point where the cursor ray intersects the plane.
+    // This will be the point that the object must look towards to be looking at the mouse.
+    // Raycasting to a Plane object only gives us a distance, so we'll have to take the distance,
+    //   then find the point along that ray that meets that distance.  This will be the point
+    //   to look at.
+    var hitdist = 0.0;
+    // If the ray is parallel to the plane, Raycast will return false.
+    if (playerPlane.Raycast (ray, hitdist)) {
+        // Get the point along the ray that hits the calculated distance.
+        var targetPoint = ray.GetPoint(hitdist);
+ 
+        // Determine the target rotation.  This is the rotation if the transform looks at the target point.
+        var targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
+ 
+        // Smoothly rotate towards the target point.
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
+ 
+        // Move the object forward.
+        transform.position += transform.forward * speed * Time.deltaTime;
+ 
+    }
+}
 	if (Input.GetButtonDown ("Jump"))
 	{
 		lastJumpButtonTime = Time.time;
 	}
 
-	UpdateSmoothedMovementDirection();
+	//UpdateSmoothedMovementDirection();
 	
 	// Apply gravity
 	// - extra power jump modifies gravity
@@ -387,11 +422,11 @@ function Update() {
 			if(!jumpingReachedApex) {
 				_animation[jumpPoseAnimation.name].speed = jumpAnimationSpeed;
 				_animation[jumpPoseAnimation.name].wrapMode = WrapMode.ClampForever;
-				_animation.CrossFade(jumpPoseAnimation.name);
+				//_animation.CrossFade(jumpPoseAnimation.name);
 			} else {
 				_animation[jumpPoseAnimation.name].speed = -landAnimationSpeed;
 				_animation[jumpPoseAnimation.name].wrapMode = WrapMode.ClampForever;
-				_animation.CrossFade(jumpPoseAnimation.name);	
+				//_animation.CrossFade(jumpPoseAnimation.name);	
 							
 			}
 			
@@ -399,21 +434,21 @@ function Update() {
 		else 
 		{
 			if(controller.velocity.sqrMagnitude < 0.1) {
-				_animation.CrossFade("idle");
+				//_animation.CrossFade("idle");
 			}
 			else 
 			{
 				if(_characterState == CharacterState.Running) {
 					_animation[runAnimation.name].speed = Mathf.Clamp(controller.velocity.magnitude, 0.0, runMaxAnimationSpeed);
-					_animation.CrossFade("run");	
+					//_animation.CrossFade("run");	
 				}
 				else if(_characterState == CharacterState.Trotting) {
 					_animation[walkAnimation.name].speed = Mathf.Clamp(controller.velocity.magnitude, 0.0, trotMaxAnimationSpeed);
-					_animation.CrossFade("walk");	
+					//_animation.CrossFade("walk");	
 				}
 				else if(_characterState == CharacterState.Walking) {
 					_animation[walkAnimation.name].speed = Mathf.Clamp(controller.velocity.magnitude, 0.0, walkMaxAnimationSpeed);
-					_animation.CrossFade("walk");	
+					//_animation.CrossFade("walk");	
 				}
 				
 			}
@@ -450,23 +485,7 @@ function Update() {
 		}
 	}
  }
-    if(numberOfDinosaurs < maxSpawn)
-    {
-       if(Time.time >= checkTimer) //if the current time elapsed is equal to or greater than the timer
-       {
-           checkTimer += spawnTime; //set the timer again
-        
-	    
-              numberOfDinosaurs++;
-              var myNewTrans : Transform;
-              myNewTrans = Network.Instantiate(dinosaurClone, transform.position, transform.rotation, 0);
-	     // myNewTrans =  Network.Instantiate(dinosaurClone, 
-	     //     (Vector3((transform.position.x-(5)*moveDirection.x), 
-          //(transform.position.y-(5)*moveDirection.y), 
-	      //    (transform.position.z-(5)*moveDirection.z))), 0);
-	    
-       }
-   }
+   
     
 
 	

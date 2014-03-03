@@ -16,6 +16,7 @@ public var landAnimationSpeed : float = 1.0;
 private var _animation : Animation;
 
 
+
 private var _characterState : CharacterState;
 
 // The speed when walking

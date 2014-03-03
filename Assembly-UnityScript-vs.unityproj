@@ -46,17 +46,13 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Camera Scripts\MouseOrbit.js" />
-     <Compile Include="Assets\Scripts\Camera Scripts\SmoothFollow.js" />
-     <Compile Include="Assets\Scripts\Camera Scripts\SmoothLookAt.js" />
-     <Compile Include="Assets\Scripts\Camera Scripts\ThirdPersonCamera.js" />
-     <Compile Include="Assets\Scripts\ControllerScripts\DummyCollision.js" />
+     <Compile Include="Assets\Scripts\Camera Scripts\CameraScript.js" />
+     <Compile Include="Assets\Scripts\ControllerScripts\Collision.js" />
+     <Compile Include="Assets\Scripts\ControllerScripts\PlayerController.js" />
      <Compile Include="Assets\Scripts\ControllerScripts\ThirdPersonController.js" />
-     <Compile Include="Assets\Scripts\ControllerScripts\ThirdPersonControllerClone.js" />
      <Compile Include="Assets\Scripts\ControllerScripts\ThirdPersonControllerMainMenu.js" />
      <Compile Include="Assets\Scripts\MenuScripts\Menu.js" />
      <Compile Include="Assets\Scripts\MultiplayerScripts\Connect.js" />
-     <Compile Include="Assets\Scripts\MultiplayerScripts\Playerscript.js" />
      <Compile Include="Assets\Scripts\MultiplayerScripts\Spawnscript.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
