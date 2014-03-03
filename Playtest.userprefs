@@ -1,12 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ControllerScripts\ThirdPersonControllerMainMenu.js">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ControllerScripts\ThirdPersonController.js">
     <Files>
-      <File FileName="Assets\Scripts\ControllerScripts\ThirdPersonController.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ControllerScripts\ThirdPersonControllerMainMenu.js" Line="432" Column="2" />
+      <File FileName="Assets\Scripts\MultiplayerScripts\Spawnscript.js" Line="41" Column="3" />
+      <File FileName="Assets\Scripts\ControllerScripts\ThirdPersonControllerClone.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ControllerScripts\ThirdPersonController.js" Line="143" Column="9" />
+      <File FileName="Assets\Scripts\ControllerScripts\ThirdPersonControllerMainMenu.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\MenuScripts\Menu.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MultiplayerScripts\Connect.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ControllerScripts\ThirdPersonController.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MultiplayerScripts\Connect.js" Line="18" Column="1" />
       <File FileName="Assets\Scripts\MultiplayerScripts\Playerscript.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\MultiplayerScripts\Spawnscript.js" Line="1" Column="1" />
     </Files>

@@ -9,6 +9,7 @@ public var jumpPoseAnimation : AnimationClip;
 public var dinosaurClone : Transform;
 public var spawnTime : float; //for 5 second
 public var checkTimer : float;
+public var maxSpawn : int = 5;
 
 public var walkMaxAnimationSpeed : float = 0.75;
 public var trotMaxAnimationSpeed : float = 1.0;
@@ -135,7 +136,18 @@ function Awake ()
 	}
 	
 }
-
+/*
+function OnTriggerEnter(collisionInfo : Collider)
+{
+       if(collisionInfo.gameObject.tag == "Server" && this.gameObject.tag != "Server")
+       {
+       	Debug.Log("hit Server");
+       }
+       else if(collisionInfo.gameObject.tag == "Client" && this.gameObject.tag != "Client")
+       {
+       Debug.Log("hit client");
+       }
+}*/
 function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo)
 {
 	if (stream.isWriting){
@@ -438,7 +450,7 @@ function Update() {
 		}
 	}
  }
-    if(numberOfDinosaurs < 11)
+    if(numberOfDinosaurs < maxSpawn)
     {
        if(Time.time >= checkTimer) //if the current time elapsed is equal to or greater than the timer
        {
@@ -448,10 +460,10 @@ function Update() {
               numberOfDinosaurs++;
               var myNewTrans : Transform;
               myNewTrans = Network.Instantiate(dinosaurClone, transform.position, transform.rotation, 0);
-//	        Network.Instantiate(dinosaurClone, 
-//	          (Vector3((transform.position.x-(5)*moveDirection.x), 
-//	          (transform.position.y-(5)*moveDirection.y), 
-//	          (transform.position.z-(5)*moveDirection.z))), 0);
+	     // myNewTrans =  Network.Instantiate(dinosaurClone, 
+	     //     (Vector3((transform.position.x-(5)*moveDirection.x), 
+          //(transform.position.y-(5)*moveDirection.y), 
+	      //    (transform.position.z-(5)*moveDirection.z))), 0);
 	    
        }
    }
