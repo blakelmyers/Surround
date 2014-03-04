@@ -34,6 +34,11 @@ enum PlayerType {
     Client = 1,
 }
 
+function Start()
+{
+    serverTransforms = new Transform[maxSpawnServer];
+    clientTransforms = new Transform[maxSpawnClient];
+}
 
 function OnServerInitialized(){
     whichPlayer = PlayerType.Server;
@@ -60,6 +65,7 @@ function SpawnStartingPlayer(){
 	   //Instantiate a new object for this player, remember; the server is therefore the owner.
 	   myNewTrans = Network.Instantiate(serverPrefab, startPositionServer, transform.rotation, 0);
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfServerPrefabs;
+       serverTransforms[0] = myNewTrans;
        
 	}
 	else   // Client
@@ -72,6 +78,7 @@ function SpawnStartingPlayer(){
 	   //Instantiate a new object for this player, remember; the server is therefore the owner.
 	   myNewTrans= Network.Instantiate(clientPrefab, startPositionClient, transform.rotation, 0);
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfClientPrefabs;
+       clientTransforms[0] = myNewTrans;
 	}
 }
 
@@ -80,6 +87,7 @@ function Update()
     if(gameStarted == true)
     {
         var myNewTrans : Transform;
+        var myPrevTrans : Transform;
         
         // check Spawn for Server
         if(whichPlayer == PlayerType.Server)
@@ -88,10 +96,13 @@ function Update()
             {
                 if(Time.time >= checkTimerServer) //if the current time elapsed is equal to or greater than the timer
                 {
+                    myPrevTrans = serverTransforms[numberOfServerPrefabs - 1];
                     checkTimerServer += spawnTimeServer; //set the timer again
                     numberOfServerPrefabs++;
-                    myNewTrans = Network.Instantiate(serverPrefab, startPositionServer, serverPrefab.rotation, 0);
+                   
+                    myNewTrans = Network.Instantiate(serverPrefab, myPrevTrans.position, myPrevTrans.rotation, 0);
                     myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfServerPrefabs;
+                    serverTransforms[numberOfServerPrefabs - 1] = myNewTrans;
                 }
             }
         }
@@ -103,10 +114,13 @@ function Update()
             {
                 if(Time.time >= checkTimerClient) //if the current time elapsed is equal to or greater than the timer
                 {
+                    myPrevTrans = clientTransforms[numberOfClientPrefabs - 1];
                     checkTimerClient += spawnTimeClient; //set the timer again
                     numberOfClientPrefabs++;   
-                    myNewTrans = Network.Instantiate(clientPrefab, startPositionClient, clientPrefab.rotation, 0);
+                   
+                    myNewTrans = Network.Instantiate(clientPrefab, myPrevTrans.position, myPrevTrans.rotation, 0);
                     myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfClientPrefabs;
+                    clientTransforms[numberOfClientPrefabs - 1] = myNewTrans;
                 }
             }
         }
