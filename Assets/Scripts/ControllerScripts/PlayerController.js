@@ -155,17 +155,27 @@ function Update() {
             // If the ray is parallel to the plane, Raycast will return false.
             if (playerPlane.Raycast (ray, hitdist)) {
                 // Get the point along the ray that hits the calculated distance.
+             
                 var targetPoint = ray.GetPoint(hitdist);
+                
+                // Don't move is mouse is with 5 units
+                if(Vector3.Distance(targetPoint, transform.position) < 5)
+                {
+                    _animation.CrossFade("idle");
+                }
+                else
+                {
+                    // Determine the target rotation.  This is the rotation if the transform looks at the target point.
+                    var targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
  
-                // Determine the target rotation.  This is the rotation if the transform looks at the target point.
-                var targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
+                    // Smoothly rotate towards the target point.
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, walkSpeed * Time.deltaTime);
  
-                // Smoothly rotate towards the target point.
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, walkSpeed * Time.deltaTime);
- 
-                // Move the object forward.
-                transform.position += transform.forward * walkSpeed * Time.deltaTime;
-                rigidbody.MovePosition(rigidbody.position + transform.forward * walkSpeed * Time.deltaTime);
+                    // Move the object forward.
+                    transform.position += transform.forward * walkSpeed * Time.deltaTime;
+                    
+                    _animation.CrossFade("walk");
+                }
  
             }
         }
