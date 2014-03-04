@@ -59,6 +59,7 @@ function SpawnStartingPlayer(){
 	   startPositionServer = Vector3(1320, 5, 760);
 	   //Instantiate a new object for this player, remember; the server is therefore the owner.
 	   myNewTrans = Network.Instantiate(serverPrefab, startPositionServer, transform.rotation, 0);
+       myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfServerPrefabs;
        
 	}
 	else   // Client
@@ -70,6 +71,7 @@ function SpawnStartingPlayer(){
 	   startPositionClient = Vector3(900, 5, 1280);
 	   //Instantiate a new object for this player, remember; the server is therefore the owner.
 	   myNewTrans= Network.Instantiate(clientPrefab, startPositionClient, transform.rotation, 0);
+       myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfClientPrefabs;
 	}
 }
 
@@ -89,6 +91,7 @@ function Update()
                     checkTimerServer += spawnTimeServer; //set the timer again
                     numberOfServerPrefabs++;
                     myNewTrans = Network.Instantiate(serverPrefab, startPositionServer, serverPrefab.rotation, 0);
+                    myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfServerPrefabs;
                 }
             }
         }
@@ -103,6 +106,7 @@ function Update()
                     checkTimerClient += spawnTimeClient; //set the timer again
                     numberOfClientPrefabs++;   
                     myNewTrans = Network.Instantiate(clientPrefab, startPositionClient, clientPrefab.rotation, 0);
+                    myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfClientPrefabs;
                 }
             }
         }
