@@ -1,11 +1,12 @@
 
 // Require a character controller to be attached to the same game object
-@script RequireComponent(CharacterController)
+//@script RequireComponent(CharacterController)
 
 public var idleAnimation : AnimationClip;
 public var walkAnimation : AnimationClip;
-public var attackAnimation : AnimationClip;
-public var movementActive : boolean = true;
+public var attackAnimation : AnimationClip;;
+
+public var movementActive : boolean = false;
 
 public var numberOfDinosaurs : int = 1;
 
@@ -125,11 +126,11 @@ function Update() {
         
         if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
         {
-            walkSpeed = 80;
+            walkSpeed = 40;
         }
         else
         {
-            walkSpeed = 160;
+            walkSpeed = 80;
         }
               
         if(Input.GetMouseButtonDown(1))
@@ -164,6 +165,7 @@ function Update() {
  
                 // Move the object forward.
                 transform.position += transform.forward * walkSpeed * Time.deltaTime;
+                rigidbody.MovePosition(rigidbody.position + transform.forward * walkSpeed * Time.deltaTime);
  
             }
         }

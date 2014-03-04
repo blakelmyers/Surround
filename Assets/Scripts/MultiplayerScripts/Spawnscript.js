@@ -10,6 +10,7 @@
 
 public var serverPrefab : Transform;
 public var clientPrefab : Transform;
+public var cameraForPlayer : Transform;
 public var spawnTimeServer : float;
 public var spawnTimeClient : float;
 public var maxSpawnServer : int = 5;
@@ -47,17 +48,23 @@ function OnConnectedToServer(){
 function SpawnStartingPlayer(){
 	
 	gameStarted = true;
+    var startingCameraPosition : Vector3;
 	
 	if(whichPlayer == PlayerType.Server)
 	{
+       startingCameraPosition = Vector3(1400, 300, 1000);
+       cameraForPlayer.position = startingCameraPosition;
 	   checkTimerServer = Time.time + spawnTimeServer;
 	   numberOfServerPrefabs++;
 	   startPositionServer = Vector3(1320, 5, 760);
 	   //Instantiate a new object for this player, remember; the server is therefore the owner.
 	   myNewTrans = Network.Instantiate(serverPrefab, startPositionServer, transform.rotation, 0);
+       
 	}
 	else   // Client
 	{
+       startingCameraPosition = Vector3(1000, 303, 1450);
+       cameraForPlayer.position = startingCameraPosition;
 	   checkTimerClient = Time.time + spawnTimeClient;
 	   numberOfClientPrefabs++;
 	   startPositionClient = Vector3(900, 5, 1280);
