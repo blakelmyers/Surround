@@ -4,7 +4,9 @@ var cameraTransform : Transform;
 
 
 function Update () {
-	if(Input.GetKey(KeyCode.A)){
+    
+
+    if(Input.GetKey(KeyCode.A)){
 		cameraTransform.position.x += 5;
 	}
 	else if(Input.GetKey(KeyCode.D)){

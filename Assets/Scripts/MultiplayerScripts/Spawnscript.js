@@ -11,6 +11,7 @@
 public var serverPrefab : Transform;
 public var clientPrefab : Transform;
 public var cameraForPlayer : Transform;
+public var cameraDistance : float;
 public var spawnTimeServer : float;
 public var spawnTimeClient : float;
 public var maxSpawnServer : int = 5;
@@ -61,7 +62,7 @@ function SpawnStartingPlayer(){
        cameraForPlayer.position = startingCameraPosition;
 	   checkTimerServer = Time.time + spawnTimeServer;
 	   numberOfServerPrefabs++;
-	   startPositionServer = Vector3(1320, 5, 760);
+	   startPositionServer = Vector3(1320, 12, 760);
 	   //Instantiate a new object for this player, remember; the server is therefore the owner.
 	   myNewTrans = Network.Instantiate(serverPrefab, startPositionServer, transform.rotation, 0);
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfServerPrefabs;
@@ -70,16 +71,52 @@ function SpawnStartingPlayer(){
 	}
 	else   // Client
 	{
-       startingCameraPosition = Vector3(1000, 303, 1450);
+       startingCameraPosition = Vector3(1000, 303, 1100);
        cameraForPlayer.position = startingCameraPosition;
 	   checkTimerClient = Time.time + spawnTimeClient;
 	   numberOfClientPrefabs++;
-	   startPositionClient = Vector3(900, 5, 1280);
+	   startPositionClient = Vector3(1020, 5, 815);
 	   //Instantiate a new object for this player, remember; the server is therefore the owner.
 	   myNewTrans= Network.Instantiate(clientPrefab, startPositionClient, transform.rotation, 0);
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfClientPrefabs;
        clientTransforms[0] = myNewTrans;
 	}
+}
+
+function UnitDied(unitNumber : int)
+{
+    if(whichPlayer == PlayerType.Server)
+    {
+        for (var i = unitNumber; i < numberOfServerPrefabs; i++)
+        {
+            serverTransforms[i-1] = serverTransforms[i];
+            serverTransforms[i-1].GetComponent(PlayerController).spawnNumber = i;
+        }
+        checkTimerServer = Time.time + spawnTimeServer;
+        --numberOfServerPrefabs;
+    
+        if(numberOfServerPrefabs == 0)
+        {
+            Network.Disconnect(200);
+            Application.LoadLevel("MainMenu");
+        }
+    }
+    else //Client
+    {
+        for (var j = unitNumber; j < numberOfClientPrefabs; j++)
+        {
+            clientTransforms[j-1] = clientTransforms[j];
+            clientTransforms[j-1].GetComponent(PlayerController).spawnNumber = j;
+        }
+        checkTimerClient = Time.time + spawnTimeClient;
+        --numberOfClientPrefabs;
+    
+        if(numberOfClientPrefabs == 0)
+        {
+            Network.Disconnect(200);
+            Application.LoadLevel("MainMenu");
+        }
+    }
 }
 
 function Update()
@@ -88,7 +125,7 @@ function Update()
     {
         var myNewTrans : Transform;
         var myPrevTrans : Transform;
-        
+
         // check Spawn for Server
         if(whichPlayer == PlayerType.Server)
         {
@@ -102,6 +139,7 @@ function Update()
                    
                     myNewTrans = Network.Instantiate(serverPrefab, myPrevTrans.position, myPrevTrans.rotation, 0);
                     myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfServerPrefabs;
+                    myNewTrans.GetComponent(PlayerController).movementActive = myPrevTrans.GetComponent(PlayerController).movementActive;
                     serverTransforms[numberOfServerPrefabs - 1] = myNewTrans;
                 }
             }

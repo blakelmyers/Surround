@@ -50,8 +50,10 @@
      <Compile Include="Assets\Scripts\ControllerScripts\PlayerController.js" />
      <Compile Include="Assets\Scripts\ControllerScripts\ThirdPersonController.js" />
      <Compile Include="Assets\Scripts\ControllerScripts\ThirdPersonControllerMainMenu.js" />
+     <Compile Include="Assets\Scripts\ControllerScripts\TutorialEnemy.js" />
      <Compile Include="Assets\Scripts\MenuScripts\Menu.js" />
      <Compile Include="Assets\Scripts\MultiplayerScripts\Connect.js" />
+     <Compile Include="Assets\Scripts\MultiplayerScripts\SpawnTutorial.js" />
      <Compile Include="Assets\Scripts\MultiplayerScripts\Spawnscript.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
