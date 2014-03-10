@@ -8,6 +8,8 @@ public var spawnNumber : int;
 
 private var _animation : Animation;
 
+var playerType : PlayerType;
+
 /*
 enum CharacterState {
 	Idle = 0,
@@ -18,7 +20,9 @@ enum CharacterState {
 enum TextureType {
     Grass = 0,
     Sand = 1,
-    Berry = 2,
+    Blueberry = 2,
+    Redberry = 3,
+    Orangeberry = 4,
 }
 
 //private var _characterState : CharacterState;
@@ -137,7 +141,11 @@ function Update() {
         {
             walkSpeed = 40;
         }
-        else if(checkTerrain == TextureType.Berry)
+        else if(checkTerrain == TextureType.Blueberry  && playerType == PlayerType.Client)
+        {
+            RestoreHealth();     
+        }
+        else if(checkTerrain == TextureType.Redberry  && playerType == PlayerType.Server)
         {
             RestoreHealth();     
         }

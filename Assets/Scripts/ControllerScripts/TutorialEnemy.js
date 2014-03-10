@@ -51,9 +51,9 @@ function Start ()
    health_ = HealthStatus.Green;
    var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
-        if (t.name == "RedEnemy"){ RedPlane = t.gameObject;}
-        else if (t.name == "GreenEnemy"){ GreenPlane = t.gameObject;}
-        else if (t.name == "YellowEnemy"){ YellowPlane = t.gameObject;}
+        if (t.name == "RedPlane"){ RedPlane = t.gameObject;}
+        else if (t.name == "GreenPlane"){ GreenPlane = t.gameObject;}
+        else if (t.name == "YellowPlane"){ YellowPlane = t.gameObject;}
    }
    GreenPlane.renderer.enabled = true;
    RedPlane.renderer.enabled = false;

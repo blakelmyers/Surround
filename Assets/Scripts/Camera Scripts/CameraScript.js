@@ -5,7 +5,7 @@ var cameraTransform : Transform;
 
 function Update () {
     
-
+    Debug.Log(cameraTransform.position);
     if(Input.GetKey(KeyCode.A)){
 		cameraTransform.position.x += 5;
 	}
@@ -19,9 +19,15 @@ function Update () {
 		cameraTransform.position.z += 5;
 	}
     if(Input.GetKey(KeyCode.Z)){
-        cameraTransform.position.y -= 5;
+        if(cameraTransform.position.y > 300)
+        {
+            cameraTransform.position.y -= 5;
+        }
     }   
     else if(Input.GetKey(KeyCode.X)){
-        cameraTransform.position.y += 5;
+        if(cameraTransform.position.y < 600)
+        {
+            cameraTransform.position.y += 5;
+        }
     }
 }
