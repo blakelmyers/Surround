@@ -18,7 +18,6 @@ function Update () {
 	else if(Input.GetKey(KeyCode.S)){
 		cameraTransform.position.z += 5;
 	}
-<<<<<<< HEAD
     if(Input.GetKey(KeyCode.Z)){
         if(cameraTransform.position.y > 300)
         {
@@ -31,6 +30,4 @@ function Update () {
             cameraTransform.position.y += 5;
         }
     }
-=======
->>>>>>> 1db9ae1197ee78312523ec4423ebd7c0d5def39a
 }
