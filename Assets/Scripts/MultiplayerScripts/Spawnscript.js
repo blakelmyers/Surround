@@ -58,11 +58,11 @@ function SpawnStartingPlayer(){
 	
 	if(whichPlayer == PlayerType.Server)
 	{
-       startingCameraPosition = Vector3(1400, 300, 1000);
+       startingCameraPosition = Vector3(1500, 400, 800);
        cameraForPlayer.position = startingCameraPosition;
 	   checkTimerServer = Time.time + spawnTimeServer;
 	   numberOfServerPrefabs++;
-	   startPositionServer = Vector3(1320, 12, 760);
+	   startPositionServer = Vector3(1450, 8, 560);
 	   //Instantiate a new object for this player, remember; the server is therefore the owner.
 	   myNewTrans = Network.Instantiate(serverPrefab, startPositionServer, transform.rotation, 0);
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfServerPrefabs;
@@ -71,11 +71,11 @@ function SpawnStartingPlayer(){
 	}
 	else   // Client
 	{
-       startingCameraPosition = Vector3(1000, 303, 1100);
+       startingCameraPosition = Vector3(500, 400, 1700);
        cameraForPlayer.position = startingCameraPosition;
 	   checkTimerClient = Time.time + spawnTimeClient;
 	   numberOfClientPrefabs++;
-	   startPositionClient = Vector3(1020, 5, 815);
+	   startPositionClient = Vector3(450, 5, 1500);
 	   //Instantiate a new object for this player, remember; the server is therefore the owner.
 	   myNewTrans= Network.Instantiate(clientPrefab, startPositionClient, transform.rotation, 0);
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfClientPrefabs;

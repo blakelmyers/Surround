@@ -102,16 +102,34 @@ function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo)
 		//Executed on the owner of the networkview; 
 		//The server sends it's position over the network
 		
-		var pos : Vector3 = transform.position;		
+		var pos : Vector3 = transform.position;	
+        var gPlane : boolean = GreenPlane.renderer.enabled;
+        var rPlane : boolean = RedPlane.renderer.enabled;
+        var yPlane : boolean = YellowPlane.renderer.enabled;
+	
 		stream.Serialize(pos);//"Encode" it, and send it
+        stream.Serialize(gPlane);
+        stream.Serialize(rPlane);
+        stream.Serialize(yPlane);
 				
 	}else{
 		//Executed on the others; 
 		//The clients receive a position and set the object to it
 		
 		var posReceive : Vector3 = Vector3.zero;
+        var gPlaneReceive : boolean = false;
+        var rPlaneReceive : boolean = false;
+        var yPlaneReceive : boolean = false;
+        
 		stream.Serialize(posReceive); //"Decode" it and receive it
+        stream.Serialize(gPlaneReceive);
+        stream.Serialize(rPlaneReceive);
+        stream.Serialize(yPlaneReceive);
+        
 		transform.position = posReceive;
+        GreenPlane.renderer.enabled = gPlaneReceive;
+        RedPlane.renderer.enabled = rPlaneReceive;
+        YellowPlane.renderer.enabled = yPlaneReceive;
 		
 	}
 }

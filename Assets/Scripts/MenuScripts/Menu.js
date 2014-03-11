@@ -1,13 +1,5 @@
-﻿ function Start () {
- 	Debug.Log("started");
- }
- 
- function Update () {
- 
- }
+static var selectedPrefab : int;
 
 function OnMouseDown(){
-    Debug.Log("Play");
-    
     Application.LoadLevel("MapScene");
 }
