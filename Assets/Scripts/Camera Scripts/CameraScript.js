@@ -19,7 +19,7 @@ function Update () {
 		cameraTransform.position.z += 5;
 	}
     if(Input.GetKey(KeyCode.Z)){
-        if(cameraTransform.position.y > 300)
+        if(cameraTransform.position.y > 200)
         {
             cameraTransform.position.y -= 5;
         }

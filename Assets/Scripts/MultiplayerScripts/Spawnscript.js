@@ -30,15 +30,25 @@ private var gameStarted : boolean = false;
 
 var whichPlayer : int;
 
+var selectionType : GameObject;
+
 enum PlayerType {
     Server = 0,
     Client = 1,
 }
 
+function Awake () 
+{
+    selectionType = GameObject.Find("Selection");
+    DontDestroyOnLoad(selectionType);
+}
+    
 function Start()
 {
     serverTransforms = new Transform[maxSpawnServer];
     clientTransforms = new Transform[maxSpawnClient];
+    
+    Debug.Log(selectionType.GetComponent(SelectionScript).selectionChoice);
 }
 
 function OnServerInitialized(){
@@ -58,7 +68,7 @@ function SpawnStartingPlayer(){
 	
 	if(whichPlayer == PlayerType.Server)
 	{
-       startingCameraPosition = Vector3(1500, 400, 800);
+       startingCameraPosition = Vector3(1500, 400, 1000);
        cameraForPlayer.position = startingCameraPosition;
 	   checkTimerServer = Time.time + spawnTimeServer;
 	   numberOfServerPrefabs++;
@@ -71,7 +81,7 @@ function SpawnStartingPlayer(){
 	}
 	else   // Client
 	{
-       startingCameraPosition = Vector3(500, 400, 1700);
+       startingCameraPosition = Vector3(500, 400, 2050);
        cameraForPlayer.position = startingCameraPosition;
 	   checkTimerClient = Time.time + spawnTimeClient;
 	   numberOfClientPrefabs++;
