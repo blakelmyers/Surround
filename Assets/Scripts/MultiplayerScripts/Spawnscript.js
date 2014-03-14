@@ -49,6 +49,15 @@ function Start()
     clientTransforms = new Transform[maxSpawnClient];
     
     Debug.Log(selectionType.GetComponent(SelectionScript).selectionChoice);
+    
+    switch(selectionType.GetComponent(SelectionScript).selectionChoice)
+    {
+    case DinosaurEnum.YellowTall:
+    case DinosaurEnum.RedTall:
+    case DinosaurEnum.PurpleFat:
+    case DinosaurEnum.BlueFat:
+        break;
+    }
 }
 
 function OnServerInitialized(){

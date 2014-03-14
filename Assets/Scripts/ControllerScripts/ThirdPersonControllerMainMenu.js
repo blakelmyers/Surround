@@ -15,6 +15,7 @@ public var landAnimationSpeed : float = 1.0;
 
 private var _animation : Animation;
 
+public var dinosaurType : DinosaurEnum;
 
 
 private var _characterState : CharacterState;
@@ -288,8 +289,20 @@ function DidJump ()
 
 	_characterState = CharacterState.Jumping;
 }
-
+function OnMouseDown()
+{
+    Debug.Log(dinosaurType);
+    
+    GameObject.Find("Selection").GetComponent(SelectionScript).selectionChoice = dinosaurType;
+    Application.LoadLevel("MapScene");
+}
 function Update() {
+
+    if(Input.GetMouseButtonDown(0))
+    {
+        //Debug.Log(dinosaurType);
+    }
+    
 	if (!isControllable)
 	{
 		// kill all inputs if not controllable.

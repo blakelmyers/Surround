@@ -1,6 +1,8 @@
 ﻿enum DinosaurEnum {
     YellowTall = 0,
-    PurpleFat = 1,
+    RedTall = 1,
+    PurpleFat = 2,
+    BlueFat = 3, 
 }
 
 static var selectionChoice : DinosaurEnum;
