@@ -51,9 +51,11 @@
      <Compile Include="Assets\Scripts\ControllerScripts\ThirdPersonController.js" />
      <Compile Include="Assets\Scripts\ControllerScripts\ThirdPersonControllerMainMenu.js" />
      <Compile Include="Assets\Scripts\ControllerScripts\TutorialEnemy.js" />
+     <Compile Include="Assets\Scripts\ControllerScripts\TutorialPlayerController.js" />
      <Compile Include="Assets\Scripts\MenuScripts\Menu.js" />
      <Compile Include="Assets\Scripts\MenuScripts\SelectionScript.js" />
      <Compile Include="Assets\Scripts\MenuScripts\Tutorial.js" />
+     <Compile Include="Assets\Scripts\MenuScripts\TutorialGUI.js" />
      <Compile Include="Assets\Scripts\MultiplayerScripts\Connect.js" />
      <Compile Include="Assets\Scripts\MultiplayerScripts\SpawnTutorial.js" />
      <Compile Include="Assets\Scripts\MultiplayerScripts\Spawnscript.js" />

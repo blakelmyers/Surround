@@ -10,6 +10,10 @@
 
 public var serverPrefab : Transform;
 public var clientPrefab : Transform;
+public var serverPrefabYellow : Transform;
+public var clientPrefabPurple : Transform;
+public var serverPrefabRed : Transform;
+public var clientPrefabBlue : Transform;
 public var cameraForPlayer : Transform;
 public var cameraDistance : float;
 public var spawnTimeServer : float;
@@ -48,14 +52,25 @@ function Start()
     serverTransforms = new Transform[maxSpawnServer];
     clientTransforms = new Transform[maxSpawnClient];
     
+    // Set Default values
+    serverPrefab = serverPrefabYellow;
+    clientPrefab = clientPrefabPurple;
+    
     Debug.Log(selectionType.GetComponent(SelectionScript).selectionChoice);
     
     switch(selectionType.GetComponent(SelectionScript).selectionChoice)
     {
     case DinosaurEnum.YellowTall:
+        serverPrefab = serverPrefabYellow;
+        break;
     case DinosaurEnum.RedTall:
+        serverPrefab = serverPrefabRed;
+        break;
     case DinosaurEnum.PurpleFat:
+        clientPrefab = clientPrefabPurple;
+        break;
     case DinosaurEnum.BlueFat:
+        clientPrefab = clientPrefabBlue;
         break;
     }
 }

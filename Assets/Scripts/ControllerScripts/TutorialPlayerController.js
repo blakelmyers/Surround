@@ -8,6 +8,10 @@ public var spawnNumber : int;
 
 private var _animation : Animation;
 
+var playerType : PlayerType;
+
+var firstHit : boolean = false;
+
 public var tutorialGui : TutorialGUI;
 /*
 enum CharacterState {
@@ -18,17 +22,13 @@ enum CharacterState {
 */
 
 
-var health_ : HealthStatus;
-var collisionCounter : int = 0;
-var RedPlane : GameObject;
-var GreenPlane : GameObject;
-var YellowPlane : GameObject;
-
 //private var _characterState : CharacterState;
 
 // The speed when walking
 var walkSpeed = 2.0;
 var rotateSpeed = 500.0;
+
+public var spawnScript : Spawnscript;
 
 // The current move direction in x-z
 private var moveDirection = Vector3.zero;
@@ -43,46 +43,67 @@ private var lastJumpStartHeight = 0.0;
 
 private var inAirVelocity = Vector3.zero;
 
-private var lastGroundedTime = 0.0;
+private var healthCounter : int;
 
 
 private var isControllable = true;
 
+var health_ : HealthStatus;
+var collisionCounter : int = 0;
+var RedPlane : GameObject;
+var GreenPlane : GameObject;
+var YellowPlane : GameObject;
+
 function Start ()
 {
-   health_ = HealthStatus.Green;
+   //health_ = HealthStatus.Green;
    var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
         if (t.name == "RedPlane"){ RedPlane = t.gameObject;}
         else if (t.name == "GreenPlane"){ GreenPlane = t.gameObject;}
         else if (t.name == "YellowPlane"){ YellowPlane = t.gameObject;}
    }
-   GreenPlane.renderer.enabled = true;
-   RedPlane.renderer.enabled = false;
+   GreenPlane.renderer.enabled = false;
+   RedPlane.renderer.enabled = true;
    YellowPlane.renderer.enabled = false;
+   
+   //spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
 }
 
 function Awake ()
 {
+	
 	moveDirection = transform.TransformDirection(Vector3.forward);
 	
 	_animation = GetComponent(Animation);
 	if(!_animation)
 		Debug.Log("The character you would like to control doesn't have animations. Moving her might look weird.");
 	
-    rigidbody.freezeRotation = true;
 }
 
 function Update() {
+
+    var checkTerrain : TextureType;
+    
+    
 	    if (!isControllable)
 	    {
 		    // kill all inputs if not controllable.
 		    Input.ResetInputAxes();
 	    }
-        //if(transform.position.y > 2) transform.position.y = 0;
-        if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
+        checkTerrain = GetTerrainTextureAt(transform.position);
+        if(checkTerrain == TextureType.Sand)
         {
             walkSpeed = 40;
+            tutorialGui.OverSand();
+        }
+        else if(checkTerrain == TextureType.Blueberry  && playerType == PlayerType.Client)
+        {
+            RestoreHealth();     
+        }
+        else if(checkTerrain == TextureType.Redberry  && playerType == PlayerType.Server)
+        {
+            RestoreHealth();     
         }
         else
         {
@@ -93,8 +114,41 @@ function Update() {
         {
             movementActive = !movementActive;
         }
-
+    
+       if (movementActive == true)
+       {
+            ProcessMovement();
+       }
+       else
+       {
+            _animation.CrossFade("idle");
+       }
+        
+    
 	
+}
+
+function RestoreHealth()
+{
+    healthCounter++;
+    
+    tutorialGui.OverBerries();
+    
+    if(health_ < HealthStatus.Green)
+    {
+        Debug.Log(health_);
+        health_ = HealthStatus.Green;
+        healthCounter = 0;
+        GreenPlane.renderer.enabled = true;
+        RedPlane.renderer.enabled = false;
+        YellowPlane.renderer.enabled = false;
+    }
+    
+}
+
+function GetMovementActive()
+{
+    return movementActive;
 }
 
 function ProcessMovement()
@@ -122,6 +176,8 @@ function ProcessMovement()
         if(Vector3.Distance(targetPoint, transform.position) < 20 * spawnNumber)
         {
             _animation.CrossFade("idle");
+            transform.position.y = 8;
+            
         }
         else
         {
@@ -133,28 +189,33 @@ function ProcessMovement()
  
             // Move the object forward.
             transform.position += transform.forward * walkSpeed * Time.deltaTime;
-                    
+            transform.position.y = 8;        
             _animation.CrossFade("walk");
         }
+        
  
     }
 }
 
 function FixedUpdate() 
 {
-    if (movementActive == true)
-        {
-            //ProcessMovement();
-        }
+    
+    
 }
 
-
 function OnTriggerEnter(collisionInfo : Collider){
-   if(collisionInfo.name != this.name){
+
+    
+    if(collisionInfo.name != this.name){
         if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
-            if(collisionCounter % 12 == 0)
+           if(!firstHit)
             {
-                ProcessHealth();
+                firstHit = true;
+                tutorialGui.HitEnemy();            
+            }
+           if(collisionCounter % 9 == 0)
+            {
+                DecreaseHealth();
             }
             collisionCounter++;
         }
@@ -163,11 +224,12 @@ function OnTriggerEnter(collisionInfo : Collider){
 
 function OnTriggerExit (collisionInfo : Collider) {
    //collisionCounter--;
-  // Debug.Log(collisionCounter);
+   //Debug.Log(collisionCounter);
 }
 
-function ProcessHealth()
+function DecreaseHealth()
 {
+    //Debug.Log(health_);
     switch (health_)
     {
         case HealthStatus.Green:
@@ -183,9 +245,9 @@ function ProcessHealth()
             YellowPlane.renderer.enabled = false;
             break;
         case HealthStatus.Red:
-            tutorialGui.EnemyDied();
             health_ = HealthStatus.Dead;
             Destroy(this.gameObject);
+            //spawnScript.UnitDied(spawnNumber);
             break;
     }
 }

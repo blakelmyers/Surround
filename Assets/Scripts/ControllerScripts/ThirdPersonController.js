@@ -333,14 +333,14 @@ function Update() {
 
 	var speed = 100.0;
 	
-	if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
+	/*if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
 	{
 	   speed = 40;
 	}
 	else
 	{
 	   speed = 80;
-}
+}*/
         if(networkView.isMine)
         {
 	
@@ -398,7 +398,7 @@ if (movementActive == true)
 
 	// Apply jumping logic
 	ApplyJumping ();
-	
+	/*
 	if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
 	{
 	   walkSpeed = 20;
@@ -406,7 +406,7 @@ if (movementActive == true)
 	else
 	{
 	   walkSpeed = 40;
-	}
+	}*/
 	// Calculate actual motion
 	var movement = moveDirection * moveSpeed + Vector3 (0, verticalSpeed, 0) + inAirVelocity;
 	movement *= Time.deltaTime;

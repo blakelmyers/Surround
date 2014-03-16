@@ -15,7 +15,13 @@ var connectPort : int = 25001;
 //Obviously the GUI is for both client&servers (mixed!)
 function OnGUI ()
 {
-
+    GUILayout.BeginVertical();
+    if(GUILayout.Button("Return to Main Menu"))
+    {
+        Application.LoadLevel("MainMenu");
+    }
+    GUILayout.EndVertical();
+    
 	if (Network.peerType == NetworkPeerType.Disconnected){
 	//We are currently disconnected: Not a client or host
 		GUILayout.Label("Connection status: Disconnected");
