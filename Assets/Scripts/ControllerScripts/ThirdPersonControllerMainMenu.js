@@ -2,6 +2,8 @@
 // Require a character controller to be attached to the same game object
 @script RequireComponent(CharacterController)
 
+public class ThirdPersonControllerMainMenu extends Photon.MonoBehaviour{
+
 public var idleAnimation : AnimationClip;
 public var walkAnimation : AnimationClip;
 public var runAnimation : AnimationClip;
@@ -87,19 +89,18 @@ private var isControllable = true;
 
 function Awake ()
 {
-
+    //if(!photonView.isMine){
+        //We aren't the network owner, disable this script
+        //RPC's and OnSerializeNetworkView will STILL get trough!
+     //   enabled=false;  
+    //}
 	moveDirection = transform.TransformDirection(Vector3.forward);
 	
 	_animation = GetComponent(Animation);
 	if(!_animation)
 		Debug.Log("The character you would like to control doesn't have animations. Moving her might look weird.");
 	
-	/*
-public var idleAnimation : AnimationClip;
-public var walkAnimation : AnimationClip;
-public var runAnimation : AnimationClip;
-public var jumpPoseAnimation : AnimationClip;	
-	*/
+
 	if(!idleAnimation) {
 		_animation = null;
 		Debug.Log("No idle animation found. Turning off animations.");
@@ -118,7 +119,6 @@ public var jumpPoseAnimation : AnimationClip;
 	}
 			
 }
-
 
 function UpdateSmoothedMovementDirection ()
 {
@@ -298,6 +298,8 @@ function OnMouseDown()
 }
 function Update() {
 
+if(photonView.isMine)
+    {
     if(Input.GetMouseButtonDown(0))
     {
         //Debug.Log(dinosaurType);
@@ -401,7 +403,7 @@ function Update() {
 			SendMessage("DidLand", SendMessageOptions.DontRequireReceiver);
 		}
 	}
-	
+	}
 }
 
 
@@ -460,4 +462,4 @@ function Reset ()
 {
 	gameObject.tag = "Player";
 }
-
+}

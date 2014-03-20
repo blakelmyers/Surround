@@ -8,6 +8,8 @@
 #pragma implicit
 #pragma downcast
 
+//import Photon.MonoBehaviour;
+
 public var serverPrefab : Transform;
 public var clientPrefab : Transform;
 public var serverPrefabYellow : Transform;
@@ -23,8 +25,8 @@ public var maxSpawnClient : int = 5;
 public var startPositionServer : Vector3;
 public var startPositionClient : Vector3;
 
-var serverTransforms : Transform[];
-var clientTransforms : Transform[];
+var serverTransforms : GameObject[];
+var clientTransforms : GameObject[];
 
 private var numberOfServerPrefabs : int = 0;
 private var numberOfClientPrefabs : int = 0;
@@ -35,6 +37,7 @@ private var gameStarted : boolean = false;
 var whichPlayer : int;
 
 var selectionType : GameObject;
+var connectionObject : GameObject;
 
 enum PlayerType {
     Server = 0,
@@ -45,12 +48,16 @@ function Awake ()
 {
     selectionType = GameObject.Find("Selection");
     DontDestroyOnLoad(selectionType);
+    
+    connectionObject = GameObject.Find("Connect");
+    DontDestroyOnLoad(connectionObject);
+    
 }
     
 function Start()
 {
-    serverTransforms = new Transform[maxSpawnServer];
-    clientTransforms = new Transform[maxSpawnClient];
+    serverTransforms = new GameObject[maxSpawnServer];
+    clientTransforms = new GameObject[maxSpawnClient];
     
     // Set Default values
     serverPrefab = serverPrefabYellow;
@@ -73,17 +80,10 @@ function Start()
         clientPrefab = clientPrefabBlue;
         break;
     }
+    
+    SpawnStartingPlayer();
 }
 
-function OnServerInitialized(){
-    whichPlayer = PlayerType.Server;
-	SpawnStartingPlayer();
-}
-
-function OnConnectedToServer(){
-    whichPlayer = PlayerType.Client;
-	SpawnStartingPlayer();
-}
 
 function SpawnStartingPlayer(){
 	
@@ -98,9 +98,9 @@ function SpawnStartingPlayer(){
 	   numberOfServerPrefabs++;
 	   startPositionServer = Vector3(1450, 8, 560);
 	   //Instantiate a new object for this player, remember; the server is therefore the owner.
-	   myNewTrans = Network.Instantiate(serverPrefab, startPositionServer, transform.rotation, 0);
-       myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfServerPrefabs;
-       serverTransforms[0] = myNewTrans;
+	   //myNewTrans = PhotonNetwork.Instantiate("serverPrefab", startPositionServer, transform.rotation, 0);
+       //myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfServerPrefabs;
+       //serverTransforms[0] = myNewTrans;
        
 	}
 	else   // Client
@@ -111,9 +111,9 @@ function SpawnStartingPlayer(){
 	   numberOfClientPrefabs++;
 	   startPositionClient = Vector3(450, 5, 1500);
 	   //Instantiate a new object for this player, remember; the server is therefore the owner.
-	   myNewTrans= Network.Instantiate(clientPrefab, startPositionClient, transform.rotation, 0);
-       myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfClientPrefabs;
-       clientTransforms[0] = myNewTrans;
+	   //myNewTrans = PhotonNetwork.Instantiate("clientPrefab", startPositionClient, transform.rotation, 0);
+       //myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfClientPrefabs;
+       //clientTransforms[0] = myNewTrans;
 	}
 }
 
@@ -131,7 +131,7 @@ function UnitDied(unitNumber : int)
     
         if(numberOfServerPrefabs == 0)
         {
-            Network.Disconnect(200);
+           // Network.Disconnect(200);
             Application.LoadLevel("MainMenu");
         }
     }
@@ -147,7 +147,7 @@ function UnitDied(unitNumber : int)
     
         if(numberOfClientPrefabs == 0)
         {
-            Network.Disconnect(200);
+            //Network.Disconnect(200);
             Application.LoadLevel("MainMenu");
         }
     }
@@ -157,8 +157,8 @@ function Update()
 {
     if(gameStarted == true)
     {
-        var myNewTrans : Transform;
-        var myPrevTrans : Transform;
+        var myNewTrans : GameObject;
+        var myPrevTrans : GameObject;
 
         // check Spawn for Server
         if(whichPlayer == PlayerType.Server)
@@ -171,7 +171,7 @@ function Update()
                     checkTimerServer += spawnTimeServer; //set the timer again
                     numberOfServerPrefabs++;
                    
-                    myNewTrans = Network.Instantiate(serverPrefab, myPrevTrans.position, myPrevTrans.rotation, 0);
+                    //myNewTrans = PhotonNetwork.Instantiate("serverPrefab", myPrevTrans.transform.position, myPrevTrans.transform.rotation, 0);
                     myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfServerPrefabs;
                     myNewTrans.GetComponent(PlayerController).movementActive = myPrevTrans.GetComponent(PlayerController).movementActive;
                     serverTransforms[numberOfServerPrefabs - 1] = myNewTrans;
@@ -190,34 +190,11 @@ function Update()
                     checkTimerClient += spawnTimeClient; //set the timer again
                     numberOfClientPrefabs++;   
                    
-                    myNewTrans = Network.Instantiate(clientPrefab, myPrevTrans.position, myPrevTrans.rotation, 0);
+                    //myNewTrans = PhotonNetwork.Instantiate("clientPrefab", myPrevTrans.transform.position, myPrevTrans.transform.rotation, 0);
                     myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfClientPrefabs;
                     clientTransforms[numberOfClientPrefabs - 1] = myNewTrans;
                 }
             }
         }
     }
-}
-
-function OnPlayerDisconnected(player: NetworkPlayer) {
-	Debug.Log("Clean up after player " + player);
-	Network.RemoveRPCs(player);
-	Network.DestroyPlayerObjects(player);
-	gameStarted = false;
-}
-
-function OnDisconnectedFromServer(info : NetworkDisconnection) {
-	Debug.Log("Clean up a bit after server quit");
-	gameStarted = false;
-	Network.RemoveRPCs(Network.player);
-	Network.DestroyPlayerObjects(Network.player);
-	
-	/* 
-	* Note that we only remove our own objects, but we cannot remove the other players 
-	* objects since we don't know what they are; we didn't keep track of them. 
-	* In a game you would usually reload the level or load the main menu level anyway ;).
-	* 
-	* In fact, we could use "Application.LoadLevel(Application.loadedLevel);" here instead to reset the scene.
-	*/
-	Application.LoadLevel(Application.loadedLevel);
 }
