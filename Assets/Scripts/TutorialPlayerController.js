@@ -65,7 +65,6 @@ function Start ()
    GreenPlane.renderer.enabled = false;
    RedPlane.renderer.enabled = true;
    YellowPlane.renderer.enabled = false;
-   
    //spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
 }
 
@@ -91,17 +90,19 @@ function Update() {
 		    Input.ResetInputAxes();
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
+        Debug.Log(gameObject.tag);
         if(checkTerrain == TextureType.Sand)
         {
             walkSpeed = 40;
             tutorialGui.OverSand();
         }
-        else if(checkTerrain == TextureType.Blueberry  && this.Tag == "Blue")
+        //else if(checkTerrain == TextureType.Blueberry  && gameObject.Tag == "Blue")
+        //{
+       //     RestoreHealth();     
+       // }
+        else if(checkTerrain == TextureType.Redberry)
         {
-            RestoreHealth();     
-        }
-        else if(checkTerrain == TextureType.Redberry  && this.Tag == "Red")
-        {
+        Debug.Log(checkTerrain);
             RestoreHealth();     
         }
         else

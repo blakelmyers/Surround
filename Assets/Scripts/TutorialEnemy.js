@@ -65,6 +65,7 @@ function Start ()
    GreenPlane.renderer.enabled = true;
    RedPlane.renderer.enabled = false;
    YellowPlane.renderer.enabled = false;
+   
 }
 
 function Awake ()

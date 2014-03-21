@@ -160,8 +160,8 @@ function OverSand()
 function HitEnemy() {
 
     // stop the follower prefab as well
-    GameObject.Find("ServerPrefabYellow1").GetComponent(TutorialPlayerController).movementActive = false;
-    GameObject.Find("ServerPrefabYellow").GetComponent(TutorialPlayerController).movementActive = false;
+    GameObject.Find("YellowPrefab1").GetComponent(TutorialPlayerController).movementActive = false;
+    GameObject.Find("YellowPrefab2").GetComponent(TutorialPlayerController).movementActive = false;
     
     if(step8a)   // Only set this once
     {
