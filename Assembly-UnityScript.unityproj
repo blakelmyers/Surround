@@ -46,19 +46,19 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Camera Scripts\CameraScript.js" />
-     <Compile Include="Assets\Scripts\ControllerScripts\PlayerController.js" />
-     <Compile Include="Assets\Scripts\ControllerScripts\ThirdPersonController.js" />
-     <Compile Include="Assets\Scripts\ControllerScripts\ThirdPersonControllerMainMenu.js" />
-     <Compile Include="Assets\Scripts\ControllerScripts\TutorialEnemy.js" />
-     <Compile Include="Assets\Scripts\ControllerScripts\TutorialPlayerController.js" />
-     <Compile Include="Assets\Scripts\MenuScripts\Menu.js" />
-     <Compile Include="Assets\Scripts\MenuScripts\SelectionScript.js" />
-     <Compile Include="Assets\Scripts\MenuScripts\Tutorial.js" />
-     <Compile Include="Assets\Scripts\MenuScripts\TutorialGUI.js" />
-     <Compile Include="Assets\Scripts\MultiplayerScripts\Connect.js" />
-     <Compile Include="Assets\Scripts\MultiplayerScripts\SpawnTutorial.js" />
-     <Compile Include="Assets\Scripts\MultiplayerScripts\Spawnscript.js" />
+     <Compile Include="Assets\Scripts\CameraScript.js" />
+     <Compile Include="Assets\Scripts\Connect.js" />
+     <Compile Include="Assets\Scripts\Menu.js" />
+     <Compile Include="Assets\Scripts\PlayerController.js" />
+     <Compile Include="Assets\Scripts\SelectionScript.js" />
+     <Compile Include="Assets\Scripts\SpawnTutorial.js" />
+     <Compile Include="Assets\Scripts\Spawnscript.js" />
+     <Compile Include="Assets\Scripts\ThirdPersonController.js" />
+     <Compile Include="Assets\Scripts\ThirdPersonControllerMainMenu.js" />
+     <Compile Include="Assets\Scripts\Tutorial.js" />
+     <Compile Include="Assets\Scripts\TutorialEnemy.js" />
+     <Compile Include="Assets\Scripts\TutorialGUI.js" />
+     <Compile Include="Assets\Scripts\TutorialPlayerController.js" />
      <None Include="Assets\Plugins\release_history.txt" />
      <None Include="Assets\Plugins\Photon3Unity3D.xml" />
      <None Include="Assets\Photon Unity Networking\readme.txt" />

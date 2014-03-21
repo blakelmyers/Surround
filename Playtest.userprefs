@@ -1,27 +1,35 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="c:\Users\Myers\Documents\Playtest\Assets\Scripts\MultiplayerScripts\NetworkCharacter.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Spawnscript.js">
     <Files>
-      <File FileName="Assets\Scripts\MultiplayerScripts\Spawnscript.js" Line="11" Column="3" />
-      <File FileName="Assets\Scripts\MultiplayerScripts\Spawnscript.js" Line="201" Column="1" />
-      <File FileName="Assets\Scripts\MenuScripts\Tutorial.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ControllerScripts\PlayerController.js" Line="115" Column="8" />
-      <File FileName="Assets\Scripts\Camera Scripts\CameraScript.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MultiplayerScripts\Connect.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ControllerScripts\ThirdPersonControllerMainMenu.js" Line="11" Column="1" />
-      <File FileName="Assets\Scripts\ControllerScripts\TutorialEnemy.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MultiplayerScripts\SpawnTutorial.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MenuScripts\Menu.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ControllerScripts\ThirdPersonController.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MenuScripts\SelectionScript.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MenuScripts\TutorialGUI.js" Line="1" Column="1" />
       <File FileName="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs" Line="93" Column="99" />
-      <File FileName="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\PhotonConverter.cs" Line="401" Column="1" />
-      <File FileName="c:\Users\Myers\Documents\Playtest\Assets\Scripts\MultiplayerScripts\NetworkCharacter.cs" Line="18" Column="31" />
-      <File FileName="Assets\Scripts\MultiplayerScripts\RandomMatchmaker.cs" Line="55" Column="42" />
-      <File FileName="Assets\Plugins\PhotonNetwork\PhotonNetwork.cs" Line="2041" Column="1" />
-      <File FileName="Assets\Scripts\MultiplayerScripts\GameLogic.cs" Line="13" Column="38" />
+      <File FileName="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\PhotonConverter.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Spawnscript.js" Line="188" Column="25" />
+      <File FileName="Assets\Scripts\PlayerController.js" Line="99" Column="37" />
+      <File FileName="Assets\Standard Assets\RandomMatchmaker.cs" Line="33" Column="38" />
+      <File FileName="Assets\Scripts\SpawnTutorial.js" Line="1" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Assembly-CSharp-Editor" expanded="True">
+            <Node name="Photon Unity Networking" expanded="True">
+              <Node name="Editor" expanded="True">
+                <Node name="PhotonNetwork" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+          <Node name="Assembly-CSharp-firstpass" expanded="True">
+            <Node name="Standard Assets" expanded="True" />
+          </Node>
+          <Node name="Assembly-UnityScript" expanded="True">
+            <Node name="Scripts" expanded="True">
+              <Node name="Spawnscript.js" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

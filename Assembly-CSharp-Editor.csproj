@@ -56,6 +56,12 @@
     <None Include="Assets\Plugins\Photon3Unity3D.xml" />
     <None Include="Assets\Photon Unity Networking\readme.txt" />
     <None Include="Assets\Photon Unity Networking\changelog.txt" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Assets\Photon Unity Networking\Editor\PhotonNetwork\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Photon3Unity3D">
+      <HintPath>Assets\Plugins\Photon3Unity3D.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.Graphs">
       <HintPath>C:\Program Files %28x86%29\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
     </Reference>
@@ -74,25 +80,11 @@
     <Reference Include="UnityEditor.Android.Extensions">
       <HintPath>C:\Program Files %28x86%29\Unity\Editor\Data\PlaybackEngines\AndroidPlayer\EditorExtensions\UnityEditor.Android.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Assets\Photon Unity Networking\Editor\PhotonNetwork\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Photon3Unity3D">
-      <HintPath>Assets\Plugins\Photon3Unity3D.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
       <Project>{8498DA1E-B52A-8443-40DD-BE37750D9640}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
-    </ProjectReference>
-    <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{5418A9B3-F628-58BD-5533-F00B2588CC4C}</Project>
-      <Name>Assembly-CSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="Assembly-UnityScript.unityproj">
-      <Project>{9DF2BF18-12B9-43D6-6B88-E38C13BCD347}</Project>
-      <Name>Assembly-UnityScript</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

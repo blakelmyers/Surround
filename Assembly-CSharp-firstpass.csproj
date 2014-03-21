@@ -46,25 +46,6 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Plugins\PhotonNetwork\CustomTypes.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\Enums.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\Extensions.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\FriendInfo.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\LoadbalancingPeer.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\NetworkingPeer.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\PhotonClasses.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\PhotonHandler.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\PhotonLagSimulationGui.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\PhotonNetwork.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\PhotonPlayer.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\PhotonStatsGui.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\PhotonView.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\PingCloudRegions.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\RPC.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\Room.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\RoomInfo.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\RpcIndexComponent.cs" />
-     <Compile Include="Assets\Plugins\PhotonNetwork\ServerSettings.cs" />
      <Compile Include="Assets\Plugins\UtilityScripts\ConnectAndJoinRandom.cs" />
      <Compile Include="Assets\Plugins\UtilityScripts\InRoomChat.cs" />
      <Compile Include="Assets\Plugins\UtilityScripts\InputToEvent.cs" />
@@ -79,6 +60,27 @@
      <Compile Include="Assets\Plugins\UtilityScripts\SmoothSyncMovement.cs" />
      <Compile Include="Assets\Plugins\UtilityScripts\TestDontDestroyOnLoad.cs" />
      <Compile Include="Assets\Plugins\UtilityScripts\TimeKeeper.cs" />
+     <Compile Include="Assets\Standard Assets\CustomTypes.cs" />
+     <Compile Include="Assets\Standard Assets\Enums.cs" />
+     <Compile Include="Assets\Standard Assets\Extensions.cs" />
+     <Compile Include="Assets\Standard Assets\FriendInfo.cs" />
+     <Compile Include="Assets\Standard Assets\LoadbalancingPeer.cs" />
+     <Compile Include="Assets\Standard Assets\NetworkCharacter.cs" />
+     <Compile Include="Assets\Standard Assets\NetworkingPeer.cs" />
+     <Compile Include="Assets\Standard Assets\PhotonClasses.cs" />
+     <Compile Include="Assets\Standard Assets\PhotonHandler.cs" />
+     <Compile Include="Assets\Standard Assets\PhotonLagSimulationGui.cs" />
+     <Compile Include="Assets\Standard Assets\PhotonNetwork.cs" />
+     <Compile Include="Assets\Standard Assets\PhotonPlayer.cs" />
+     <Compile Include="Assets\Standard Assets\PhotonStatsGui.cs" />
+     <Compile Include="Assets\Standard Assets\PhotonView.cs" />
+     <Compile Include="Assets\Standard Assets\PingCloudRegions.cs" />
+     <Compile Include="Assets\Standard Assets\RPC.cs" />
+     <Compile Include="Assets\Standard Assets\RandomMatchmaker.cs" />
+     <Compile Include="Assets\Standard Assets\Room.cs" />
+     <Compile Include="Assets\Standard Assets\RoomInfo.cs" />
+     <Compile Include="Assets\Standard Assets\RpcIndexComponent.cs" />
+     <Compile Include="Assets\Standard Assets\ServerSettings.cs" />
      <None Include="Assets\Plugins\release_history.txt" />
      <None Include="Assets\Plugins\Photon3Unity3D.xml" />
      <None Include="Assets\Photon Unity Networking\readme.txt" />

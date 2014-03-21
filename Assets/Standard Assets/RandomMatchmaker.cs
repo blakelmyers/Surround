@@ -4,8 +4,8 @@ using UnityEngine;
 public class RandomMatchmaker : Photon.MonoBehaviour
 {
     private PhotonView myPhotonView;
-	private Vector3 startingPosPlayer1 = new Vector3(1888, 8, 1829);
-	private Vector3 startingPosPlayer2 = new Vector3(1854, 8, 1854);
+	private Vector3 startingPosPlayer1 = new Vector3(1450, 8, 560);
+	private Vector3 startingPosPlayer2 = new Vector3(450, 5, 1500);
 	private int playerID;
 	private bool connected = false;
 
@@ -54,18 +54,6 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 		{
 			GUILayout.Label("Player " + playerID);
 		}
-		if (PhotonNetwork.connectionStateDetailed == PeerState.Joined)
-		{
-			bool shoutMarco = GameLogic.playerWhoIsIt == PhotonNetwork.player.ID;
-			
-			if (shoutMarco && GUILayout.Button("Marco!"))
-			{
-				myPhotonView.RPC("Marco", PhotonTargets.All);
-			}
-			if (!shoutMarco && GUILayout.Button("Polo!"))
-			{
-				myPhotonView.RPC("Polo", PhotonTargets.All);
-			}
-		}
+
 	}
 }

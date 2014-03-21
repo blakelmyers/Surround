@@ -16,7 +16,12 @@ enum CharacterState {
 	Attacking = 2,
 }
 */
-
+enum HealthStatus {
+    Green = 3, 
+    Yellow = 2,
+    Red = 1,
+    Dead = 0,
+}
 
 var health_ : HealthStatus;
 var collisionCounter : int = 0;

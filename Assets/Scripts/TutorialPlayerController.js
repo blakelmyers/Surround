@@ -8,15 +8,10 @@ public var spawnNumber : int;
 
 private var _animation : Animation;
 
-var playerType : PlayerType;
+var firstHit : boolean = false;
 
-/*
-enum CharacterState {
-	Idle = 0,
-	Walking = 1,
-	Attacking = 2,
-}
-*/
+public var tutorialGui : TutorialGUI;
+
 enum TextureType {
     Grass = 0,
     Sand = 1,
@@ -24,6 +19,7 @@ enum TextureType {
     Redberry = 3,
     Orangeberry = 4,
 }
+
 
 //private var _characterState : CharacterState;
 
@@ -57,36 +53,24 @@ var RedPlane : GameObject;
 var GreenPlane : GameObject;
 var YellowPlane : GameObject;
 
-enum HealthStatus {
-    Green = 3, 
-    Yellow = 2,
-    Red = 1,
-    Dead = 0,
-}
-
 function Start ()
 {
-   health_ = HealthStatus.Green;
+   //health_ = HealthStatus.Green;
    var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
         if (t.name == "RedPlane"){ RedPlane = t.gameObject;}
         else if (t.name == "GreenPlane"){ GreenPlane = t.gameObject;}
         else if (t.name == "YellowPlane"){ YellowPlane = t.gameObject;}
    }
-   GreenPlane.renderer.enabled = true;
-   RedPlane.renderer.enabled = false;
+   GreenPlane.renderer.enabled = false;
+   RedPlane.renderer.enabled = true;
    YellowPlane.renderer.enabled = false;
    
-   spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
+   //spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
 }
 
 function Awake ()
 {
-    if(!networkView.isMine){
-		//We aren't the network owner, disable this script
-		//RPC's and OnSerializeNetworkView will STILL get trough!
-		enabled=false;	
-	}
 	
 	moveDirection = transform.TransformDirection(Vector3.forward);
 	
@@ -96,59 +80,11 @@ function Awake ()
 	
 }
 
-function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo)
-{
-	if (stream.isWriting){
-		//Executed on the owner of the networkview; 
-		//The server sends it's position over the network
-		
-		var pos : Vector3 = transform.position;	
-        var gPlane : boolean = GreenPlane.renderer.enabled;
-        var rPlane : boolean = RedPlane.renderer.enabled;
-        var yPlane : boolean = YellowPlane.renderer.enabled;
-	
-		stream.Serialize(pos);//"Encode" it, and send it
-        stream.Serialize(gPlane);
-        stream.Serialize(rPlane);
-        stream.Serialize(yPlane);
-				
-	}else{
-		//Executed on the others; 
-		//The clients receive a position and set the object to it
-		
-		var posReceive : Vector3 = Vector3.zero;
-        var gPlaneReceive : boolean = false;
-        var rPlaneReceive : boolean = false;
-        var yPlaneReceive : boolean = false;
-        
-		stream.Serialize(posReceive); //"Decode" it and receive it
-        stream.Serialize(gPlaneReceive);
-        stream.Serialize(rPlaneReceive);
-        stream.Serialize(yPlaneReceive);
-        
-		transform.position = posReceive;
-        GreenPlane.renderer.enabled = gPlaneReceive;
-        RedPlane.renderer.enabled = rPlaneReceive;
-        YellowPlane.renderer.enabled = yPlaneReceive;
-		
-	}
-}
-
-@RPC
-function SetPosition(newPos : Vector3){
-	//This RPC is in this case always called by the server,
-	// but executed on all clients
-	
-	transform.position=newPos;	
-}
-
-
 function Update() {
 
     var checkTerrain : TextureType;
     
-    if(networkView.isMine)
-    {
+    
 	    if (!isControllable)
 	    {
 		    // kill all inputs if not controllable.
@@ -158,12 +94,13 @@ function Update() {
         if(checkTerrain == TextureType.Sand)
         {
             walkSpeed = 40;
+            tutorialGui.OverSand();
         }
-        else if(checkTerrain == TextureType.Blueberry  && playerType == PlayerType.Client)
+        else if(checkTerrain == TextureType.Blueberry  && this.Tag == "Blue")
         {
             RestoreHealth();     
         }
-        else if(checkTerrain == TextureType.Redberry  && playerType == PlayerType.Server)
+        else if(checkTerrain == TextureType.Redberry  && this.Tag == "Red")
         {
             RestoreHealth();     
         }
@@ -186,13 +123,15 @@ function Update() {
             _animation.CrossFade("idle");
        }
         
-    }
+    
 	
 }
 
 function RestoreHealth()
 {
     healthCounter++;
+    
+    tutorialGui.OverBerries();
     
     if(health_ < HealthStatus.Green)
     {
@@ -236,7 +175,7 @@ function ProcessMovement()
         if(Vector3.Distance(targetPoint, transform.position) < 20 * spawnNumber)
         {
             _animation.CrossFade("idle");
-            transform.position.y = 1;
+            transform.position.y = 8;
             
         }
         else
@@ -249,7 +188,7 @@ function ProcessMovement()
  
             // Move the object forward.
             transform.position += transform.forward * walkSpeed * Time.deltaTime;
-            transform.position.y = 1;        
+            transform.position.y = 8;        
             _animation.CrossFade("walk");
         }
         
@@ -264,9 +203,16 @@ function FixedUpdate()
 }
 
 function OnTriggerEnter(collisionInfo : Collider){
+
+    
     if(collisionInfo.name != this.name){
         if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
-           if(collisionCounter % 6 == 0)
+           if(!firstHit)
+            {
+                firstHit = true;
+                tutorialGui.HitEnemy();            
+            }
+           if(collisionCounter % 9 == 0)
             {
                 DecreaseHealth();
             }
@@ -299,8 +245,8 @@ function DecreaseHealth()
             break;
         case HealthStatus.Red:
             health_ = HealthStatus.Dead;
-            Network.Destroy(this.gameObject);
-            spawnScript.UnitDied(spawnNumber);
+            Destroy(this.gameObject);
+            //spawnScript.UnitDied(spawnNumber);
             break;
     }
 }

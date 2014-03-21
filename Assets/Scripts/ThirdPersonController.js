@@ -2,24 +2,37 @@
 // Require a character controller to be attached to the same game object
 @script RequireComponent(CharacterController)
 
-public class ThirdPersonControllerMainMenu extends Photon.MonoBehaviour{
-
 public var idleAnimation : AnimationClip;
 public var walkAnimation : AnimationClip;
 public var runAnimation : AnimationClip;
 public var jumpPoseAnimation : AnimationClip;
+public var dinosaurClone : Transform;
+public var spawnTime : float; //for 5 second
+public var checkTimer : float;
+public var movementActive : boolean = true;
 
 public var walkMaxAnimationSpeed : float = 0.75;
 public var trotMaxAnimationSpeed : float = 1.0;
 public var runMaxAnimationSpeed : float = 1.0;
 public var jumpAnimationSpeed : float = 1.15;
 public var landAnimationSpeed : float = 1.0;
+public var numberOfDinosaurs : int = 1;
 
 private var _animation : Animation;
 
-public var dinosaurType : DinosaurEnum;
-
-
+enum CharacterState {
+	Idle = 0,
+	Walking = 1,
+	Trotting = 2,
+	Running = 3,
+	Jumping = 4,
+}
+/*
+enum TextureType {
+    Grass = 0,
+    Sand = 1,
+}
+*/
 private var _characterState : CharacterState;
 
 // The speed when walking
@@ -87,20 +100,24 @@ private var lastGroundedTime = 0.0;
 
 private var isControllable = true;
 
+function Start ()
+{
+    checkTimer = Time.time + spawnTime;
+}
 function Awake ()
 {
-    //if(!photonView.isMine){
-        //We aren't the network owner, disable this script
-        //RPC's and OnSerializeNetworkView will STILL get trough!
-     //   enabled=false;  
-    //}
+    if(!networkView.isMine){
+		//We aren't the network owner, disable this script
+		//RPC's and OnSerializeNetworkView will STILL get trough!
+		enabled=false;	
+	}
+	
 	moveDirection = transform.TransformDirection(Vector3.forward);
 	
 	_animation = GetComponent(Animation);
 	if(!_animation)
 		Debug.Log("The character you would like to control doesn't have animations. Moving her might look weird.");
 	
-
 	if(!idleAnimation) {
 		_animation = null;
 		Debug.Log("No idle animation found. Turning off animations.");
@@ -117,8 +134,37 @@ function Awake ()
 		_animation = null;
 		Debug.Log("No jump animation found and the character has canJump enabled. Turning off animations.");
 	}
-			
+	
 }
+
+function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo)
+{
+	if (stream.isWriting){
+		//Executed on the owner of the networkview; 
+		//The server sends it's position over the network
+		
+		var pos : Vector3 = transform.position;		
+		stream.Serialize(pos);//"Encode" it, and send it
+				
+	}else{
+		//Executed on the others; 
+		//The clients receive a position and set the object to it
+		
+		var posReceive : Vector3 = Vector3.zero;
+		stream.Serialize(posReceive); //"Decode" it and receive it
+		transform.position = posReceive;
+		
+	}
+}
+
+@RPC
+function SetPosition(newPos : Vector3){
+	//This RPC is in this case always called by the server,
+	// but executed on all clients
+	
+	transform.position=newPos;	
+}
+
 
 function UpdateSmoothedMovementDirection ()
 {
@@ -223,13 +269,6 @@ function UpdateSmoothedMovementDirection ()
 		
 }
 
-@RPC
-function SetPosition(newPos : Vector3){
-	//This RPC is in this case always called by the server,
-	// but executed on all clients
-	
-	transform.position=newPos;	
-}
 
 function ApplyJumping ()
 {
@@ -253,9 +292,6 @@ function ApplyGravity ()
 {
 	if (isControllable)	// don't move player at all if not controllable.
 	{
-		// Apply gravity
-		var jumpButton = Input.GetButton("Jump");
-		
 		
 		// When we reach the apex of the jump we send out a message
 		if (jumping && !jumpingReachedApex && verticalSpeed <= 0.0)
@@ -286,37 +322,71 @@ function DidJump ()
 	lastJumpStartHeight = transform.position.y;
 	lastJumpButtonTime = -10;
 	
-
 	_characterState = CharacterState.Jumping;
 }
-function OnMouseDown()
-{
-    Debug.Log(dinosaurType);
-    
-    GameObject.Find("Selection").GetComponent(SelectionScript).selectionChoice = dinosaurType;
-    Application.LoadLevel("MapScene");
-}
+
+
 function Update() {
 
-if(photonView.isMine)
-    {
-    if(Input.GetMouseButtonDown(0))
-    {
-        //Debug.Log(dinosaurType);
-    }
-    
-	if (!isControllable)
+	var speed = 100.0;
+	
+	/*if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
 	{
-		// kill all inputs if not controllable.
-		Input.ResetInputAxes();
+	   speed = 40;
 	}
-
+	else
+	{
+	   speed = 80;
+}*/
+        if(networkView.isMine)
+        {
+	
+	        if (!isControllable)
+	        {
+		        // kill all inputs if not controllable.
+		        Input.ResetInputAxes();
+	        }
+                
+                if(Input.GetMouseButtonDown(1))
+    {
+    movementActive = !movementActive;
+    }
+if (movementActive == true)
+{
+	// Generate a plane that intersects the transform's position with an upwards normal.
+    var playerPlane = new Plane(Vector3.up, transform.position);
+ 
+    // Generate a ray from the cursor position
+    var ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+ 
+    // Determine the point where the cursor ray intersects the plane.
+    // This will be the point that the object must look towards to be looking at the mouse.
+    // Raycasting to a Plane object only gives us a distance, so we'll have to take the distance,
+    //   then find the point along that ray that meets that distance.  This will be the point
+    //   to look at.
+    var hitdist = 0.0;
+    // If the ray is parallel to the plane, Raycast will return false.
+    if (playerPlane.Raycast (ray, hitdist)) {
+        // Get the point along the ray that hits the calculated distance.
+        var targetPoint = ray.GetPoint(hitdist);
+ 
+        // Determine the target rotation.  This is the rotation if the transform looks at the target point.
+        var targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
+ 
+        // Smoothly rotate towards the target point.
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
+ 
+        // Move the object forward.
+        transform.position += transform.forward * speed * Time.deltaTime;
+ 
+    }
+}
 	if (Input.GetButtonDown ("Jump"))
 	{
 		lastJumpButtonTime = Time.time;
 	}
 
-	UpdateSmoothedMovementDirection();
+	//UpdateSmoothedMovementDirection();
 	
 	// Apply gravity
 	// - extra power jump modifies gravity
@@ -325,7 +395,15 @@ if(photonView.isMine)
 
 	// Apply jumping logic
 	ApplyJumping ();
-	
+	/*
+	if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
+	{
+	   walkSpeed = 20;
+	}
+	else
+	{
+	   walkSpeed = 40;
+	}*/
 	// Calculate actual motion
 	var movement = moveDirection * moveSpeed + Vector3 (0, verticalSpeed, 0) + inAirVelocity;
 	movement *= Time.deltaTime;
@@ -341,11 +419,11 @@ if(photonView.isMine)
 			if(!jumpingReachedApex) {
 				_animation[jumpPoseAnimation.name].speed = jumpAnimationSpeed;
 				_animation[jumpPoseAnimation.name].wrapMode = WrapMode.ClampForever;
-				_animation.CrossFade(jumpPoseAnimation.name);
+				//_animation.CrossFade(jumpPoseAnimation.name);
 			} else {
 				_animation[jumpPoseAnimation.name].speed = -landAnimationSpeed;
 				_animation[jumpPoseAnimation.name].wrapMode = WrapMode.ClampForever;
-				_animation.CrossFade(jumpPoseAnimation.name);	
+				//_animation.CrossFade(jumpPoseAnimation.name);	
 							
 			}
 			
@@ -353,21 +431,21 @@ if(photonView.isMine)
 		else 
 		{
 			if(controller.velocity.sqrMagnitude < 0.1) {
-				_animation.CrossFade("idle");
+				//_animation.CrossFade("idle");
 			}
 			else 
 			{
 				if(_characterState == CharacterState.Running) {
 					_animation[runAnimation.name].speed = Mathf.Clamp(controller.velocity.magnitude, 0.0, runMaxAnimationSpeed);
-					_animation.CrossFade("run");	
+					//_animation.CrossFade("run");	
 				}
 				else if(_characterState == CharacterState.Trotting) {
 					_animation[walkAnimation.name].speed = Mathf.Clamp(controller.velocity.magnitude, 0.0, trotMaxAnimationSpeed);
-					_animation.CrossFade("walk");	
+					//_animation.CrossFade("walk");	
 				}
 				else if(_characterState == CharacterState.Walking) {
 					_animation[walkAnimation.name].speed = Mathf.Clamp(controller.velocity.magnitude, 0.0, walkMaxAnimationSpeed);
-					_animation.CrossFade("walk");	
+					//_animation.CrossFade("walk");	
 				}
 				
 			}
@@ -403,12 +481,12 @@ if(photonView.isMine)
 			SendMessage("DidLand", SendMessageOptions.DontRequireReceiver);
 		}
 	}
-	}
+ }
+   
+    
+
+	
 }
-
-
-
-
 
 function OnControllerColliderHit (hit : ControllerColliderHit )
 {
@@ -417,11 +495,47 @@ function OnControllerColliderHit (hit : ControllerColliderHit )
 		return;
 }
 
+function GetTerrainTextureAt(position : Vector3)
+{
+       // Set up:
+       var retval : int;
+       var selectedTexture : Texture;
+       var TS : Vector3; // terrain size
+       var AS : Vector2; // control texture size
+ 
+       TS = Terrain.activeTerrain.terrainData.size;
+       AS.x = Terrain.activeTerrain.terrainData.alphamapWidth;
+       AS.y = Terrain.activeTerrain.terrainData.alphamapHeight;
+ 
+ 
+       // Lookup texture we are standing on:
+       var AX : int;
+       AX =  (position.x/TS.x )*AS.x + 0.5f ;
+       var AY : int;
+       AY =  (position.z/TS.z )*AS.y + 0.5f;
+       var TerrCntrl : float[,,] = Terrain.activeTerrain.terrainData.GetAlphamaps(AX, AY,1 ,1);
+ 
+       var TD : TerrainData = Terrain.activeTerrain.terrainData;
+ 
+       var i : int;
+       for(i = 0; i < TD.splatPrototypes.Length; i++ )
+       {
+         if( TerrCntrl[0,0,i] > .5f )
+         {
+           retval = i;
+         }
+ 
+       }
+ 
+ 
+       return retval;
+}
+    
 function GetSpeed () {
 	return moveSpeed;
 }
 
-
+   
 function IsJumping () {
 	return jumping;
 }
@@ -462,4 +576,4 @@ function Reset ()
 {
 	gameObject.tag = "Player";
 }
-}
+
