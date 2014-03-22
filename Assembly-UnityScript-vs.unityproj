@@ -46,15 +46,31 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Camera Scripts\CameraScript.js" />
-     <Compile Include="Assets\Scripts\ControllerScripts\PlayerController.js" />
-     <Compile Include="Assets\Scripts\ControllerScripts\ThirdPersonController.js" />
-     <Compile Include="Assets\Scripts\ControllerScripts\ThirdPersonControllerMainMenu.js" />
-     <Compile Include="Assets\Scripts\ControllerScripts\TutorialEnemy.js" />
-     <Compile Include="Assets\Scripts\MenuScripts\Menu.js" />
-     <Compile Include="Assets\Scripts\MultiplayerScripts\Connect.js" />
-     <Compile Include="Assets\Scripts\MultiplayerScripts\SpawnTutorial.js" />
-     <Compile Include="Assets\Scripts\MultiplayerScripts\Spawnscript.js" />
+     <Compile Include="Assets\Scripts\CameraScript1.js" />
+     <Compile Include="Assets\Scripts\CameraScript2.js" />
+     <Compile Include="Assets\Scripts\Connect.js" />
+     <Compile Include="Assets\Scripts\Menu.js" />
+     <Compile Include="Assets\Scripts\PlayerController.js" />
+     <Compile Include="Assets\Scripts\SelectionScript.js" />
+     <Compile Include="Assets\Scripts\SpawnTutorial.js" />
+     <Compile Include="Assets\Scripts\Spawnscript.js" />
+     <Compile Include="Assets\Scripts\ThirdPersonController.js" />
+     <Compile Include="Assets\Scripts\ThirdPersonControllerMainMenu.js" />
+     <Compile Include="Assets\Scripts\Tutorial.js" />
+     <Compile Include="Assets\Scripts\TutorialEnemy.js" />
+     <Compile Include="Assets\Scripts\TutorialGUI.js" />
+     <Compile Include="Assets\Scripts\TutorialPlayerController.js" />
+     <None Include="Assets\Plugins\release_history.txt" />
+     <None Include="Assets\Plugins\Photon3Unity3D.xml" />
+     <None Include="Assets\Photon Unity Networking\readme.txt" />
+     <None Include="Assets\Photon Unity Networking\changelog.txt" />
+ <Reference Include="Photon3Unity3D">
+ <HintPath>Assets\Plugins\Photon3Unity3D.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
+      <Project>{8498DA1E-B52A-8443-40DD-BE37750D9640}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

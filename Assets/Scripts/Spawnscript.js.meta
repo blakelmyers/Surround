@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 8ad4fde643dedf044bef9c602d2d1017
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - player1Prefab: {instanceID: 0}
+  - player2Prefab: {instanceID: 0}
+  - player1PrefabYellow: {fileID: 400020, guid: db5cf87521c18e8458571900b703f4fd,
+      type: 2}
+  - player2PrefabPurple: {fileID: 400016, guid: 95f64fe1b36f38844968205cd224d72d,
+      type: 2}
+  - player1PrefabRed: {fileID: 400000, guid: 683907ebf34b6cd4eae1d8f6af7b1b29, type: 2}
+  - player2PrefabBlue: {fileID: 400000, guid: 2d2b720b8b2d7404094026896ceaea25, type: 2}
+  - cameraForPlayer: {instanceID: 0}
+  - selectionType: {instanceID: 0}
+  - connectionObject: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
