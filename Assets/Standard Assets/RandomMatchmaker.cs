@@ -8,6 +8,7 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 	private Vector3 startingPosPlayer2 = new Vector3(450, 5, 1500);
 	private int playerID;
 	private bool connected = false;
+	private bool waiting = false;
 
     // Use this for initialization
     void Start()
@@ -28,32 +29,57 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 
     void OnJoinedRoom()
     {
-		GameObject monster;
-
 		playerID = PhotonNetwork.player.ID;
 
 		connected = true;
-		
-		if(playerID == 1)  // Player 1 has joined
+
+			GameObject monster;
+			
+		if(playerID == 1)  // Player 1
 		{
-			monster = PhotonNetwork.Instantiate("YellowPrefab", startingPosPlayer1, Quaternion.identity, 0);
+			waiting = true;
 		}
-		else
-		{
-			monster = PhotonNetwork.Instantiate("PurplePrefab", startingPosPlayer2, Quaternion.identity, 0);
-		}
-        //monster.GetComponent<myThirdPersonController>().isControllable = true;
-        myPhotonView = monster.GetComponent<PhotonView>();
+			 
+		if(playerID == 2)
+			{
+			waiting = false;
+				monster = PhotonNetwork.Instantiate("PurplePrefab", startingPosPlayer2, Quaternion.identity, 0);
+				myPhotonView = monster.GetComponent<PhotonView>();
+			}
+ 
     }
+
+	void OnPhotonPlayerConnected(PhotonPlayer player)
+	{
+		if(player.ID == 2)
+		{
+			if(playerID == 1)  // Player 1 
+			{
+				GameObject monster;
+				monster = PhotonNetwork.Instantiate("YellowPrefab", startingPosPlayer1, Quaternion.identity, 0);
+				myPhotonView = monster.GetComponent<PhotonView>();
+			}
+		}
+	}
 
     void OnGUI()
     {
-		GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
+		if (Application.loadedLevel != 0) {
+						if (GUILayout.Button ("Return to Main Menu")) {
+								PhotonNetwork.LeaveRoom ();
+								PhotonNetwork.Disconnect ();
+								Application.LoadLevel ("MainMenu");
+						}
+						GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
 
-		if(connected)
-		{
-			GUILayout.Label("Player " + playerID);
+						if (connected) {
+								GUILayout.Label ("Player " + playerID);
+						}
+			if (waiting) {
+				GUILayout.Label ("Waiting on Player 2");
+			}
 		}
+
 
 	}
 }

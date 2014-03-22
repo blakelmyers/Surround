@@ -2,10 +2,9 @@
 
 var cameraTransform : Transform;
 
-
 function Update () {
-    
-    //Debug.Log(cameraTransform.position);
+
+    Debug.Log(cameraTransform.position);
     if(Input.GetKey(KeyCode.A)){
 		cameraTransform.position.x += 5;
 	}
@@ -30,4 +29,6 @@ function Update () {
             cameraTransform.position.y += 5;
         }
     }
+    
+
 }

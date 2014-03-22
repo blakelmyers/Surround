@@ -27,8 +27,6 @@ enum TextureType {
 var walkSpeed = 2.0;
 var rotateSpeed = 500.0;
 
-public var spawnScript : Spawnscript;
-
 // The current move direction in x-z
 private var moveDirection = Vector3.zero;
 

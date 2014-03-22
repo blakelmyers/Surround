@@ -16,7 +16,8 @@ public var player1PrefabYellow : Transform;
 public var player2PrefabPurple : Transform;
 public var player1PrefabRed : Transform;
 public var player2PrefabBlue : Transform;
-public var cameraForPlayer : Transform;
+public var cameraForPlayer1 : GameObject;
+public var cameraForPlayer2 : GameObject;
 public var cameraDistance : float;
 public var spawnTimeplayer1 : float;
 public var spawnTimeplayer2 : float;
@@ -94,10 +95,11 @@ function StartSpawning(){
 	gameStarted = true;
     var startingCameraPosition : Vector3;
 	playerID = PhotonNetwork.player.ID;
-    
 	if(playerID == 1){
+       cameraForPlayer1.SetActive(true);
+       cameraForPlayer2.SetActive(false);
        startingCameraPosition = Vector3(1500, 400, 1000);
-       cameraForPlayer.position = startingCameraPosition;
+       cameraForPlayer1.transform.position = startingCameraPosition;
 	   checkTimerplayer1 = Time.time + spawnTimeplayer1;
 	   numberOfplayer1Prefabs++;
 	   startPositionplayer1 = Vector3(1450, 8, 560);
@@ -108,10 +110,13 @@ function StartSpawning(){
        player1prefabs[0] = myNewTrans;
        
 	}
-	else   // player2
+	else if (playerID == 2)   // player2
 	{
+       cameraForPlayer2.SetActive(true);
+       cameraForPlayer1.SetActive(false);
+       
        startingCameraPosition = Vector3(500, 400, 2050);
-       cameraForPlayer.position = startingCameraPosition;
+       cameraForPlayer2.transform.position = startingCameraPosition;
 	   checkTimerplayer2 = Time.time + spawnTimeplayer2;
 	   numberOfplayer2Prefabs++;
 	   startPositionplayer2 = Vector3(450, 5, 1500);
@@ -121,6 +126,7 @@ function StartSpawning(){
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
        player2prefabs[0] = myNewTrans;
 	}
+    
 }
 
 function UnitDied(unitNumber : int)
@@ -161,6 +167,7 @@ function UnitDied(unitNumber : int)
 
 function Update()
 {
+   
     if(gameStarted == true)
     {
         var myNewTrans : GameObject;
@@ -202,7 +209,8 @@ function Update()
                 }
             }
         }
-    }
+        }
+    
 }
 
 }
