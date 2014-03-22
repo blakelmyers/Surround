@@ -19,12 +19,12 @@ public class RandomMatchmaker : Photon.MonoBehaviour
     void OnJoinedLobby()
     {
         Debug.Log("JoinRandom");
-        PhotonNetwork.JoinRandomRoom();
+        PhotonNetwork.JoinRandomRoom(null, 2);
     }
 
     void OnPhotonRandomJoinFailed()
     {
-        PhotonNetwork.CreateRoom(null);
+        PhotonNetwork.CreateRoom(null, true, true, 2);
     }
 
     void OnJoinedRoom()
