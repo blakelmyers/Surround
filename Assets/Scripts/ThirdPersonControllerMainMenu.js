@@ -10,6 +10,11 @@ private var _animation : Animation;
 
 public var dinosaurType : DinosaurEnum;
 
+private var mouseOver : boolean = false;
+
+public var hoverString : String;
+
+var style : GUIStyle;
 
 function Awake ()
 {	
@@ -21,8 +26,26 @@ function OnMouseDown()
 {
     Debug.Log(dinosaurType);
     
-    GameObject.Find("Selection").GetComponent(SelectionScript).selectionChoice = dinosaurType;
+    GameObject.Find("Selection").GetComponent(SelectionChoice).selectionValue = dinosaurType;
     Application.LoadLevel("MapScene");
+}
+
+function OnGUI () {
+
+    if(mouseOver)
+    {
+        GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/7), 320, 320));
+        GUILayout.Label(hoverString, style);
+        GUILayout.EndArea ();
+    }
+}
+
+function OnMouseOver () {
+    mouseOver = true;
+}
+
+function OnMouseExit () {
+    mouseOver = false;
 }
 
 function Update() {

@@ -9,7 +9,16 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 	private int playerID;
 	private bool connected = false;
 	private bool waiting = false;
+	private SelectionChoice selectionType;
+	public string playerChoice;
 
+
+	void Awake()
+	{
+		GameObject selection = GameObject.Find ("Selection");
+		Debug.Log (selection.transform);
+		DontDestroyOnLoad(selection); 
+	}
     // Use this for initialization
     void Start()
     {
@@ -19,18 +28,37 @@ public class RandomMatchmaker : Photon.MonoBehaviour
     void OnJoinedLobby()
     {
         Debug.Log("JoinRandom");
-        PhotonNetwork.JoinRandomRoom();
+        PhotonNetwork.JoinRandomRoom(null, 2);
     }
 
     void OnPhotonRandomJoinFailed()
     {
-        PhotonNetwork.CreateRoom(null);
+        PhotonNetwork.CreateRoom(null, true, true, 2);
     }
 
     void OnJoinedRoom()
     {
 		playerID = PhotonNetwork.player.ID;
+		selectionType = GameObject.Find("Selection").GetComponent<SelectionChoice>();
 
+
+		switch(selectionType.selectionValue)
+		{
+		case DinosaurEnum.YellowTall:
+			playerChoice = "YellowPrefab";
+			break;
+		case DinosaurEnum.RedTall:
+			playerChoice = "RedPrefab";
+			break;
+		case DinosaurEnum.PurpleFat:
+			playerChoice = "PurplePrefab";
+			break;
+		case DinosaurEnum.BlueFat:
+			playerChoice = "BluePrefab";
+			break;
+		}
+		Debug.Log ("in room");
+		Debug.Log (playerChoice);
 		connected = true;
 
 			GameObject monster;
@@ -43,7 +71,8 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 		if(playerID == 2)
 			{
 			waiting = false;
-				monster = PhotonNetwork.Instantiate("PurplePrefab", startingPosPlayer2, Quaternion.identity, 0);
+				monster = PhotonNetwork.Instantiate(playerChoice, startingPosPlayer2, Quaternion.identity, 0);
+			monster.tag = "Blue";
 				myPhotonView = monster.GetComponent<PhotonView>();
 			}
  
@@ -56,7 +85,8 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 			if(playerID == 1)  // Player 1 
 			{
 				GameObject monster;
-				monster = PhotonNetwork.Instantiate("YellowPrefab", startingPosPlayer1, Quaternion.identity, 0);
+				monster = PhotonNetwork.Instantiate(playerChoice, startingPosPlayer1, Quaternion.identity, 0);
+				monster.tag = "Red";
 				myPhotonView = monster.GetComponent<PhotonView>();
 			}
 		}
@@ -64,7 +94,7 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 
     void OnGUI()
     {
-		if (Application.loadedLevel != 0) {
+		if (Application.loadedLevel != 1) {
 						if (GUILayout.Button ("Return to Main Menu")) {
 								PhotonNetwork.LeaveRoom ();
 								PhotonNetwork.Disconnect ();

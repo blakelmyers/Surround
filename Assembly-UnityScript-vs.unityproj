@@ -51,7 +51,6 @@
      <Compile Include="Assets\Scripts\Connect.js" />
      <Compile Include="Assets\Scripts\Menu.js" />
      <Compile Include="Assets\Scripts\PlayerController.js" />
-     <Compile Include="Assets\Scripts\SelectionScript.js" />
      <Compile Include="Assets\Scripts\SpawnTutorial.js" />
      <Compile Include="Assets\Scripts\Spawnscript.js" />
      <Compile Include="Assets\Scripts\ThirdPersonController.js" />

@@ -4,6 +4,7 @@ var style : GUIStyle;
 var style2 : GUIStyle;
 
 private var step1 : boolean = false;
+private var step1a : boolean = false;
 private var step2 : boolean = false;
 private var step3 : boolean = false;
 private var step4 : boolean = false;
@@ -45,6 +46,17 @@ function OnGUI () {
         if(GUILayout.Button ("Continue"))
         {
             step1 = false;
+            step1a = true;
+        }
+        GUILayout.EndArea ();
+    }
+    if(step1a)
+    {
+        GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 150, 300, 300));
+        GUILayout.Label("Surround is a casual Real-Time Strategy game where each player controls a group of animals. The goal is to surround the opponent’s animals and eat them. The players are playing against each other in real-time and so in order to win, each player must out maneuver the opponent by using strategy and their wits.", style2);
+        if(GUILayout.Button ("Continue"))
+        {
+            step1a = false;
             step2 = true;
         }
         GUILayout.EndArea ();
@@ -65,18 +77,7 @@ function OnGUI () {
     if(step3)
     {
         GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("To move your dinosaurs, click the right mouse button.", style);
-        if(Input.GetMouseButtonDown(1))
-        {
-            step3 = false;
-            step4 = true;
-        }
-        GUILayout.EndArea ();
-    }
-    if(step4)
-    {
-        GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("The dinosaurs will now follow the mouse. The Red circle below the dinosaur is the health indicator.  Right now his health is low.  Enter the base area to heal.", style2);
+        GUILayout.Label("To move your dinosaurs, click the right mouse button. The Red circle below the dinosaur is the health indicator.  Right now his health is low.  Enter the base area to heal.", style2);
         GUILayout.EndArea ();
     }
     if(step5)
@@ -103,18 +104,7 @@ function OnGUI () {
     if(step7)
     {
         GUILayout.BeginArea (Rect(400, 20, 200, 200));
-        GUILayout.Label("The Sand slows your speed", style2);
-        if(GUILayout.Button ("Continue"))
-        {
-            step7 = false;
-            step8 = true;
-        }
-        GUILayout.EndArea ();
-    }
-    if(step8)
-    {
-        GUILayout.BeginArea (Rect(400, 20, 200, 200));
-        GUILayout.Label("Attack the enemy unit by colliding with it", style2);
+        GUILayout.Label("The Sand slows your speed! Attack the enemy unit by colliding with it", style2);
         GUILayout.EndArea ();
     }
     if(step9)
@@ -141,7 +131,7 @@ function OverBerries()
 {
     if(step5a)   // Only set this once
     {
-        step4 = false;
+        step3 = false;
         step5a = false;
         step5 = true;
     }
@@ -165,7 +155,7 @@ function HitEnemy() {
     
     if(step8a)   // Only set this once
     {
-        step8 = false;
+        step7 = false;
         step8a = false;
         step9 = true;
     }
