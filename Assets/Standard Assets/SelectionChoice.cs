@@ -13,6 +13,7 @@ public class SelectionChoice : MonoBehaviour {
 
 	public DinosaurEnum selectionValue = DinosaurEnum.YellowTall;
 
+
 	// Use this for initialization
 	void Start () {
 		DontDestroyOnLoad(this);
@@ -22,4 +23,5 @@ public class SelectionChoice : MonoBehaviour {
 	void Update () {
 	
 	}
+	
 }

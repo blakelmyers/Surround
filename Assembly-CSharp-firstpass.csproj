@@ -64,6 +64,7 @@
      <Compile Include="Assets\Standard Assets\Enums.cs" />
      <Compile Include="Assets\Standard Assets\Extensions.cs" />
      <Compile Include="Assets\Standard Assets\FriendInfo.cs" />
+     <Compile Include="Assets\Standard Assets\IntroGUI.cs" />
      <Compile Include="Assets\Standard Assets\LoadbalancingPeer.cs" />
      <Compile Include="Assets\Standard Assets\NetworkCharacter.cs" />
      <Compile Include="Assets\Standard Assets\NetworkingPeer.cs" />

@@ -94,7 +94,7 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 
     void OnGUI()
     {
-		if (Application.loadedLevel != 0) {
+		if (Application.loadedLevel != 1) {
 						if (GUILayout.Button ("Return to Main Menu")) {
 								PhotonNetwork.LeaveRoom ();
 								PhotonNetwork.Disconnect ();
