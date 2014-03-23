@@ -10,12 +10,6 @@
 
 public class Spawnscript extends Photon.MonoBehaviour{
 
-public var player1Prefab : Transform;
-public var player2Prefab : Transform;
-public var player1PrefabYellow : Transform;
-public var player2PrefabPurple : Transform;
-public var player1PrefabRed : Transform;
-public var player2PrefabBlue : Transform;
 public var cameraForPlayer1 : GameObject;
 public var cameraForPlayer2 : GameObject;
 public var cameraDistance : float;
@@ -35,9 +29,11 @@ private var checkTimerplayer1: float;
 private var checkTimerplayer2: float;
 private var gameStarted : boolean = false;
 
+private var playerChoice : String;
+
 public var playerID : int;
 
-var selectionType : GameObject;
+var selectionType : SelectionChoice;
 var connectionObject : GameObject;
 
 enum PlayerType {
@@ -47,42 +43,36 @@ enum PlayerType {
 
 function Awake () 
 {
-    selectionType = GameObject.Find("Selection");
-    DontDestroyOnLoad(selectionType);
-    
-    connectionObject = GameObject.Find("Connect");
-    DontDestroyOnLoad(connectionObject);
-    
+    //DontDestroyOnLoad(GameObject.Find("Selection"));   
 }
     
 function Start()
 {
     player1prefabs = new GameObject[maxSpawnplayer1];
     player2prefabs = new GameObject[maxSpawnplayer2];
+      
+    selectionType = GameObject.Find("Selection").GetComponent(SelectionChoice);
     
-    // Set Default values
-    player1Prefab = player1PrefabYellow;
-    player2Prefab = player2PrefabPurple;
+    Debug.Log(selectionType.selectionValue);
     
-    Debug.Log(selectionType.GetComponent(SelectionScript).selectionChoice);
+    playerChoice = "YellowPrefab";
     
-    switch(selectionType.GetComponent(SelectionScript).selectionChoice)
+    switch(selectionType.GetComponent(SelectionChoice).selectionValue)
     {
     case DinosaurEnum.YellowTall:
-        player1Prefab = player1PrefabYellow;
+        playerChoice = "YellowPrefab";
         break;
     case DinosaurEnum.RedTall:
-        player1Prefab = player1PrefabRed;
+        playerChoice = "RedPrefab";
         break;
     case DinosaurEnum.PurpleFat:
-        player2Prefab = player2PrefabPurple;
+        playerChoice = "PurplePrefab";
         break;
     case DinosaurEnum.BlueFat:
-        player2Prefab = player2PrefabBlue;
+        playerChoice = "BluePrefab";
         break;
     }
-    
-    //SpawnStartingPlayer();
+
 }
 
 function GetGameStarted()
@@ -105,7 +95,7 @@ function StartSpawning(){
 	   startPositionplayer1 = Vector3(1450, 8, 560);
        
 	   //Instantiate a new object for this player, remember; the player1 is therefore the owner.
-	   myNewTrans = GameObject.Find("YellowPrefab(Clone)");
+	   myNewTrans = GameObject.Find(playerChoice+"(Clone)");
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer1Prefabs;
        player1prefabs[0] = myNewTrans;
        
@@ -122,7 +112,7 @@ function StartSpawning(){
 	   startPositionplayer2 = Vector3(450, 5, 1500);
        
 	   //Instantiate a new object for this player, remember; the player1 is therefore the owner.
-	   myNewTrans = GameObject.Find("PurplePrefab(Clone)");
+	   myNewTrans = GameObject.Find(playerChoice+"(Clone)");
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
        player2prefabs[0] = myNewTrans;
 	}
@@ -184,7 +174,8 @@ function Update()
                     checkTimerplayer1 += spawnTimeplayer1; //set the timer again
                     numberOfplayer1Prefabs++;
                    
-                    myNewTrans = PhotonNetwork.Instantiate("YellowPrefab", myPrevTrans.transform.position, myPrevTrans.transform.rotation, 0);
+                    myNewTrans = PhotonNetwork.Instantiate(playerChoice, myPrevTrans.transform.position, myPrevTrans.transform.rotation, 0);
+                    myNewTrans.tag = "Red";
                     myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer1Prefabs;
                     myNewTrans.GetComponent(PlayerController).movementActive = myPrevTrans.GetComponent(PlayerController).movementActive;
                     player1prefabs[numberOfplayer1Prefabs - 1] = myNewTrans;
@@ -203,7 +194,8 @@ function Update()
                     checkTimerplayer2 += spawnTimeplayer2; //set the timer again
                     numberOfplayer2Prefabs++;   
                    
-                    myNewTrans = PhotonNetwork.Instantiate("PurplePrefab", myPrevTrans.transform.position, myPrevTrans.transform.rotation, 0);
+                    myNewTrans = PhotonNetwork.Instantiate(playerChoice, myPrevTrans.transform.position, myPrevTrans.transform.rotation, 0);
+                    myNewTrans.tag = "Blue";
                     myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
                     player2prefabs[numberOfplayer2Prefabs - 1] = myNewTrans;
                 }

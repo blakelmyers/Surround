@@ -80,6 +80,7 @@
      <Compile Include="Assets\Standard Assets\Room.cs" />
      <Compile Include="Assets\Standard Assets\RoomInfo.cs" />
      <Compile Include="Assets\Standard Assets\RpcIndexComponent.cs" />
+     <Compile Include="Assets\Standard Assets\SelectionChoice.cs" />
      <Compile Include="Assets\Standard Assets\ServerSettings.cs" />
      <None Include="Assets\Plugins\release_history.txt" />
      <None Include="Assets\Plugins\Photon3Unity3D.xml" />

@@ -21,7 +21,7 @@ function OnMouseDown()
 {
     Debug.Log(dinosaurType);
     
-    GameObject.Find("Selection").GetComponent(SelectionScript).selectionChoice = dinosaurType;
+    GameObject.Find("Selection").GetComponent(SelectionChoice).selectionValue = dinosaurType;
     Application.LoadLevel("MapScene");
 }
 
