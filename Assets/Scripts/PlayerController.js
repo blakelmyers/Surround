@@ -11,6 +11,8 @@ public var movementLock : boolean = false;
 
 public var spawnNumber : int;
 
+public var grabbedFruit : boolean = false;
+
 private var _animation : Animation;
 
 private var lead: Transform;
@@ -133,9 +135,9 @@ function Update() {
 		    Input.ResetInputAxes();
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
-        if(checkTerrain == TextureType.Sand)
+         if(grabbedFruit)
         {
-            walkSpeed = 40;
+            walkSpeed *= 2;
         }
         else if(checkTerrain == TextureType.Blueberry && this.Tag == "Blue")
         {
@@ -219,14 +221,21 @@ function ProcessMovement()
     if (playerPlane.Raycast (ray, hitdist)) 
     {
         // Get the point along the ray that hits the calculated distance.
-             
+        if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
+        {
+            walkSpeed = 40;
+            transform.position.y = -3;
+        }    
+        else{
+        	transform.position.y = 1;
+        }
         var targetPoint = ray.GetPoint(hitdist);
                 
         // Don't move if mouse is with 5 units
         if(Vector3.Distance(targetPoint, transform.position) < 20 * spawnNumber)
         {
             _animation.CrossFade("idle");
-            transform.position.y = 1;
+            
             
         }
         else

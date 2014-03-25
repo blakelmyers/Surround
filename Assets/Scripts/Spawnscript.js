@@ -27,7 +27,11 @@ private var numberOfplayer1Prefabs : int = 0;
 private var numberOfplayer2Prefabs : int = 0;
 private var checkTimerplayer1: float;
 private var checkTimerplayer2: float;
+private var endFruitTime1: float;
+private var endFruitTime2: float;
 private var gameStarted : boolean = false;
+
+private var fruitGrab: boolean = false;
 
 private var playerChoice : String;
 
@@ -119,6 +123,14 @@ function StartSpawning(){
     
 }
 
+function fruitTimer(time : float){
+	if(playerID==1)
+		endFruitTime1 = Time.time + 5;
+	else
+		endFruitTime2 = Time.time + 5;
+	fruitGrab=true;
+}
+
 function UnitDied(unitNumber : int)
 {
     if(playerID == 1)
@@ -181,6 +193,19 @@ function Update()
                     player1prefabs[numberOfplayer1Prefabs - 1] = myNewTrans;
                 }
             }
+            if(fruitGrab){//IF FRUIT IS BUGGY ITS CAUSE THIS CODE IS SHITTY
+	            if(Time.time>=endFruitTime1){
+	            	for(var i = 0; i<numberOfplayer1Prefabs; i++){
+	            		player1prefabs[i].GetComponent(PlayerController).grabbedFruit = false;
+	            	}
+	            	fruitGrab=false;
+	            }
+	           	else{
+	           		for(var j = 0; j<numberOfplayer1Prefabs; j++){
+	            		player1prefabs[j].GetComponent(PlayerController).grabbedFruit = true;
+	            	}
+	           	}
+           	}
         }
         
         if(playerID == 2)
@@ -200,7 +225,21 @@ function Update()
                     player2prefabs[numberOfplayer2Prefabs - 1] = myNewTrans;
                 }
             }
+            if(fruitGrab){//IF FRUIT IS BUGGY ITS CAUSE THIS CODE IS SHITTY
+	            if(Time.time>=endFruitTime2){
+	            	for(i = 0; i<numberOfplayer2Prefabs; i++){
+	            		player2prefabs[i].GetComponent(PlayerController).grabbedFruit = false;
+	            	}
+	            	fruitGrab=false;
+	            }
+	           	else{
+	           		for(i = 0; i<numberOfplayer2Prefabs; i++){
+	            		player2prefabs[i].GetComponent(PlayerController).grabbedFruit = true;
+	            	}
+	           	}
+           	}
         }
+        
         }
     
 }
