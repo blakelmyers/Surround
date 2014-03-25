@@ -1,23 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TutorialPlayerController.js">
     <Files>
-      <File FileName="Assets\Standard Assets\RandomMatchmaker.cs" Line="116" Column="1" />
-      <File FileName="Assets\Scripts\Spawnscript.js" Line="198" Column="45" />
-      <File FileName="Assets\Scripts\TutorialPlayerController.js" Line="1" Column="1" />
-      <File FileName="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\TutorialEnemy.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\TutorialGUI.js" Line="56" Column="344" />
-      <File FileName="Assets\Scripts\SpawnTutorial.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PlayerController.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\CaveTrigger.js" Line="25" Column="86" />
+      <File FileName="Assets\Scripts\FruitTrigger.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\TutorialGUI.js" Line="196" Column="5" />
+      <File FileName="Assets\Scripts\CaveTrigger.js" Line="33" Column="1" />
+      <File FileName="Assets\Scripts\TutorialPlayerController.js" Line="236" Column="23" />
       <File FileName="Assets\Scripts\Connect.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CameraScript1.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CameraScript2.js" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\PhotonPlayer.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\SelectionChoice.cs" Line="15" Column="1" />
-      <File FileName="Assets\Scripts\ThirdPersonControllerMainMenu.js" Line="24" Column="78" />
-      <File FileName="Assets\Scripts\Menu.js" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\IntroGUI.cs" Line="8" Column="2" />
+      <File FileName="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs" Line="93" Column="99" />
+      <File FileName="Assets\Scripts\Spawnscript.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ThirdPersonController.js" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

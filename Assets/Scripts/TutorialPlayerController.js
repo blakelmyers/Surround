@@ -8,6 +8,10 @@ public var spawnNumber : int;
 
 private var _animation : Animation;
 
+private var grabbedFruit : boolean = false;
+
+public var secondDino : boolean = false;
+
 var firstHit : boolean = false;
 
 public var tutorialGui : TutorialGUI;
@@ -88,20 +92,21 @@ function Update() {
 		    Input.ResetInputAxes();
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
-        Debug.Log(gameObject.tag);
+        
+        if(checkTerrain == TextureType.Redberry)
+        {
+            RestoreHealth();     
+        }
+        
+
         if(checkTerrain == TextureType.Sand)
         {
             walkSpeed = 40;
-            tutorialGui.OverSand();
+            if(!secondDino) tutorialGui.OverSand();
         }
-        //else if(checkTerrain == TextureType.Blueberry  && gameObject.Tag == "Blue")
-        //{
-       //     RestoreHealth();     
-       // }
-        else if(checkTerrain == TextureType.Redberry)
+        else if(grabbedFruit)
         {
-        Debug.Log(checkTerrain);
-            RestoreHealth();     
+            walkSpeed = 160;
         }
         else
         {
@@ -130,7 +135,7 @@ function RestoreHealth()
 {
     healthCounter++;
     
-    tutorialGui.OverBerries();
+    if(!secondDino) tutorialGui.OverBerries();
     
     if(health_ < HealthStatus.Green)
     {
@@ -209,7 +214,7 @@ function OnTriggerEnter(collisionInfo : Collider){
            if(!firstHit)
             {
                 firstHit = true;
-                tutorialGui.HitEnemy();            
+                if(!secondDino) tutorialGui.HitEnemy();            
             }
            if(collisionCounter % 9 == 0)
             {
@@ -217,6 +222,19 @@ function OnTriggerEnter(collisionInfo : Collider){
             }
             collisionCounter++;
         }
+    }
+    
+    if(collisionInfo.tag == "Fruit")
+    {
+        tutorialGui.PickedUpOrange();
+        grabbedFruit = true;
+        Debug.Log(grabbedFruit);
+    }
+    
+    if(collisionInfo.tag == "Cave")
+    {
+    Debug.Log("base");
+        if(!secondDino) tutorialGui.HitBase();
     }
 }
 

@@ -7,9 +7,15 @@ public class PlayerController extends Photon.MonoBehaviour{
 
 public var movementActive : boolean = false;
 
+public var movementLock : boolean = false;
+
 public var spawnNumber : int;
 
 private var _animation : Animation;
+
+private var lead: Transform;
+
+private var offset;
 
 
 /*
@@ -86,6 +92,12 @@ function Start ()
    {
       spawnScript.StartSpawning();
    } 
+   if(playerID == 1){
+		lead = spawnScript.player1prefabs[0].transform;
+	}
+	if(playerID == 2){
+		lead = spawnScript.player2prefabs[0].transform;
+	}
 }
 
 function Awake ()
@@ -142,10 +154,22 @@ function Update() {
         {
             movementActive = !movementActive;
         }
-    
+    	if(Input.GetMouseButtonDown(0)){
+    		movementLock = !movementLock;
+    		offset = lead.position - transform.position;	
+    	}
        if (movementActive == true)
        {
-            ProcessMovement();
+       		if(movementLock){
+       			if(spawnNumber==1){
+       				ProcessMovement();
+       			}else{
+       				FollowMovement();
+       			}	
+       		}
+       		else{
+       			ProcessMovement();
+       		}
        }
        else
        {
@@ -198,7 +222,7 @@ function ProcessMovement()
              
         var targetPoint = ray.GetPoint(hitdist);
                 
-        // Don't move is mouse is with 5 units
+        // Don't move if mouse is with 5 units
         if(Vector3.Distance(targetPoint, transform.position) < 20 * spawnNumber)
         {
             _animation.CrossFade("idle");
@@ -223,6 +247,12 @@ function ProcessMovement()
     }
 }
 
+function FollowMovement(){
+	transform.position = lead.position - offset;
+	transform.rotation = lead.rotation;
+	_animation.CrossFade("walk");
+}
+
 function FixedUpdate() 
 {
     
@@ -235,10 +265,19 @@ function OnTriggerEnter(collisionInfo : Collider){
            if(collisionCounter % 6 == 0)
             {
                 DecreaseHealth();
+                _animation.CrossFade("Attack");
             }
             collisionCounter++;
         }
     }
+    Debug.Log((playerID == 1)&& (collisionInfo.tag == "cave"));
+    Debug.Log(playerID);
+    Debug.Log(collisionInfo.tag);
+ 	if((playerID == 1)&& (collisionInfo.tag == "cave")){
+ 		Debug.Log(spawnScript.maxSpawnplayer1);
+ 		spawnScript.maxSpawnplayer1 = spawnScript.maxSpawnplayer1*2;
+ 		Debug.Log(spawnScript.maxSpawnplayer1);
+ 	}
 }
 
 function OnTriggerExit (collisionInfo : Collider) {
