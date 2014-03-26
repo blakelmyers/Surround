@@ -37,6 +37,9 @@ private var playerChoice : String;
 
 public var playerID : int;
 
+var styleRed : GUIStyle;
+var styleBlue : GUIStyle;
+
 var selectionType : SelectionChoice;
 var connectionObject : GameObject;
 
@@ -52,8 +55,8 @@ function Awake ()
     
 function Start()
 {
-    player1prefabs = new GameObject[maxSpawnplayer1];
-    player2prefabs = new GameObject[maxSpawnplayer2];
+    player1prefabs = new GameObject[15];
+    player2prefabs = new GameObject[15];
       
     selectionType = GameObject.Find("Selection").GetComponent(SelectionChoice);
     
@@ -123,6 +126,11 @@ function StartSpawning(){
     
 }
 
+function UpdateMaxSpawn(caveNumber : int)
+{
+    Debug.Log(caveNumber);
+}
+
 function fruitTimer(time : float){
 	if(playerID==1)
 		endFruitTime1 = Time.time + 5;
@@ -164,6 +172,28 @@ function UnitDied(unitNumber : int)
             //Network.Disconnect(200);
             Application.LoadLevel("MainMenu");
         }
+    }
+}
+
+function OnGUI()
+{
+    if(gameStarted)
+    {
+    if(playerID == 1)
+    {
+        GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
+        GUILayout.Label("Red Player", styleRed);
+        GUILayout.Label("Max Spawn: " + maxSpawnplayer1.ToString(), styleRed);
+        GUILayout.Label("Current Spawn: " + numberOfplayer1Prefabs.ToString(), styleRed);
+        GUILayout.EndArea ();
+    }
+    else{
+        GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
+        GUILayout.Label("Blue Player", styleBlue);
+        GUILayout.Label("Max Spawn: " + maxSpawnplayer2.ToString(), styleBlue);
+        GUILayout.Label("Current Spawn: " + numberOfplayer2Prefabs.ToString(), styleBlue);
+        GUILayout.EndArea ();
+    }
     }
 }
 

@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\CameraScript1.js" />
      <Compile Include="Assets\Scripts\CameraScript2.js" />
      <Compile Include="Assets\Scripts\CaveTrigger.js" />
+     <Compile Include="Assets\Scripts\CaveTriggerTutorial.js" />
      <Compile Include="Assets\Scripts\Connect.js" />
      <Compile Include="Assets\Scripts\FruitTrigger.js" />
      <Compile Include="Assets\Scripts\Menu.js" />

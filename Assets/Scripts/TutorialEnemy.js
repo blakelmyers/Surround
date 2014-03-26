@@ -25,9 +25,9 @@ enum HealthStatus {
 
 var health_ : HealthStatus;
 var collisionCounter : int = 0;
-var RedPlane : GameObject;
-var GreenPlane : GameObject;
-var YellowPlane : GameObject;
+
+var HealthPlane : GameObject;
+
 
 //private var _characterState : CharacterState;
 
@@ -58,13 +58,9 @@ function Start ()
    health_ = HealthStatus.Green;
    var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
-        if (t.name == "RedPlane"){ RedPlane = t.gameObject;}
-        else if (t.name == "GreenPlane"){ GreenPlane = t.gameObject;}
-        else if (t.name == "YellowPlane"){ YellowPlane = t.gameObject;}
+       if (t.name == "HealthPlane"){ HealthPlane = t.gameObject;}
    }
-   GreenPlane.renderer.enabled = true;
-   RedPlane.renderer.enabled = false;
-   YellowPlane.renderer.enabled = false;
+   HealthPlane.renderer.material.color = Color.green;
    
 }
 
@@ -178,15 +174,11 @@ function ProcessHealth()
     {
         case HealthStatus.Green:
             health_ = HealthStatus.Yellow;
-            GreenPlane.renderer.enabled = false;
-            RedPlane.renderer.enabled = false;
-            YellowPlane.renderer.enabled = true;
+            HealthPlane.renderer.material.color = Color.yellow;
             break;
         case HealthStatus.Yellow:
             health_ = HealthStatus.Red;
-            GreenPlane.renderer.enabled = false;
-            RedPlane.renderer.enabled = true;
-            YellowPlane.renderer.enabled = false;
+            HealthPlane.renderer.material.color = Color.red;
             break;
         case HealthStatus.Red:
             tutorialGui.EnemyDied();
