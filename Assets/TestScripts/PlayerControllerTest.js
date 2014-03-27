@@ -1,20 +1,29 @@
 
 // Require a character controller to be attached to the same game object
 //@script RequireComponent(CharacterController)
+public var spawnScript : SpawnscriptTest;
 
 public var movementActive : boolean = false;
 
+public var movementLock : boolean = false;
+
 public var spawnNumber : int;
+
+public var grabbedFruit : boolean = false;
 
 private var _animation : Animation;
 
-private var grabbedFruit : boolean = false;
+private var lead: Transform;
 
-public var secondDino : boolean = false;
+private var offset;
 
-var firstHit : boolean = false;
 
-public var tutorialGui : TutorialGUI;
+/*
+enum CharacterState {
+	Idle = 0,
+	Walking = 1,
+	Attacking = 2,
+}
 
 enum TextureType {
     Grass = 0,
@@ -22,15 +31,16 @@ enum TextureType {
     Blueberry = 2,
     Redberry = 3,
     Orangeberry = 4,
-    Lava = 6, 
 }
-
+*/
 
 //private var _characterState : CharacterState;
 
 // The speed when walking
 var walkSpeed = 2.0;
 var rotateSpeed = 500.0;
+
+
 
 // The current move direction in x-z
 private var moveDirection = Vector3.zero;
@@ -47,30 +57,45 @@ private var inAirVelocity = Vector3.zero;
 
 private var healthCounter : int;
 
+public var playerID : int;
 
 private var isControllable = true;
 
 var health_ : HealthStatus;
-
 var collisionCounter : int = 0;
 
 var HealthPlane : GameObject;
 
+/*
+enum HealthStatus {
+    Green = 3, 
+    Yellow = 2,
+    Red = 1,
+    Dead = 0,
+}
+*/
 function Start ()
 {
-   //health_ = HealthStatus.Green;
+   health_ = HealthStatus.Green;
    var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
-        if (t.name == "HealthPlane"){ HealthPlane = t.gameObject;}
+       if (t.name == "HealthPlane"){ HealthPlane = t.gameObject;}
    }
+   HealthPlane.renderer.material.color = Color.green;
    
-   HealthPlane.renderer.material.color = Color.red;
+   
+   spawnScript = GameObject.Find("Spawntest").GetComponent.<SpawnscriptTest>();
+   
+   spawnScript.StartSpawning();
+
+   lead = spawnScript.player1prefabs[0].transform;
 
 }
 
 function Awake ()
 {
-	
+
+    
 	moveDirection = transform.TransformDirection(Vector3.forward);
 	
 	_animation = GetComponent(Animation);
@@ -79,32 +104,30 @@ function Awake ()
 	
 }
 
+
+
 function Update() {
 
     var checkTerrain : TextureType;
     
-    
+
 	    if (!isControllable)
 	    {
 		    // kill all inputs if not controllable.
 		    Input.ResetInputAxes();
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
-        
-        if(checkTerrain == TextureType.Redberry)
+         if(grabbedFruit)
+        {
+            walkSpeed *= 2;
+        }
+        else if(checkTerrain == TextureType.Blueberry && this.Tag == "Blue")
         {
             RestoreHealth();     
         }
-        
-
-        if(checkTerrain == TextureType.Sand)
+        else if(checkTerrain == TextureType.Redberry  && this.Tag == "Red")
         {
-            walkSpeed = 40;
-            if(!secondDino) tutorialGui.OverSand();
-        }
-        else if(grabbedFruit)
-        {
-            walkSpeed = 160;
+            RestoreHealth();     
         }
         else
         {
@@ -115,10 +138,22 @@ function Update() {
         {
             movementActive = !movementActive;
         }
-    
+    	if(Input.GetMouseButtonDown(0)){
+    		movementLock = !movementLock;
+    		offset = lead.position - transform.position;	
+    	}
        if (movementActive == true)
        {
-            ProcessMovement();
+       		if(movementLock){
+       			if(spawnNumber==1){
+       				ProcessMovement();
+       			}else{
+       				FollowMovement();
+       			}	
+       		}
+       		else{
+       			ProcessMovement();
+       		}
        }
        else
        {
@@ -132,8 +167,6 @@ function Update() {
 function RestoreHealth()
 {
     healthCounter++;
-    
-    if(!secondDino) tutorialGui.OverBerries();
     
     if(health_ < HealthStatus.Green)
     {
@@ -168,14 +201,17 @@ function ProcessMovement()
     if (playerPlane.Raycast (ray, hitdist)) 
     {
         // Get the point along the ray that hits the calculated distance.
-             
+        transform.position.y = 7;
+        
+        
+        
         var targetPoint = ray.GetPoint(hitdist);
                 
-        // Don't move is mouse is with 5 units
+        // Don't move if mouse is with 5 units
         if(Vector3.Distance(targetPoint, transform.position) < 20 * spawnNumber)
         {
             _animation.CrossFade("idle");
-            transform.position.y = 8;
+            
             
         }
         else
@@ -188,12 +224,18 @@ function ProcessMovement()
  
             // Move the object forward.
             transform.position += transform.forward * walkSpeed * Time.deltaTime;
-            transform.position.y = 8;        
+            transform.position.y = 7;        
             _animation.CrossFade("walk");
         }
         
  
     }
+}
+
+function FollowMovement(){
+	transform.position = lead.position - offset;
+	transform.rotation = lead.rotation;
+	_animation.CrossFade("walk");
 }
 
 function FixedUpdate() 
@@ -203,34 +245,22 @@ function FixedUpdate()
 }
 
 function OnTriggerEnter(collisionInfo : Collider){
-
-    
     if(collisionInfo.name != this.name){
         if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
-           if(!firstHit)
-            {
-                firstHit = true;
-                if(!secondDino) tutorialGui.HitEnemy();            
-            }
-           if(collisionCounter % 9 == 0)
+           if(collisionCounter % 6 == 0)
             {
                 DecreaseHealth();
+                _animation.CrossFade("Attack");
             }
             collisionCounter++;
         }
     }
-    
-    if(collisionInfo.tag == "Fruit")
-    {
-        tutorialGui.PickedUpOrange();
-        grabbedFruit = true;
-        Debug.Log(grabbedFruit);
-    }
-    
-    if(collisionInfo.tag == "Cave")
-    {
-    Debug.Log("base");
-        if(!secondDino) tutorialGui.HitBase();
+
+ 	if(collisionInfo.tag == "cave0"){
+ 		spawnScript.UpdateMaxSpawn(0);
+ 	}
+    if(collisionInfo.tag == "cave1"){
+        spawnScript.UpdateMaxSpawn(1);
     }
 }
 
@@ -254,8 +284,8 @@ function DecreaseHealth()
             break;
         case HealthStatus.Red:
             health_ = HealthStatus.Dead;
-            Destroy(this.gameObject);
-            //spawnScript.UnitDied(spawnNumber);
+            PhotonNetwork.Destroy(this.gameObject);
+            spawnScript.UnitDied(spawnNumber);
             break;
     }
 }

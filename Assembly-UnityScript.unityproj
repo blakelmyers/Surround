@@ -62,6 +62,10 @@
      <Compile Include="Assets\Scripts\TutorialEnemy.js" />
      <Compile Include="Assets\Scripts\TutorialGUI.js" />
      <Compile Include="Assets\Scripts\TutorialPlayerController.js" />
+     <Compile Include="Assets\TestScripts\CaveTriggerTest.js" />
+     <Compile Include="Assets\TestScripts\FruitTriggerTest.js" />
+     <Compile Include="Assets\TestScripts\PlayerControllerTest.js" />
+     <Compile Include="Assets\TestScripts\SpawnscriptTest.js" />
      <None Include="Assets\Plugins\release_history.txt" />
      <None Include="Assets\Plugins\Photon3Unity3D.xml" />
      <None Include="Assets\Photon Unity Networking\readme.txt" />
