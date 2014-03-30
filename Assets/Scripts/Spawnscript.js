@@ -24,6 +24,7 @@ public var startPositionplayer2 : Vector3;
 
 public var cave1 : CaveTrigger;
 public var cave2 : CaveTrigger;
+public var cave3 : CaveTrigger;
 
 var player1prefabs : GameObject[];
 var player2prefabs : GameObject[];
@@ -64,8 +65,8 @@ function Start()
 {
 
     PV = gameObject.GetComponent(PhotonView);
-    player1prefabs = new GameObject[15];
-    player2prefabs = new GameObject[15];
+    player1prefabs = new GameObject[50];
+    player2prefabs = new GameObject[50];
       
     selectionType = GameObject.Find("Selection").GetComponent(SelectionChoice);
     
@@ -91,6 +92,7 @@ function Start()
 
     cave1 = GameObject.Find("Cave1Prefab").GetComponent.<CaveTrigger>();
     cave2 = GameObject.Find("Cave2Prefab").GetComponent.<CaveTrigger>();
+    cave3 = GameObject.Find("Cave3Prefab").GetComponent.<CaveTrigger>();
 }
 
 function GetGameStarted()
@@ -107,11 +109,11 @@ function StartSpawning(){
  if(playerID == 1){
        cameraForPlayer1.SetActive(true);
        cameraForPlayer2.SetActive(false);
-       startingCameraPosition = Vector3(1500, 400, 1000);
+       startingCameraPosition = Vector3(1560, 340, 1160);
        cameraForPlayer1.transform.position = startingCameraPosition;
     checkTimerplayer1 = Time.time + spawnTimeplayer1;
     numberOfplayer1Prefabs++;
-    startPositionplayer1 = Vector3(1450, 8, 560);
+    startPositionplayer1 = Vector3(1540, 8, 740);
        
     //Instantiate a new object for this player, remember; the player1 is therefore the owner.
     myNewTrans = GameObject.Find(playerChoice+"(Clone)");
@@ -124,11 +126,11 @@ function StartSpawning(){
        cameraForPlayer2.SetActive(true);
        cameraForPlayer1.SetActive(false);
        
-       startingCameraPosition = Vector3(500, 400, 2050);
+       startingCameraPosition = Vector3(590, 290, 1800);
        cameraForPlayer2.transform.position = startingCameraPosition;
     checkTimerplayer2 = Time.time + spawnTimeplayer2;
     numberOfplayer2Prefabs++;
-    startPositionplayer2 = Vector3(450, 5, 1500);
+    startPositionplayer2 = Vector3(430, 5, 1530);
        Debug.Log("start spawngin");
     //Instantiate a new object for this player, remember; the player1 is therefore the owner.
     myNewTrans = GameObject.Find(playerChoice+"(Clone)");
@@ -155,6 +157,11 @@ function UpdatePlayer1Max(unitsLeft : int, caveNumber : int)
         absoluteMaxSpawnplayer1 += cave2.unitsLeft;
         maxSpawnplayer1 += 5;
     }
+    else if(caveNumber == 3)
+    {
+    	absoluteMaxSpawnplayer1 += cave3.unitsLeft;
+        maxSpawnplayer1 += 5;
+    }
 
 }
 
@@ -170,6 +177,11 @@ function UpdatePlayer2Max(unitsLeft : int, caveNumber : int)
         absoluteMaxSpawnplayer2 += cave2.unitsLeft;
         maxSpawnplayer2 += 5;
     }
+    else if(caveNumber == 3)
+    {
+    	absoluteMaxSpawnplayer1 += cave3.unitsLeft;
+        maxSpawnplayer1 += 5;
+    }
 }
 
 function DecreaseCaveUnits(caveNumber : int)
@@ -181,6 +193,10 @@ function DecreaseCaveUnits(caveNumber : int)
     else if(caveNumber == 2)
     {
         cave2.unitsLeft -= 1;
+    }
+    else if(caveNumber == 3)
+    {
+    	cave3.unitsLeft -=1;
     }
 }
 
@@ -267,6 +283,7 @@ function OnGUI()
     }
 }
 
+
 function Update()
 {
 
@@ -275,9 +292,14 @@ function Update()
         var myNewTrans : GameObject;
         var myPrevTrans : GameObject;
 
+		
         // check Spawn for player1
         if(playerID == 1)
         {
+        	var movementLock = player1prefabs[0].GetComponent(PlayerController).movementLock;
+        	for(var p = 0; p<numberOfplayer1Prefabs; p++){
+        		player1prefabs[p].GetComponent(PlayerController).movementLock = movementLock;
+    		}
                 if(numberOfplayer1Prefabs < maxSpawnplayer1)
                 {
                     if(Time.time >= checkTimerplayer1) //if the current time elapsed is equal to or greater than the timer
@@ -285,13 +307,14 @@ function Update()
                         myPrevTrans = player1prefabs[numberOfplayer1Prefabs - 1];
                         checkTimerplayer1 = Time.time + spawnTimeplayer1; //set the timer again
                         numberOfplayer1Prefabs++;
+                       	
                        
                         myNewTrans = PhotonNetwork.Instantiate(playerChoice, myPrevTrans.transform.position, myPrevTrans.transform.rotation, 0);
                         myNewTrans.tag = "Red";
                         myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer1Prefabs;
                         myNewTrans.GetComponent(PlayerController).movementActive = myPrevTrans.GetComponent(PlayerController).movementActive;
-                        myNewTrans.GetComponent(PlayerController).movementLock = myPrevTrans.GetComponent(PlayerController).movementLock;
-                        player1prefabs[numberOfplayer1Prefabs - 1] = myNewTrans;
+           				myNewTrans.GetComponent(PlayerController).movementLock = myPrevTrans.GetComponent(PlayerController).movementLock;
+                        player1prefabs[numberOfplayer1Prefabs - 1] = myNewTrans;    
                     }
                 }
                 if(fruitGrab){//IF FRUIT IS BUGGY ITS CAUSE THIS CODE IS SHITTY

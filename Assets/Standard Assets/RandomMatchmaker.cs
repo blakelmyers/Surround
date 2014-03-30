@@ -4,8 +4,8 @@ using UnityEngine;
 public class RandomMatchmaker : Photon.MonoBehaviour
 {
     private PhotonView myPhotonView;
-	private Vector3 startingPosPlayer1 = new Vector3(1450, 8, 560);
-	private Vector3 startingPosPlayer2 = new Vector3(450, 5, 1500);
+	private Vector3 startingPosPlayer1 = new Vector3(1540, 8, 740);
+	private Vector3 startingPosPlayer2 = new Vector3(430, 5, 1530);
 	private int playerID;
 	private bool connected = false;
 	private bool waiting = false;
