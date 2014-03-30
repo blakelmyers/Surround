@@ -49,6 +49,7 @@ private var moveDirection = Vector3.zero;
 // The last collision flags returned from controller.Move
 private var collisionFlags : CollisionFlags; 
 
+var PV: PhotonView;
 
 // the height we jumped from (Used to determine for how long to apply extra jump power after jumping.)
 private var lastJumpStartHeight = 0.0;
@@ -77,6 +78,15 @@ enum HealthStatus {
 
 function Start ()
 {
+
+    PV = gameObject.GetComponent(PhotonView);
+    
+    if(!PV.isMine){
+        //We aren't the network owner, disable this script
+        //RPC's and OnSerializeNetworkView will STILL get trough!
+        enabled=false;  
+    }
+    else{
    health_ = HealthStatus.Green;
    var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
@@ -86,9 +96,11 @@ function Start ()
    
    
    spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
+   Debug.Log("game started");
    Debug.Log(spawnScript.GetGameStarted());
    if(spawnScript.GetGameStarted() == false)
    {
+      Debug.Log("startspawning");
       spawnScript.StartSpawning();
    } 
    if(playerID == 1){
@@ -97,15 +109,11 @@ function Start ()
 	if(playerID == 2){
 		lead = spawnScript.player2prefabs[0].transform;
 	}
+    }
 }
 
 function Awake ()
 {
-    if(!photonView.isMine){
-		//We aren't the network owner, disable this script
-		//RPC's and OnSerializeNetworkView will STILL get trough!
-		enabled=false;	
-	}
     
 	playerID = PhotonNetwork.player.ID;
     
@@ -124,7 +132,7 @@ function Update() {
 
     var checkTerrain : TextureType;
     
-    if(photonView.isMine)
+    if(PV.isMine)
     {
 	    if (!isControllable)
 	    {
@@ -181,6 +189,8 @@ function Update() {
 
 function RestoreHealth()
 {
+if(PV.isMine)
+    {
     healthCounter++;
     
     if(health_ < HealthStatus.Green)
@@ -190,7 +200,7 @@ function RestoreHealth()
         healthCounter = 0;
         HealthPlane.renderer.material.color = Color.green;
     }
-    
+  }
 }
 
 function GetMovementActive()
@@ -264,6 +274,8 @@ function FixedUpdate()
 }
 
 function OnTriggerEnter(collisionInfo : Collider){
+if(PV.isMine)
+    {
     if(collisionInfo.name != this.name){
         if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
            if(collisionCounter % 6 == 0)
@@ -281,6 +293,7 @@ function OnTriggerEnter(collisionInfo : Collider){
     if(collisionInfo.tag == "cave1"){
         spawnScript.UpdateMaxSpawn(1);
     }
+    }
 }
 
 function OnTriggerExit (collisionInfo : Collider) {
@@ -290,6 +303,8 @@ function OnTriggerExit (collisionInfo : Collider) {
 
 function DecreaseHealth()
 {
+if(PV.isMine)
+    {
     //Debug.Log(health_);
     switch (health_)
     {
@@ -306,6 +321,7 @@ function DecreaseHealth()
             PhotonNetwork.Destroy(this.gameObject);
             spawnScript.UnitDied(spawnNumber);
             break;
+    }
     }
 }
 
