@@ -134,6 +134,7 @@ function Update() {
     
     if(PV.isMine)
     {
+        Debug.Log(this.tag);
 	    if (!isControllable)
 	    {
 		    // kill all inputs if not controllable.

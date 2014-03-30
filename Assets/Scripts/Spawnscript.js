@@ -38,6 +38,7 @@ private var gameStarted : boolean = false;
 
 private var fruitGrab: boolean = false;
 
+private var playerWhoWon : int = 0;
 private var playerChoice : String;
 
 var PV: PhotonView;
@@ -214,6 +215,7 @@ function UnitDied(unitNumber : int)
         
         if(numberOfplayer1Prefabs == 0)
         {
+           playerWhoWon = 2;
            // Network.Disconnect(200);
             Application.LoadLevel("MainMenu");
         }
@@ -236,6 +238,7 @@ function UnitDied(unitNumber : int)
         } 
         if(numberOfplayer2Prefabs == 0)
         {
+            playerWhoWon = 1;
             //Network.Disconnect(200);
             Application.LoadLevel("MainMenu");
         }
@@ -255,6 +258,15 @@ function OnGUI()
         GUILayout.Label("Max Spawn: " + maxSpawnplayer1.ToString(), styleRed);
         GUILayout.Label("Current Spawn: " + numberOfplayer1Prefabs.ToString(), styleRed);
         GUILayout.EndArea ();
+        
+        // Player 1 won
+        if(playerWhoWon == 1)
+        {
+            GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
+            GUILayout.Label("You WON!!!", styleRed);
+            GUILayout.EndArea ();
+        }
+
     }
     else{
         GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
@@ -264,6 +276,13 @@ function OnGUI()
         GUILayout.Label("Current Spawn: " + numberOfplayer2Prefabs.ToString(), styleBlue);
         GUILayout.EndArea ();
     }
+         // Player 1 won
+        if(playerWhoWon == 2)
+        {
+            GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
+            GUILayout.Label("You WON!!!", styleBlue);
+            GUILayout.EndArea ();
+        }
     }
 }
 
