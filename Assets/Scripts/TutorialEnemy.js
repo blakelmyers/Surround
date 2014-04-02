@@ -154,7 +154,7 @@ function FixedUpdate()
 function OnTriggerEnter(collisionInfo : Collider){
    if(collisionInfo.name != this.name){
         if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
-            if(collisionCounter % 12 == 0)
+            if(collisionCounter % 6 == 0)
             {
                 ProcessHealth();
             }
@@ -181,9 +181,10 @@ function ProcessHealth()
             HealthPlane.renderer.material.color = Color.red;
             break;
         case HealthStatus.Red:
-            tutorialGui.EnemyDied();
+            
             health_ = HealthStatus.Dead;
             Destroy(this.gameObject);
+            tutorialGui.EnemyDied();
             break;
     }
 }

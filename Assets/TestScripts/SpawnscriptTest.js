@@ -17,9 +17,10 @@ public var startPositionplayer1 : Vector3;
 var player1prefabs : GameObject[];
 
 public var playerPrefab : GameObject;
-
+public var startingPrefab : GameObject;
 private var numberOfplayer1Prefabs : int = 0;
 private var checkTimerplayer1: float;
+public var absoluteMaxSpawnplayer1 : int = 10;
 
 private var endFruitTime1: float;
 private var endFruitTime2: float;
@@ -32,7 +33,10 @@ private var playerChoice : String;
 public var playerID : int;
 
 var styleRed : GUIStyle;
-var styleBlue : GUIStyle;
+var styleGreen : GUIStyle;
+var styleLock : GUIStyle;
+var styleUnlock : GUIStyle;
+
 
 var selectionType : SelectionChoice;
 var connectionObject : GameObject;
@@ -51,7 +55,7 @@ function Start()
 {
     player1prefabs = new GameObject[15];
       
-    playerChoice = "TutorialPrefabTest";
+    playerChoice = "TutorialPrefabTest1";
 
 }
 
@@ -62,25 +66,27 @@ function GetGameStarted()
 
 function StartSpawning(){
 	if(!gameStarted)
-    {
-    gameStarted = true;
-
+    {   
        //cameraForPlayer1.transform.position = startingCameraPosition;
 	   checkTimerplayer1 = Time.time + spawnTimeplayer1;
 	   numberOfplayer1Prefabs++;
 	   startPositionplayer1 = Vector3(1450, 8, 560);
        
 	   //Instantiate a new object for this player, remember; the player1 is therefore the owner.
-	   myNewTrans = GameObject.Find(playerChoice);
-       myNewTrans.GetComponent(PlayerControllerTest).spawnNumber = numberOfplayer1Prefabs;
-       player1prefabs[0] = myNewTrans;
+	   
+       startingPrefab.GetComponent(PlayerControllerTest).spawnNumber = numberOfplayer1Prefabs;
+       player1prefabs[0] = startingPrefab;
+       gameStarted = true;
     }
     
 }
 
-function UpdateMaxSpawn(caveNumber : int)
+function UpdatePlayer1Max()
 {
-    Debug.Log(caveNumber);
+    
+        absoluteMaxSpawnplayer1 += 10;
+        maxSpawnplayer1 += 5;
+    
 }
 
 function fruitTimer(time : float){
@@ -109,13 +115,33 @@ function UnitDied(unitNumber : int)
 
 function OnGUI()
 {
-
+if(gameStarted == true)
+    {
         GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
         GUILayout.Label("Red Player", styleRed);
-        GUILayout.Label("Max Spawn: " + maxSpawnplayer1.ToString(), styleRed);
+        GUILayout.Label("Total Units:   " + absoluteMaxSpawnplayer1.ToString(), styleRed);
+        GUILayout.Label("Spawn Limit: " + maxSpawnplayer1.ToString(), styleRed);
         GUILayout.Label("Current Spawn: " + numberOfplayer1Prefabs.ToString(), styleRed);
         GUILayout.EndArea ();
-    
+        
+        if(player1prefabs[0].GetComponent(PlayerControllerTest).movementActive)
+        {             
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleGreen);
+        }
+        else
+        {
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleRed);
+        }
+        
+        if(player1prefabs[0].GetComponent(PlayerControllerTest).movementLock)
+        {             
+            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
+        }
+        else
+        {
+            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleUnlock);
+        }
+    }
 
 }
 

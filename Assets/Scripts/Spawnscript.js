@@ -201,7 +201,7 @@ function UnitDied(unitNumber : int)
 
     if(playerID == 1)
     {
-        for (var i = unitNumber; i < numberOfplayer1Prefabs; i++)
+        for (var i = unitNumber; i < numberOfplayer1Prefabs; ++i)
         {
             player1prefabs[i-1] = player1prefabs[i];
             player1prefabs[i-1].GetComponent(PlayerController).spawnNumber = i;
@@ -225,7 +225,7 @@ function UnitDied(unitNumber : int)
     }
     else //player2
     {
-        for (var j = unitNumber; j < numberOfplayer2Prefabs; j++)
+        for (var j = unitNumber; j < numberOfplayer2Prefabs; ++j)
         {
             player2prefabs[j-1] = player2prefabs[j];
             player2prefabs[j-1].GetComponent(PlayerController).spawnNumber = j;

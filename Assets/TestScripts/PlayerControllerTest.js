@@ -17,6 +17,9 @@ private var lead: Transform;
 
 private var offset;
 
+public var firstDino : boolean = false;
+
+public var tutorialGui : TutorialGUI;
 
 /*
 enum CharacterState {
@@ -83,12 +86,16 @@ function Start ()
    }
    HealthPlane.renderer.material.color = Color.green;
    
+   if(firstDino)HealthPlane.renderer.material.color = Color.red;
    
-   spawnScript = GameObject.Find("Spawntest").GetComponent.<SpawnscriptTest>();
+   if(firstDino)health_ = HealthStatus.Red;
+   spawnScript = GameObject.Find("Spawnscript").GetComponent.<SpawnscriptTest>();
    
-   spawnScript.StartSpawning();
+   tutorialGui = GameObject.Find("GUI").GetComponent.<TutorialGUI>();
 
-   lead = spawnScript.player1prefabs[0].transform;
+
+   if(!firstDino)lead = spawnScript.player1prefabs[0].transform;
+   else lead = transform;
 
 }
 
@@ -119,21 +126,27 @@ function Update() {
         checkTerrain = GetTerrainTextureAt(transform.position);
          if(grabbedFruit)
         {
-            walkSpeed *= 2;
-        }
-        else if(checkTerrain == TextureType.Blueberry && this.Tag == "Blue")
-        {
-            RestoreHealth();     
-        }
-        else if(checkTerrain == TextureType.Redberry  && this.Tag == "Red")
-        {
-            RestoreHealth();     
-        }
+            walkSpeed = 160;
+        }      
         else
         {
             walkSpeed = 80;
         }
-              
+        if(checkTerrain == TextureType.Sand)
+        {
+            walkSpeed = 40;
+            if(firstDino) tutorialGui.OverSand();
+        }
+        
+             
+        if(checkTerrain == TextureType.Blueberry && this.tag == "Blue")
+        {
+            RestoreHealth();     
+        }
+        if(checkTerrain == TextureType.Redberry  && this.tag == "Red")
+        {
+            RestoreHealth();     
+        } 
         if(Input.GetMouseButtonDown(1))
         {
             movementActive = !movementActive;
@@ -167,6 +180,8 @@ function Update() {
 function RestoreHealth()
 {
     healthCounter++;
+    Debug.Log(health_);
+    if(firstDino) {tutorialGui.OverBerries();}
     
     if(health_ < HealthStatus.Green)
     {
@@ -201,7 +216,14 @@ function ProcessMovement()
     if (playerPlane.Raycast (ray, hitdist)) 
     {
         // Get the point along the ray that hits the calculated distance.
+        if(grabbedFruit)
+        {
+        transform.position.y = 14;
+        }
+        else
+        {
         transform.position.y = 7;
+        }
         
         
         
@@ -224,7 +246,14 @@ function ProcessMovement()
  
             // Move the object forward.
             transform.position += transform.forward * walkSpeed * Time.deltaTime;
-            transform.position.y = 7;        
+           if(grabbedFruit)
+        {
+        transform.position.y = 14;
+        }
+        else
+        {
+        transform.position.y = 7;
+        }        
             _animation.CrossFade("walk");
         }
         
@@ -247,20 +276,28 @@ function FixedUpdate()
 function OnTriggerEnter(collisionInfo : Collider){
     if(collisionInfo.name != this.name){
         if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
-           if(collisionCounter % 6 == 0)
+           if(collisionCounter % 9 == 0)
             {
                 DecreaseHealth();
+                tutorialGui.HitEnemy();
                 _animation.CrossFade("Attack");
             }
             collisionCounter++;
         }
     }
 
- 	if(collisionInfo.tag == "cave0"){
- 		spawnScript.UpdateMaxSpawn(0);
- 	}
-    if(collisionInfo.tag == "cave1"){
-        spawnScript.UpdateMaxSpawn(1);
+ 	if(collisionInfo.tag == "Fruit")
+    {
+        tutorialGui.PickedUpOrange();
+        grabbedFruit = true;
+        transform.localScale *= 2;
+        Debug.Log(grabbedFruit);
+    }
+    
+    if(collisionInfo.tag == "Cave")
+    {
+    Debug.Log("base");
+        tutorialGui.HitBase();
     }
 }
 
@@ -284,7 +321,7 @@ function DecreaseHealth()
             break;
         case HealthStatus.Red:
             health_ = HealthStatus.Dead;
-            PhotonNetwork.Destroy(this.gameObject);
+            Destroy(this.gameObject);
             spawnScript.UnitDied(spawnNumber);
             break;
     }

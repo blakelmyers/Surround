@@ -3,6 +3,8 @@
 var style : GUIStyle;
 var style2 : GUIStyle;
 
+public var spawnScript : SpawnscriptTest;
+
 private var step1 : boolean = false;
 private var step1a : boolean = false;
 private var step2 : boolean = false;
@@ -31,6 +33,8 @@ function Start () {
     step1 = true;
     cameraPosition = Vector3(500, 1600, -160);
     cameraTransform.position = cameraPosition;
+    
+    spawnScript = GameObject.Find("Spawnscript").GetComponent.<SpawnscriptTest>();
 }
 
 function OnGUI () {
@@ -93,6 +97,7 @@ function OnGUI () {
         {
             step5 = false;
             step5b = true;
+            spawnScript.StartSpawning();
         }
         GUILayout.EndArea ();
     }   
@@ -130,8 +135,7 @@ function OnGUI () {
     }
     if(step9)
     {
-        cameraPosition = Vector3(685, 450, 605);
-        cameraTransform.position = cameraPosition;
+        
         GUILayout.BeginArea (Rect(400, 20, 320, 300));
         GUILayout.Label("Notice the enemies health decrease. Right click again to move the dinosaur and keep colliding until the enemy is dead", style2);
         GUILayout.EndArea ();
@@ -180,9 +184,6 @@ function OverSand()
 
 function HitEnemy() {
 
-    // stop the follower prefab as well
-    GameObject.Find("YellowPrefab1").GetComponent(TutorialPlayerController).movementActive = false;
-    GameObject.Find("YellowPrefab(Clone)").GetComponent(TutorialPlayerController).movementActive = false;
     
     if(step8a)   // Only set this once
     {
@@ -204,7 +205,7 @@ function HitBase() {
 
 function EnemyDied() {
     Debug.Log("enemydied");
-    Application.LoadLevel("MainMenu");
+    
     if(step9a)   // Only set this once
     {
         step9 = false;
