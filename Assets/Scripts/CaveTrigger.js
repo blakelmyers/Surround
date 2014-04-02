@@ -21,7 +21,7 @@ enum PlayerControlling{
 public var caveControlledBy : PlayerControlling;
 
 function Start () {
-     unitsLeft = 10;
+     unitsLeft = 3;
 
      caveControlledBy = PlayerControlling.None;
      
@@ -47,13 +47,14 @@ function OnTriggerEnter(other:Collider){
         caveControlledBy = PlayerControlling.Red;
         spawnScript.SetBaseControlledBy(1, caveNumber);
         spawnScript.UpdatePlayer1Max(unitsLeft, caveNumber);
+        --unitsLeft;
 	}
 	if(other.tag == "Blue" && caveControlledBy != PlayerControlling.Blue){
 		Cube.renderer.material.color = Color.blue;
         spawnScript.SetBaseControlledBy(2, caveNumber);
         caveControlledBy = PlayerControlling.Blue;
         spawnScript.UpdatePlayer2Max(unitsLeft, caveNumber);
-
+        --unitsLeft;
 	}
 }
 }

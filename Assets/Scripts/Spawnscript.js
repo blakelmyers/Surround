@@ -24,6 +24,7 @@ public var startPositionplayer2 : Vector3;
 
 public var cave1 : CaveTrigger;
 public var cave2 : CaveTrigger;
+public var cave3 : CaveTrigger;
 
 var player1prefabs : GameObject[];
 var player2prefabs : GameObject[];
@@ -48,6 +49,10 @@ public var playerID : int;
 var styleRed : GUIStyle;
 var styleBlue : GUIStyle;
 
+var styleGreen : GUIStyle;
+var styleLock : GUIStyle;
+var styleUnlock : GUIStyle;
+
 var selectionType : SelectionChoice;
 var connectionObject : GameObject;
 
@@ -65,8 +70,8 @@ function Start()
 {
 
     PV = gameObject.GetComponent(PhotonView);
-    player1prefabs = new GameObject[15];
-    player2prefabs = new GameObject[15];
+    player1prefabs = new GameObject[50];
+    player2prefabs = new GameObject[50];
       
     selectionType = GameObject.Find("Selection").GetComponent(SelectionChoice);
     
@@ -92,6 +97,7 @@ function Start()
 
     cave1 = GameObject.Find("Cave1Prefab").GetComponent.<CaveTrigger>();
     cave2 = GameObject.Find("Cave2Prefab").GetComponent.<CaveTrigger>();
+    cave3 = GameObject.Find("Cave3Prefab").GetComponent.<CaveTrigger>();
 }
 
 function GetGameStarted()
@@ -125,7 +131,7 @@ function StartSpawning(){
        cameraForPlayer2.SetActive(true);
        cameraForPlayer1.SetActive(false);
        
-       startingCameraPosition = Vector3(500, 400, 2050);
+       startingCameraPosition = Vector3(730, 260, 1550);
        cameraForPlayer2.transform.position = startingCameraPosition;
     checkTimerplayer2 = Time.time + spawnTimeplayer2;
     numberOfplayer2Prefabs++;
@@ -148,40 +154,37 @@ function UpdatePlayer1Max(unitsLeft : int, caveNumber : int)
 {
     if(caveNumber == 1)
     {
-        absoluteMaxSpawnplayer1 += cave1.unitsLeft;
+        absoluteMaxSpawnplayer1 += 10;
         maxSpawnplayer1 += 5;
     }
     else if(caveNumber == 2)
     {
-        absoluteMaxSpawnplayer1 += cave2.unitsLeft;
+        absoluteMaxSpawnplayer1 += 10;
         maxSpawnplayer1 += 5;
     }
-
+    else if(caveNumber == 3)
+    {
+        absoluteMaxSpawnplayer1 += 10;
+        maxSpawnplayer1 += 5;
+    }
 }
 
 function UpdatePlayer2Max(unitsLeft : int, caveNumber : int)
 {
     if(caveNumber == 1)
     {
-        absoluteMaxSpawnplayer2 += cave1.unitsLeft;
+        absoluteMaxSpawnplayer2 += 10;
         maxSpawnplayer2 += 5;
     }
     else if(caveNumber == 2)
     {
-        absoluteMaxSpawnplayer2 += cave2.unitsLeft;
+        absoluteMaxSpawnplayer2 += 10;
         maxSpawnplayer2 += 5;
     }
-}
-
-function DecreaseCaveUnits(caveNumber : int)
-{
-    if(caveNumber == 1)
+    else if(caveNumber == 3)
     {
-        cave1.unitsLeft -= 1;
-    }
-    else if(caveNumber == 2)
-    {
-        cave2.unitsLeft -= 1;
+        absoluteMaxSpawnplayer2 += 10;
+        maxSpawnplayer2 += 5;
     }
 }
 
@@ -254,8 +257,8 @@ function OnGUI()
     {
         GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
         GUILayout.Label("Red Player", styleRed);
-        GUILayout.Label("Abs Max Spawn: " + absoluteMaxSpawnplayer1.ToString(), styleRed);
-        GUILayout.Label("Max Spawn: " + maxSpawnplayer1.ToString(), styleRed);
+        GUILayout.Label("Total Units:   " + absoluteMaxSpawnplayer1.ToString(), styleRed);
+        GUILayout.Label("Spawn Limit:   " + maxSpawnplayer1.ToString(), styleRed);
         GUILayout.Label("Current Spawn: " + numberOfplayer1Prefabs.ToString(), styleRed);
         GUILayout.EndArea ();
         
@@ -266,16 +269,33 @@ function OnGUI()
             GUILayout.Label("You WON!!!", styleRed);
             GUILayout.EndArea ();
         }
-
+        
+        if(player1prefabs[0].GetComponent(PlayerController).movementActive)
+        {             
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleGreen);
+        }
+        else
+        {
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleRed);
+        }
+        
+        if(player1prefabs[0].GetComponent(PlayerController).movementLock)
+        {             
+            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
+        }
+        else
+        {
+            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleUnlock);
+        }
     }
     else{
         GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
         GUILayout.Label("Blue Player", styleBlue);
-        GUILayout.Label("Abs Max Spawn: " + absoluteMaxSpawnplayer2.ToString(), styleBlue);
-        GUILayout.Label("Max Spawn: " + maxSpawnplayer2.ToString(), styleBlue);
+        GUILayout.Label("Total Units: " + absoluteMaxSpawnplayer2.ToString(), styleBlue);
+        GUILayout.Label("Spawn Limit: " + maxSpawnplayer2.ToString(), styleBlue);
         GUILayout.Label("Current Spawn: " + numberOfplayer2Prefabs.ToString(), styleBlue);
         GUILayout.EndArea ();
-    }
+    
          // Player 1 won
         if(playerWhoWon == 2)
         {
@@ -283,6 +303,25 @@ function OnGUI()
             GUILayout.Label("You WON!!!", styleBlue);
             GUILayout.EndArea ();
         }
+        
+        if(player2prefabs[0].GetComponent(PlayerController).movementActive)
+        {             
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleGreen);
+        }
+        else
+        {
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleRed);
+        }
+        
+        if(player2prefabs[0].GetComponent(PlayerController).movementLock)
+        {             
+            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
+        }
+        else
+        {
+            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleUnlock);
+        }
+       } 
     }
 }
 

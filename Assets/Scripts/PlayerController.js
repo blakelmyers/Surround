@@ -141,23 +141,24 @@ function Update() {
 		    Input.ResetInputAxes();
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
-         if(grabbedFruit)
+        if(grabbedFruit)
         {
             walkSpeed *= 2;
-        }
-        else if(checkTerrain == TextureType.Blueberry && this.Tag == "Blue")
-        {
-            RestoreHealth();     
-        }
-        else if(checkTerrain == TextureType.Redberry  && this.Tag == "Red")
-        {
-            RestoreHealth();     
         }
         else
         {
             walkSpeed = 80;
         }
-              
+          
+        if(checkTerrain == TextureType.Blueberry && this.tag == "Blue")
+        {
+            RestoreHealth();     
+        }
+        if(checkTerrain == TextureType.Redberry  && this.tag == "Red")
+        {
+            RestoreHealth();     
+        }    
+        
         if(Input.GetMouseButtonDown(1))
         {
             movementActive = !movementActive;
@@ -288,12 +289,6 @@ if(PV.isMine)
         }
     }
 
- 	if(collisionInfo.tag == "cave0"){
- 		spawnScript.UpdateMaxSpawn(0);
- 	}
-    if(collisionInfo.tag == "cave1"){
-        spawnScript.UpdateMaxSpawn(1);
-    }
     }
 }
 

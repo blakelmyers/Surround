@@ -5,7 +5,7 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 {
     private PhotonView myPhotonView;
 	private Vector3 startingPosPlayer1 = new Vector3(1450, 8, 560);
-	private Vector3 startingPosPlayer2 = new Vector3(450, 5, 1500);
+	private Vector3 startingPosPlayer2 = new Vector3(740, 5, 1180);
 	private int playerID;
 	private bool connected = false;
 	private bool waiting = false;
