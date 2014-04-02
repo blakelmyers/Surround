@@ -7,10 +7,23 @@ public class PlayerController extends Photon.MonoBehaviour{
 
 public var movementActive : boolean = false;
 
+public var movementLock : boolean = false;
+
 public var spawnNumber : int;
+
+public var grabbedFruit : boolean = false;
 
 private var _animation : Animation;
 
+private var lead: Transform;
+
+private var offset;
+
+private var normalSpeed : int = 80;
+
+private var healthMax : int = 6;
+
+private var speedTime: int = 0;
 
 /*
 enum CharacterState {
@@ -41,6 +54,7 @@ private var moveDirection = Vector3.zero;
 // The last collision flags returned from controller.Move
 private var collisionFlags : CollisionFlags; 
 
+var PV: PhotonView;
 
 // the height we jumped from (Used to determine for how long to apply extra jump power after jumping.)
 private var lastJumpStartHeight = 0.0;
@@ -56,9 +70,9 @@ private var isControllable = true;
 
 var health_ : HealthStatus;
 var collisionCounter : int = 0;
-var RedPlane : GameObject;
-var GreenPlane : GameObject;
-var YellowPlane : GameObject;
+
+var HealthPlane : GameObject;
+
 
 enum HealthStatus {
     Green = 3, 
@@ -69,32 +83,42 @@ enum HealthStatus {
 
 function Start ()
 {
+
+    PV = gameObject.GetComponent(PhotonView);
+    
+    if(!PV.isMine){
+        //We aren't the network owner, disable this script
+        //RPC's and OnSerializeNetworkView will STILL get trough!
+        enabled=false;  
+    }
+    else{
    health_ = HealthStatus.Green;
    var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
-        if (t.name == "RedPlane"){ RedPlane = t.gameObject;}
-        else if (t.name == "GreenPlane"){ GreenPlane = t.gameObject;}
-        else if (t.name == "YellowPlane"){ YellowPlane = t.gameObject;}
+       if (t.name == "HealthPlane"){ HealthPlane = t.gameObject;}
    }
-   GreenPlane.renderer.enabled = true;
-   RedPlane.renderer.enabled = false;
-   YellowPlane.renderer.enabled = false;
+   HealthPlane.renderer.material.color = Color.green;
+   
    
    spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
-   Debug.Log(spawnScript.GetGameStarted());
+   //Debug.Log("game started");
+   //Debug.Log(spawnScript.GetGameStarted());
    if(spawnScript.GetGameStarted() == false)
    {
+      //Debug.Log("startspawning");
       spawnScript.StartSpawning();
    } 
+   if(playerID == 1){
+		lead = spawnScript.player1prefabs[0].transform;
+	}
+	if(playerID == 2){
+		lead = spawnScript.player2prefabs[0].transform;
+	}
+    }
 }
 
 function Awake ()
 {
-    if(!photonView.isMine){
-		//We aren't the network owner, disable this script
-		//RPC's and OnSerializeNetworkView will STILL get trough!
-		enabled=false;	
-	}
     
 	playerID = PhotonNetwork.player.ID;
     
@@ -104,7 +128,7 @@ function Awake ()
 	if(!_animation)
 		Debug.Log("The character you would like to control doesn't have animations. Moving her might look weird.");
 	
-     Debug.Log(playerID);
+     //Debug.Log(playerID);
 }
 
 
@@ -112,8 +136,16 @@ function Awake ()
 function Update() {
 
     var checkTerrain : TextureType;
+    speedTime +=1;
+    Debug.Log(speedTime);
+    if (Input.GetKey (KeyCode.Space) && speedTime>1000 && !grabbedFruit)
+	{
+		spawnScript.fruitTimer(playerID);
+		Debug.Log("THIS SHIT JUST HAPPENED");
+		speedTime=0;
+	}
     
-    if(photonView.isMine)
+    if(PV.isMine)
     {
 	    if (!isControllable)
 	    {
@@ -121,9 +153,9 @@ function Update() {
 		    Input.ResetInputAxes();
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
-        if(checkTerrain == TextureType.Sand)
+         if(grabbedFruit)
         {
-            walkSpeed = 40;
+            walkSpeed = 2*normalSpeed;
         }
         else if(checkTerrain == TextureType.Blueberry && this.Tag == "Blue")
         {
@@ -135,17 +167,29 @@ function Update() {
         }
         else
         {
-            walkSpeed = 80;
+            walkSpeed = normalSpeed;
         }
               
         if(Input.GetMouseButtonDown(1))
         {
             movementActive = !movementActive;
         }
-    
+    	if(Input.GetMouseButtonDown(0)){
+    		movementLock = !movementLock;
+    		offset = lead.position - transform.position;	
+    	}
        if (movementActive == true)
        {
-            ProcessMovement();
+       		if(movementLock){
+       			if(spawnNumber==1){
+       				ProcessMovement();
+       			}else{
+       				FollowMovement();
+       			}	
+       		}
+       		else{
+       			ProcessMovement();
+       		}
        }
        else
        {
@@ -158,18 +202,18 @@ function Update() {
 
 function RestoreHealth()
 {
+if(PV.isMine)
+    {
     healthCounter++;
     
     if(health_ < HealthStatus.Green)
     {
-        Debug.Log(health_);
+        //Debug.Log(health_);
         health_ = HealthStatus.Green;
         healthCounter = 0;
-        GreenPlane.renderer.enabled = true;
-        RedPlane.renderer.enabled = false;
-        YellowPlane.renderer.enabled = false;
+        HealthPlane.renderer.material.color = Color.green;
     }
-    
+  }
 }
 
 function GetMovementActive()
@@ -195,14 +239,21 @@ function ProcessMovement()
     if (playerPlane.Raycast (ray, hitdist)) 
     {
         // Get the point along the ray that hits the calculated distance.
-             
+        if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
+        {
+            walkSpeed = 40;
+            transform.position.y = -3;
+        }    
+        else{
+        	transform.position.y = 1;
+        }
         var targetPoint = ray.GetPoint(hitdist);
                 
-        // Don't move is mouse is with 5 units
+        // Don't move if mouse is with 5 units
         if(Vector3.Distance(targetPoint, transform.position) < 20 * spawnNumber)
         {
             _animation.CrossFade("idle");
-            transform.position.y = 1;
+            
             
         }
         else
@@ -223,6 +274,12 @@ function ProcessMovement()
     }
 }
 
+function FollowMovement(){
+	transform.position = lead.position - offset;
+	transform.rotation = lead.rotation;
+	_animation.CrossFade("walk");
+}
+
 function FixedUpdate() 
 {
     
@@ -230,14 +287,25 @@ function FixedUpdate()
 }
 
 function OnTriggerEnter(collisionInfo : Collider){
+if(PV.isMine)
+    {
     if(collisionInfo.name != this.name){
         if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
-           if(collisionCounter % 6 == 0)
+           if(collisionCounter % healthMax == 0)
             {
                 DecreaseHealth();
+                _animation.CrossFade("Attack");
             }
             collisionCounter++;
         }
+    }
+
+ 	if(collisionInfo.tag == "cave0"){
+ 		spawnScript.UpdateMaxSpawn(0);
+ 	}
+    if(collisionInfo.tag == "cave1"){
+        spawnScript.UpdateMaxSpawn(1);
+    }
     }
 }
 
@@ -248,26 +316,25 @@ function OnTriggerExit (collisionInfo : Collider) {
 
 function DecreaseHealth()
 {
+if(PV.isMine)
+    {
     //Debug.Log(health_);
     switch (health_)
     {
         case HealthStatus.Green:
             health_ = HealthStatus.Yellow;
-            GreenPlane.renderer.enabled = false;
-            RedPlane.renderer.enabled = false;
-            YellowPlane.renderer.enabled = true;
+            HealthPlane.renderer.material.color = Color.yellow;
             break;
         case HealthStatus.Yellow:
             health_ = HealthStatus.Red;
-            GreenPlane.renderer.enabled = false;
-            RedPlane.renderer.enabled = true;
-            YellowPlane.renderer.enabled = false;
+            HealthPlane.renderer.material.color = Color.red;
             break;
         case HealthStatus.Red:
             health_ = HealthStatus.Dead;
             PhotonNetwork.Destroy(this.gameObject);
             spawnScript.UnitDied(spawnNumber);
             break;
+    }
     }
 }
 

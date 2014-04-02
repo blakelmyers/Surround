@@ -3,20 +3,19 @@
 var cameraTransform : Transform;
 
 function Update () {
-
-    Debug.Log(cameraTransform.position);
+    //Debug.Log(cameraTransform.position);
     if(Input.GetKey(KeyCode.A)){
-		cameraTransform.position.x += 5;
-	}
-	else if(Input.GetKey(KeyCode.D)){
-		cameraTransform.position.x -= 5;
-	}
-	if(Input.GetKey(KeyCode.W)){
-		cameraTransform.position.z -= 5;
-	}	
-	else if(Input.GetKey(KeyCode.S)){
-		cameraTransform.position.z += 5;
-	}
+        cameraTransform.position.x += 5;
+    }
+    else if(Input.GetKey(KeyCode.D)){
+        cameraTransform.position.x -= 5;
+    }
+    if(Input.GetKey(KeyCode.W)){
+        cameraTransform.position.z -= 5;
+    }   
+    else if(Input.GetKey(KeyCode.S)){
+        cameraTransform.position.z += 5;
+    }
     if(Input.GetKey(KeyCode.Z)){
         if(cameraTransform.position.y > 200)
         {
