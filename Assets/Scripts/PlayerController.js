@@ -19,6 +19,11 @@ private var lead: Transform;
 
 private var offset;
 
+private var normalSpeed : int = 80;
+
+private var healthMax : int = 6;
+
+private var speedTime: int = 0;
 
 /*
 enum CharacterState {
@@ -96,11 +101,11 @@ function Start ()
    
    
    spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
-   Debug.Log("game started");
-   Debug.Log(spawnScript.GetGameStarted());
+   //Debug.Log("game started");
+   //Debug.Log(spawnScript.GetGameStarted());
    if(spawnScript.GetGameStarted() == false)
    {
-      Debug.Log("startspawning");
+      //Debug.Log("startspawning");
       spawnScript.StartSpawning();
    } 
    if(playerID == 1){
@@ -123,7 +128,7 @@ function Awake ()
 	if(!_animation)
 		Debug.Log("The character you would like to control doesn't have animations. Moving her might look weird.");
 	
-     Debug.Log(playerID);
+     //Debug.Log(playerID);
 }
 
 
@@ -131,6 +136,14 @@ function Awake ()
 function Update() {
 
     var checkTerrain : TextureType;
+    speedTime +=1;
+    Debug.Log(speedTime);
+    if (Input.GetKey (KeyCode.Space) && speedTime>1000 && !grabbedFruit)
+	{
+		spawnScript.fruitTimer(playerID);
+		Debug.Log("THIS SHIT JUST HAPPENED");
+		speedTime=0;
+	}
     
     if(PV.isMine)
     {
@@ -142,7 +155,7 @@ function Update() {
         checkTerrain = GetTerrainTextureAt(transform.position);
          if(grabbedFruit)
         {
-            walkSpeed *= 2;
+            walkSpeed = 2*normalSpeed;
         }
         else if(checkTerrain == TextureType.Blueberry && this.Tag == "Blue")
         {
@@ -154,7 +167,7 @@ function Update() {
         }
         else
         {
-            walkSpeed = 80;
+            walkSpeed = normalSpeed;
         }
               
         if(Input.GetMouseButtonDown(1))
@@ -195,7 +208,7 @@ if(PV.isMine)
     
     if(health_ < HealthStatus.Green)
     {
-        Debug.Log(health_);
+        //Debug.Log(health_);
         health_ = HealthStatus.Green;
         healthCounter = 0;
         HealthPlane.renderer.material.color = Color.green;
@@ -278,7 +291,7 @@ if(PV.isMine)
     {
     if(collisionInfo.name != this.name){
         if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
-           if(collisionCounter % 6 == 0)
+           if(collisionCounter % healthMax == 0)
             {
                 DecreaseHealth();
                 _animation.CrossFade("Attack");
