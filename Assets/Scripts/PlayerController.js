@@ -141,14 +141,9 @@ function Update() {
 		    Input.ResetInputAxes();
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
-        if(grabbedFruit)
-        {
-            walkSpeed *= 2;
-        }
-        else
-        {
-            walkSpeed = 80;
-        }
+        
+        walkSpeed = 80;
+        
           
         if(checkTerrain == TextureType.Blueberry && this.tag == "Blue")
         {
@@ -231,10 +226,18 @@ function ProcessMovement()
         if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
         {
             walkSpeed = 40;
-            transform.position.y = -3;
+            transform.position.y = -2;
         }    
         else{
-        	transform.position.y = 1;
+            if(grabbedFruit)
+            {
+                transform.position.y = 7;
+            }
+            else
+            {
+                transform.position.y = 1;
+            }
+        	
         }
         var targetPoint = ray.GetPoint(hitdist);
                 
@@ -255,7 +258,14 @@ function ProcessMovement()
  
             // Move the object forward.
             transform.position += transform.forward * walkSpeed * Time.deltaTime;
-            transform.position.y = 1;        
+            if(grabbedFruit)
+            {
+                transform.position.y = 7;
+            }
+            else
+            {
+                transform.position.y = 1;
+            }        
             _animation.CrossFade("walk");
         }
         
@@ -289,6 +299,12 @@ if(PV.isMine)
         }
     }
 
+    }
+    
+    if(collisionInfo.tag == "Fruit")
+    {
+        if(!grabbedFruit)transform.localScale *= 2;
+        grabbedFruit = true;
     }
 }
 

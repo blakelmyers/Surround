@@ -184,7 +184,6 @@ function ProcessHealth()
             
             health_ = HealthStatus.Dead;
             Destroy(this.gameObject);
-            tutorialGui.EnemyDied();
             break;
     }
 }

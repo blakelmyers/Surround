@@ -124,18 +124,18 @@ function Update() {
 		    Input.ResetInputAxes();
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
-         if(grabbedFruit)
+    /*     if(grabbedFruit)
         {
             walkSpeed = 160;
         }      
         else
-        {
+        {*/
             walkSpeed = 80;
-        }
+        //}
         if(checkTerrain == TextureType.Sand)
         {
             walkSpeed = 40;
-            if(firstDino) tutorialGui.OverSand();
+            tutorialGui.OverSand();
         }
         
              
@@ -247,13 +247,13 @@ function ProcessMovement()
             // Move the object forward.
             transform.position += transform.forward * walkSpeed * Time.deltaTime;
            if(grabbedFruit)
-        {
-        transform.position.y = 14;
-        }
-        else
-        {
-        transform.position.y = 7;
-        }        
+            {
+                transform.position.y = 14;
+            }
+            else
+            {
+                transform.position.y = 7;
+            }        
             _animation.CrossFade("walk");
         }
         
@@ -298,6 +298,11 @@ function OnTriggerEnter(collisionInfo : Collider){
     {
     Debug.Log("base");
         tutorialGui.HitBase();
+    }
+    
+    if(collisionInfo.tag == "BlueBase")
+    {
+        Application.LoadLevel("MainMenu");
     }
 }
 

@@ -12,6 +12,7 @@ private var step3 : boolean = false;
 private var step4 : boolean = false;
 private var step5 : boolean = false;
 private var step5a : boolean = true;
+private var step5_1 : boolean = false;
 private var step5b : boolean = false;
 private var step5c : boolean = true;
 private var step6 : boolean = false;
@@ -96,11 +97,23 @@ function OnGUI () {
         if(GUILayout.Button ("Continue"))
         {
             step5 = false;
-            step5b = true;
+            step5_1 = true; 
             spawnScript.StartSpawning();
         }
         GUILayout.EndArea ();
     }   
+    if(step5_1)
+    {
+        GUILayout.BeginArea (Rect(300, 20, 300, 300));
+        GUILayout.Label("You will now start spawning units.  In the upper right of the screen is your current Player Type and Spawn data.  In the lower left are two icons.  Right clicking the mouse toggles movement on and off indicated by the green and red. Left clicking locks your units in formation, indicated by the lock icon", style2);
+        if(GUILayout.Button ("Continue"))
+        {
+            step5_1 = false;
+            step5b = true;
+            spawnScript.StartSpawning();
+        }
+        GUILayout.EndArea ();
+    }
     if(step5b)
     {
         cameraPosition = Vector3(823, 600, 525);
@@ -114,7 +127,7 @@ function OnGUI () {
         cameraPosition = Vector3(630, 1311, -30);
         cameraTransform.position = cameraPosition;
         GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("The fruit increased speed.", style2);
+        GUILayout.Label("The fruit increased your size.", style2);
         GUILayout.EndArea ();
     }
     if(step7)
@@ -137,7 +150,7 @@ function OnGUI () {
     {
         
         GUILayout.BeginArea (Rect(400, 20, 320, 300));
-        GUILayout.Label("Notice the enemies health decrease. Right click again to move the dinosaur and keep colliding until the enemy is dead", style2);
+        GUILayout.Label("Notice the enemies health decrease. Keep colliding until the enemy is dead.  Touch the Blue Base to end the tutorial", style2);
         GUILayout.EndArea ();
     }
     if(step10)

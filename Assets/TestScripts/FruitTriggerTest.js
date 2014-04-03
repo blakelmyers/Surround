@@ -1,6 +1,5 @@
 ﻿#pragma strict
 
-public var tutorialGui : TutorialGUI;
 
 function Start () {
 
@@ -15,6 +14,6 @@ function OnTriggerEnter(other:Collider){
         Destroy(this.gameObject);
     }
     if(other.tag == "Blue"){
-        renderer.material.color = Color.blue;
+        Destroy(this.gameObject);
     }
 }
