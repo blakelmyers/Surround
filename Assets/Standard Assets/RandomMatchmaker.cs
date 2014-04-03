@@ -65,11 +65,11 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 			
 		if(playerID == 1)  // Player 1
 		{
-			//waiting = true;
+			waiting = true;
 
-			monster = PhotonNetwork.Instantiate(playerChoice, startingPosPlayer1, Quaternion.identity, 0);
-			monster.tag = "Red";
-			myPhotonView = monster.GetComponent<PhotonView>();
+			//monster = PhotonNetwork.Instantiate(playerChoice, startingPosPlayer1, Quaternion.identity, 0);
+			//monster.tag = "Red";
+			//myPhotonView = monster.GetComponent<PhotonView>();
 		}
 			 
 		if(playerID == 2)
@@ -87,12 +87,12 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 		if(player.ID == 2)
 		{
 			if(playerID == 1)  // Player 1 
-			{   /*
+			{   
 				GameObject monster;
 				monster = PhotonNetwork.Instantiate(playerChoice, startingPosPlayer1, Quaternion.identity, 0);
 				monster.tag = "Red";
 				myPhotonView = monster.GetComponent<PhotonView>();
-				*/
+
 			}
 		}
 	}
