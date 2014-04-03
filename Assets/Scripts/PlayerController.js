@@ -66,6 +66,8 @@ private var isControllable = true;
 var health_ : HealthStatus;
 var collisionCounter : int = 0;
 
+private var healthMax_ : int = 6;
+
 var HealthPlane : GameObject;
 
 
@@ -290,7 +292,7 @@ if(PV.isMine)
     {
     if(collisionInfo.name != this.name){
         if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
-           if(collisionCounter % 6 == 0)
+           if(collisionCounter % healthMax_ == 0)
             {
                 DecreaseHealth();
                 _animation.CrossFade("Attack");
@@ -303,7 +305,11 @@ if(PV.isMine)
     
     if(collisionInfo.tag == "Fruit")
     {
-        if(!grabbedFruit)transform.localScale *= 2;
+        if(!grabbedFruit)
+        {
+            transform.localScale *= 2;
+            healthMax_ *= 2;
+        }
         grabbedFruit = true;
     }
 }

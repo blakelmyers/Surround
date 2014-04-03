@@ -65,6 +65,9 @@ public var playerID : int;
 private var isControllable = true;
 
 var health_ : HealthStatus;
+
+private var healthMax_ : int = 9;
+
 var collisionCounter : int = 0;
 
 var HealthPlane : GameObject;
@@ -276,7 +279,7 @@ function FixedUpdate()
 function OnTriggerEnter(collisionInfo : Collider){
     if(collisionInfo.name != this.name){
         if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
-           if(collisionCounter % 9 == 0)
+           if(collisionCounter % healthMax_ == 0)
             {
                 DecreaseHealth();
                 tutorialGui.HitEnemy();
@@ -291,7 +294,8 @@ function OnTriggerEnter(collisionInfo : Collider){
         tutorialGui.PickedUpOrange();
         grabbedFruit = true;
         transform.localScale *= 2;
-        Debug.Log(grabbedFruit);
+        healthMax_ *= 2;
+        Debug.Log(healthMax_);
     }
     
     if(collisionInfo.tag == "Cave")
