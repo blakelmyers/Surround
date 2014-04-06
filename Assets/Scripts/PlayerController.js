@@ -68,6 +68,21 @@ var collisionCounter : int = 0;
 
 private var healthMax_ : int = 6;
 
+private var normalSpeed : int = 80;
+
+private var speedTime : float = 3;  // 3 seconds
+
+private var speedTimeCheck : float;
+
+private var speedActive : boolean = false;
+
+public var speedAvailable : boolean = true;
+
+private var speedCooldown : boolean = false;
+
+private var speedCooldownTimeCheck : float;
+
+private var speedCooldownTime : float = 3;   // 3 seconds
 
 enum HealthStatus {
     Green = 3, 
@@ -89,7 +104,12 @@ function Start ()
     else{
    health_ = HealthStatus.Green;
 
+   var t : Transform;
+   for (t in transform.GetComponentsInChildren.<Transform>()) {
+       if (t.name == "Plane"){ planeObj = t.gameObject;}
+   }
    
+   planeObj.renderer.material.color = Color.clear;
    
    spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
    Debug.Log("game started");
@@ -130,6 +150,38 @@ function Update() {
     
     if(PV.isMine)
     {
+        walkSpeed = 80;
+        
+        if(speedAvailable)
+        {
+            if (Input.GetKey (KeyCode.Space)  && !speedActive)
+            {
+               speedActive = true;
+               speedTimeCheck = Time.time + speedTime;   // set timer for 3 seconds
+               speedAvailable = false;
+            }
+        }
+        
+        if(speedActive)
+        {
+            walkSpeed = 160;
+            if(Time.time >= speedTimeCheck)  // 3 seconds of speed has expired
+            {
+                speedActive = false;
+                speedCooldown = true;
+                speedCooldownTimeCheck = Time.time + speedCooldownTime;
+            }
+        }
+        
+        if(speedCooldown)
+        {
+            if(Time.time >= speedCooldownTimeCheck)  // 3 seconds of cooldown has expired
+            {
+                speedAvailable = true;
+                speedCooldown = false;
+            }
+        }
+
         
 	    if (!isControllable)
 	    {
@@ -138,17 +190,6 @@ function Update() {
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
         
-        walkSpeed = 80;
-        
-          
-        if(checkTerrain == TextureType.Blueberry && this.tag == "Blue")
-        {
-            RestoreHealth();     
-        }
-        if(checkTerrain == TextureType.Redberry  && this.tag == "Red")
-        {
-            RestoreHealth();     
-        }    
         
         if(Input.GetMouseButtonDown(1))
         {
@@ -158,6 +199,7 @@ function Update() {
     		movementLock = !movementLock;
     		offset = lead.position - transform.position;	
     	}
+        
        if (movementActive == true)
        {
        		if(movementLock){

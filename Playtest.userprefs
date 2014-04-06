@@ -6,6 +6,17 @@
       <File FileName="Assets\TestScripts\TextureTest.js" Line="39" Column="41" />
       <File FileName="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs" Line="93" Column="99" />
       <File FileName="Assets\TestScripts\PaintRoad.cs" Line="37" Column="5" />
+      <File FileName="Assets\Scripts\ThirdPersonControllerMainMenu.js" Line="37" Column="84" />
+      <File FileName="Assets\Scripts\Menu.js" Line="1" Column="1" />
+      <File FileName="Assets\Standard Assets\SelectionChoice.cs" Line="17" Column="2" />
+      <File FileName="Assets\Scripts\PlayerController.js" Line="168" Column="39" />
+      <File FileName="Assets\Standard Assets\RandomMatchmaker.cs" Line="97" Column="16" />
+      <File FileName="Assets\Scripts\Spawnscript.js" Line="363" Column="21" />
+      <File FileName="Assets\Scripts\CaveTrigger.js" Line="30" Column="6" />
+      <File FileName="Assets\Scripts\CameraScript1.js" Line="44" Column="7" />
+      <File FileName="Assets\Scripts\CameraScript2.js" Line="43" Column="7" />
+      <File FileName="Assets\Standard Assets\NetworkCharacter.cs" Line="7" Column="87" />
+      <File FileName="Assets\Scripts\SpawnTutorial.js" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

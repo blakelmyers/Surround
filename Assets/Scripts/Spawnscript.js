@@ -55,7 +55,7 @@ var stylePurple : GUIStyle;
 var styleOrange : GUIStyle;
 
 var styleLock : GUIStyle;
-var styleUnlock : GUIStyle;
+var styleSpeed : GUIStyle;
 
 var selectionType : SelectionChoice;
 var connectionObject : GameObject;
@@ -313,9 +313,9 @@ function OnGUI()
         {             
             GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
         }
-        else
-        {
-            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleUnlock);
+        if(player1prefabs[0].GetComponent(PlayerController).speedAvailable)
+        {             
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
         }
     }
     else{
@@ -339,10 +339,12 @@ function OnGUI()
         {             
             GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
         }
-        else
-        {
-            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleUnlock);
+        
+        if(player2prefabs[0].GetComponent(PlayerController).speedAvailable)
+        {             
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
         }
+
        } 
     }
 }
@@ -409,7 +411,7 @@ function Update()
                      Debug.Log(myNewTrans.tag);
                     myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
                     myNewTrans.GetComponent(PlayerController).movementActive = myPrevTrans.GetComponent(PlayerController).movementActive;
-                    myNewTrans.GetComponent(PlayerController).movementLock = myPrevTrans.GetComponent(PlayerController).movementLock;
+                     myNewTrans.GetComponent(PlayerController).movementLock = myPrevTrans.GetComponent(PlayerController).movementLock;
                     player2prefabs[numberOfplayer2Prefabs - 1] = myNewTrans;
                 }
             }
