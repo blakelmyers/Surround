@@ -48,13 +48,28 @@ public var playerID : int;
 
 var styleRed : GUIStyle;
 var styleBlue : GUIStyle;
-
 var styleGreen : GUIStyle;
+var styleGreenPre : GUIStyle;
+var styleYellow : GUIStyle;
+var stylePurple : GUIStyle;
+var styleOrange : GUIStyle;
+
 var styleLock : GUIStyle;
 var styleUnlock : GUIStyle;
 
 var selectionType : SelectionChoice;
 var connectionObject : GameObject;
+
+var player1Base : GameObject;
+var player2Base : GameObject;
+
+var baseColor : Color;
+
+var playerColor : String;
+
+var styleGUI : GUIStyle;
+
+var noBaseChange : boolean = false;
 
 enum PlayerType {
     player1 = 0,
@@ -83,15 +98,39 @@ function Start()
     {
     case DinosaurEnum.YellowTall:
         playerChoice = "YellowPrefab";
+        baseColor = Color.yellow;
+        playerColor = "Yellow";
+        styleGUI = styleYellow;
         break;
     case DinosaurEnum.RedTall:
         playerChoice = "RedPrefab";
+        baseColor = Color.red;
+        playerColor = "Red";
+        styleGUI = styleRed;
         break;
     case DinosaurEnum.PurpleFat:
         playerChoice = "PurplePrefab";
+        baseColor = Color.magenta;
+        playerColor = "Purple";
+        styleGUI = stylePurple;
         break;
     case DinosaurEnum.BlueFat:
         playerChoice = "BluePrefab";
+        baseColor = Color.blue;
+        playerColor = "Blue";
+        styleGUI = styleBlue;
+        break;
+    case DinosaurEnum.GreenFat:
+        playerChoice = "GreenPrefab";
+        baseColor = Color.green;
+        playerColor = "Green";
+        styleGUI = styleGreenPre;
+        break;
+    case DinosaurEnum.OrangeTall:
+        playerChoice = "OrangePrefab";
+        noBaseChange = true;
+        playerColor = "Orange";
+        styleGUI = styleOrange;
         break;
     }
 
@@ -125,6 +164,7 @@ function StartSpawning(){
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer1Prefabs;
        player1prefabs[0] = myNewTrans;
        
+       if(!noBaseChange)player1Base.renderer.material.color = baseColor;
  }
  else if (playerID == 2)   // player2
  {
@@ -141,14 +181,12 @@ function StartSpawning(){
     myNewTrans = GameObject.Find(playerChoice+"(Clone)");
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
        player2prefabs[0] = myNewTrans;
+       
+       if(!noBaseChange)player2Base.renderer.material.color = baseColor;
  }
     }
 }
 
-function SetBaseControlledBy(playerTag : int,  caveNumber : int)
-{
-
-}
 
 function UpdatePlayer1Max(unitsLeft : int, caveNumber : int)
 {
@@ -256,10 +294,10 @@ function OnGUI()
     if(playerID == 1)
     {
         GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
-        GUILayout.Label("Red Player", styleRed);
-        GUILayout.Label("Total Units:   " + absoluteMaxSpawnplayer1.ToString(), styleRed);
-        GUILayout.Label("Spawn Limit:   " + maxSpawnplayer1.ToString(), styleRed);
-        GUILayout.Label("Current Spawn: " + numberOfplayer1Prefabs.ToString(), styleRed);
+        GUILayout.Label(playerColor + " Player", styleGUI);
+        GUILayout.Label("Total Units:   " + absoluteMaxSpawnplayer1.ToString(), styleGUI);
+        GUILayout.Label("Spawn Limit:   " + maxSpawnplayer1.ToString(), styleGUI);
+        GUILayout.Label("Current Spawn: " + numberOfplayer1Prefabs.ToString(), styleGUI);
         GUILayout.EndArea ();
         
         // Player 1 won
@@ -270,14 +308,6 @@ function OnGUI()
             GUILayout.EndArea ();
         }
         
-        if(player1prefabs[0].GetComponent(PlayerController).movementActive)
-        {             
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleGreen);
-        }
-        else
-        {
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleRed);
-        }
         
         if(player1prefabs[0].GetComponent(PlayerController).movementLock)
         {             
@@ -290,10 +320,10 @@ function OnGUI()
     }
     else{
         GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
-        GUILayout.Label("Blue Player", styleBlue);
-        GUILayout.Label("Total Units: " + absoluteMaxSpawnplayer2.ToString(), styleBlue);
-        GUILayout.Label("Spawn Limit: " + maxSpawnplayer2.ToString(), styleBlue);
-        GUILayout.Label("Current Spawn: " + numberOfplayer2Prefabs.ToString(), styleBlue);
+        GUILayout.Label(playerColor + " Player", styleGUI);
+        GUILayout.Label("Total Units:   " + absoluteMaxSpawnplayer2.ToString(), styleGUI);
+        GUILayout.Label("Spawn Limit:   " + maxSpawnplayer2.ToString(), styleGUI);
+        GUILayout.Label("Current Spawn: " + numberOfplayer2Prefabs.ToString(), styleGUI);
         GUILayout.EndArea ();
     
          // Player 1 won
@@ -304,14 +334,6 @@ function OnGUI()
             GUILayout.EndArea ();
         }
         
-        if(player2prefabs[0].GetComponent(PlayerController).movementActive)
-        {             
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleGreen);
-        }
-        else
-        {
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleRed);
-        }
         
         if(player2prefabs[0].GetComponent(PlayerController).movementLock)
         {             
@@ -345,7 +367,8 @@ function Update()
                         numberOfplayer1Prefabs++;
                        
                         myNewTrans = PhotonNetwork.Instantiate(playerChoice, myPrevTrans.transform.position, myPrevTrans.transform.rotation, 0);
-                        myNewTrans.tag = "Red";
+                        //myNewTrans.tag = "Red";
+                        Debug.Log(myNewTrans.tag);
                         myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer1Prefabs;
                         myNewTrans.GetComponent(PlayerController).movementActive = myPrevTrans.GetComponent(PlayerController).movementActive;
                         myNewTrans.GetComponent(PlayerController).movementLock = myPrevTrans.GetComponent(PlayerController).movementLock;
@@ -382,8 +405,11 @@ function Update()
                     numberOfplayer2Prefabs++;   
                    
                     myNewTrans = PhotonNetwork.Instantiate(playerChoice, myPrevTrans.transform.position, myPrevTrans.transform.rotation, 0);
-                    myNewTrans.tag = "Blue";
+                    //myNewTrans.tag = "Blue";
+                     Debug.Log(myNewTrans.tag);
                     myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
+                    myNewTrans.GetComponent(PlayerController).movementActive = myPrevTrans.GetComponent(PlayerController).movementActive;
+                    myNewTrans.GetComponent(PlayerController).movementLock = myPrevTrans.GetComponent(PlayerController).movementLock;
                     player2prefabs[numberOfplayer2Prefabs - 1] = myNewTrans;
                 }
             }

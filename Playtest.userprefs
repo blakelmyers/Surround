@@ -2,25 +2,10 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs">
     <Files>
-      <File FileName="Playtest.sln" Line="1" Column="1" />
-      <File FileName="Assets\TestScripts\PlayerControllerTest.js" Line="383" Column="1" />
-      <File FileName="Assets\Scripts\PlayerController.js" Line="1" Column="1" />
-      <File FileName="Assets\TestScripts\PlayerControllerTest.js" Line="134" Column="11" />
-      <File FileName="Assets\Scripts\CaveTrigger.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\FruitTrigger.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\TutorialGUI.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\TutorialPlayerController.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Connect.js" Line="1" Column="1" />
+      <File FileName="Assets\TestScripts\cameraTest.js" Line="2" Column="1" />
+      <File FileName="Assets\TestScripts\TextureTest.js" Line="39" Column="41" />
       <File FileName="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs" Line="93" Column="99" />
-      <File FileName="Assets\Scripts\Spawnscript.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ThirdPersonController.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\TutorialEnemy.js" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\NetworkCharacter.cs" Line="1" Column="1" />
-      <File FileName="Assets\TestScripts\SpawnscriptTest.js" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\RandomMatchmaker.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CameraScript1.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CameraScript2.js" Line="1" Column="1" />
-      <File FileName="Assets\TestScripts\CaveTriggerTest.js" Line="1" Column="1" />
+      <File FileName="Assets\TestScripts\PaintRoad.cs" Line="37" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

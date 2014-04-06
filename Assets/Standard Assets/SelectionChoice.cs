@@ -3,9 +3,11 @@ using System.Collections;
 
 public enum DinosaurEnum {
 	YellowTall = 0,
-	RedTall = 1,
-	PurpleFat = 2,
-	BlueFat = 3, 
+	OrangeTall = 1,
+	RedTall = 2,
+	PurpleFat = 3,
+	BlueFat = 4,
+	GreenFat = 5
 }
 
 public class SelectionChoice : MonoBehaviour {

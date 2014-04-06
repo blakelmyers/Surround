@@ -22,7 +22,7 @@ function Start()
 
 function Update() 
 {
-   
+   /*
    if (Input.mousePosition.x > theScreenWidth - Boundary)
    {
       cameraTransform.position.x -= speed; // move on +X axis
@@ -41,7 +41,7 @@ function Update()
    if (Input.mousePosition.y < 0 + Boundary)
    {
       cameraTransform.position.z += speed; // move on -Z axis
-   }
+   }*/
     //Debug.Log(cameraTransform.position);
     if(Input.GetKey(KeyCode.A)){
         cameraTransform.position.x += 5;

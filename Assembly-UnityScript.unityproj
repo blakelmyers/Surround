@@ -66,6 +66,8 @@
      <Compile Include="Assets\TestScripts\FruitTriggerTest.js" />
      <Compile Include="Assets\TestScripts\PlayerControllerTest.js" />
      <Compile Include="Assets\TestScripts\SpawnscriptTest.js" />
+     <Compile Include="Assets\TestScripts\TextureTest.js" />
+     <Compile Include="Assets\TestScripts\cameraTest.js" />
      <None Include="Assets\Plugins\release_history.txt" />
      <None Include="Assets\Plugins\Photon3Unity3D.xml" />
      <None Include="Assets\Photon Unity Networking\readme.txt" />

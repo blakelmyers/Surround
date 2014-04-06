@@ -68,8 +68,6 @@ var collisionCounter : int = 0;
 
 private var healthMax_ : int = 6;
 
-var HealthPlane : GameObject;
-
 
 enum HealthStatus {
     Green = 3, 
@@ -90,11 +88,7 @@ function Start ()
     }
     else{
    health_ = HealthStatus.Green;
-   var t : Transform;
-   for (t in transform.GetComponentsInChildren.<Transform>()) {
-       if (t.name == "HealthPlane"){ HealthPlane = t.gameObject;}
-   }
-   HealthPlane.renderer.material.color = Color.green;
+
    
    
    spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
@@ -136,7 +130,7 @@ function Update() {
     
     if(PV.isMine)
     {
-        Debug.Log(this.tag);
+        
 	    if (!isControllable)
 	    {
 		    // kill all inputs if not controllable.
@@ -197,7 +191,6 @@ if(PV.isMine)
         Debug.Log(health_);
         health_ = HealthStatus.Green;
         healthCounter = 0;
-        HealthPlane.renderer.material.color = Color.green;
     }
   }
 }
@@ -237,7 +230,20 @@ function ProcessMovement()
             }
             else
             {
-                transform.position.y = 1;
+                //set y lock based on size
+                switch (health_)
+                {
+                    case HealthStatus.Green:
+                        transform.position.y = 7;
+                        break;
+                    case HealthStatus.Yellow:
+                        transform.position.y = 1;
+                        break;
+                    case HealthStatus.Red:
+                        transform.position.y = -1;
+                        break;
+                }
+                
             }
         	
         }
@@ -262,11 +268,24 @@ function ProcessMovement()
             transform.position += transform.forward * walkSpeed * Time.deltaTime;
             if(grabbedFruit)
             {
-                transform.position.y = 7;
+                transform.position.y = 15;
             }
             else
             {
-                transform.position.y = 1;
+                //set y lock based on size
+                switch (health_)
+                {
+                    case HealthStatus.Green:
+                        transform.position.y = 7;
+                        break;
+                    case HealthStatus.Yellow:
+                        transform.position.y = 1;
+                        break;
+                    case HealthStatus.Red:
+                        transform.position.y = -1;
+                        break;
+                }
+                
             }        
             _animation.CrossFade("walk");
         }
@@ -291,7 +310,8 @@ function OnTriggerEnter(collisionInfo : Collider){
 if(PV.isMine)
     {
     if(collisionInfo.name != this.name){
-        if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
+        // Only take damage from other color dinosaur (player 2)
+        if((collisionInfo.tag == "Red") || (collisionInfo.tag == "Blue") || (collisionInfo.tag == "Green") || (collisionInfo.tag == "Yellow") || (collisionInfo.tag == "Purple") || (collisionInfo.tag == "Orange")){
            if(collisionCounter % healthMax_ == 0)
             {
                 DecreaseHealth();
@@ -323,16 +343,17 @@ function DecreaseHealth()
 {
 if(PV.isMine)
     {
-    //Debug.Log(health_);
+    Debug.Log("decrease size");
+    Debug.Log(health_);
     switch (health_)
     {
         case HealthStatus.Green:
             health_ = HealthStatus.Yellow;
-            HealthPlane.renderer.material.color = Color.yellow;
+            transform.localScale /= 1.5;
             break;
         case HealthStatus.Yellow:
             health_ = HealthStatus.Red;
-            HealthPlane.renderer.material.color = Color.red;
+            transform.localScale /= 1.5;
             break;
         case HealthStatus.Red:
             health_ = HealthStatus.Dead;
@@ -393,7 +414,6 @@ function GetDirection () {
 
 function Reset ()
 {
-	gameObject.tag = "Player";
 }
 
 }

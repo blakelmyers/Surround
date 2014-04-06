@@ -3,16 +3,13 @@ using UnityEngine;
 public class NetworkCharacter : Photon.MonoBehaviour
 {
     private Vector3 correctPlayerPos = Vector3.zero; // We lerp towards this
+	private Vector3 correctPlayerScale = Vector3.zero; // We lerp towards this
     private Quaternion correctPlayerRot = Quaternion.identity; // We lerp towards this
-	private Color planeColor = Color.green;
-	private GameObject HealthPlane;
     // Update is called once per frame
 
 	void Start()
 	{
-		foreach (Transform t in transform.GetComponentsInChildren(typeof(Transform))) {
-			if (t.name == "HealthPlane"){ HealthPlane = t.gameObject;}
-		}
+
 	}
 
     void Update()
@@ -22,7 +19,7 @@ public class NetworkCharacter : Photon.MonoBehaviour
         {
             transform.position = Vector3.Lerp(transform.position, this.correctPlayerPos, Time.deltaTime * 5);
             transform.rotation = Quaternion.Lerp(transform.rotation, this.correctPlayerRot, Time.deltaTime * 5);
-			//HealthPlane.renderer.material.color = this.planeColor;
+			transform.localScale = Vector3.Lerp(transform.localScale, this.correctPlayerScale, Time.deltaTime * 5);
         }
     }
 
@@ -35,9 +32,8 @@ public class NetworkCharacter : Photon.MonoBehaviour
             // We own this player: send the others our data
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
-			//stream.SendNext(HealthPlane.renderer.material.color);
-           // myThirdPersonController myC = GetComponent<myThirdPersonController>();
-            //stream.SendNext((int)myC._characterState);
+			stream.SendNext(transform.localScale);
+
         }
         else
         {
@@ -45,10 +41,8 @@ public class NetworkCharacter : Photon.MonoBehaviour
             // Network player, receive data
             this.correctPlayerPos = (Vector3)stream.ReceiveNext();
             this.correctPlayerRot = (Quaternion)stream.ReceiveNext();
-			//this.planeColor = (Color)stream.ReceiveNext();
+			this.correctPlayerScale = (Vector3)stream.ReceiveNext();
 
-            //myThirdPersonController myC = GetComponent<myThirdPersonController>();
-            //myC._characterState = (CharacterState)stream.ReceiveNext();
         }
     }
 }
