@@ -70,4 +70,7 @@ function Update()
     
 
 }
+function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
+{
+}
 }

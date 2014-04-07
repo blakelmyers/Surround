@@ -15,8 +15,8 @@ public var cameraForPlayer2 : GameObject;
 public var cameraDistance : float;
 public var spawnTimeplayer1 : float;
 public var spawnTimeplayer2 : float;
-public var absoluteMaxSpawnplayer1 : int = 10;
-public var absoluteMaxSpawnplayer2 : int = 10;
+public var absoluteMaxSpawnplayer1 : int = 5;
+public var absoluteMaxSpawnplayer2 : int = 5;
 public var maxSpawnplayer1 : int = 5;
 public var maxSpawnplayer2 : int = 5;
 public var startPositionplayer1 : Vector3;
@@ -29,8 +29,8 @@ public var cave3 : CaveTrigger;
 var player1prefabs : GameObject[];
 var player2prefabs : GameObject[];
 
-private var numberOfplayer1Prefabs : int = 0;
-private var numberOfplayer2Prefabs : int = 0;
+private var numberOfplayer1Prefabs : int = 1;
+private var numberOfplayer2Prefabs : int = 1;
 private var checkTimerplayer1: float;
 private var checkTimerplayer2: float;
 private var endFruitTime1: float;
@@ -39,7 +39,7 @@ private var gameStarted : boolean = false;
 
 private var fruitGrab: boolean = false;
 
-private var playerWhoWon : int = 0;
+public var playerWhoWon : int = 0;
 private var playerChoice : String;
 
 var PV: PhotonView;
@@ -68,6 +68,10 @@ var baseColor : Color;
 var playerColor : String;
 
 var styleGUI : GUIStyle;
+
+var player1Color : int;
+
+var player2Color : int;
 
 var noBaseChange : boolean = false;
 
@@ -151,12 +155,12 @@ function StartSpawning(){
  playerID = PhotonNetwork.player.ID;
     Debug.Log(playerID);
  if(playerID == 1){
+    player1Color = selectionType.GetComponent(SelectionChoice).selectionValue;
        cameraForPlayer1.SetActive(true);
        cameraForPlayer2.SetActive(false);
        startingCameraPosition = Vector3(1500, 400, 1000);
        cameraForPlayer1.transform.position = startingCameraPosition;
     checkTimerplayer1 = Time.time + spawnTimeplayer1;
-    numberOfplayer1Prefabs++;
     startPositionplayer1 = Vector3(1450, 8, 560);
        
     //Instantiate a new object for this player, remember; the player1 is therefore the owner.
@@ -168,13 +172,13 @@ function StartSpawning(){
  }
  else if (playerID == 2)   // player2
  {
+    player2Color = selectionType.GetComponent(SelectionChoice).selectionValue;
        cameraForPlayer2.SetActive(true);
        cameraForPlayer1.SetActive(false);
        
        startingCameraPosition = Vector3(730, 260, 1550);
        cameraForPlayer2.transform.position = startingCameraPosition;
     checkTimerplayer2 = Time.time + spawnTimeplayer2;
-    numberOfplayer2Prefabs++;
     startPositionplayer2 = Vector3(450, 5, 1500);
        Debug.Log("start spawngin");
     //Instantiate a new object for this player, remember; the player1 is therefore the owner.
@@ -192,18 +196,18 @@ function UpdatePlayer1Max(unitsLeft : int, caveNumber : int)
 {
     if(caveNumber == 1)
     {
-        absoluteMaxSpawnplayer1 += 10;
-        maxSpawnplayer1 += 5;
+        absoluteMaxSpawnplayer1 += 5;
+        maxSpawnplayer1 += 3;
     }
     else if(caveNumber == 2)
     {
-        absoluteMaxSpawnplayer1 += 10;
-        maxSpawnplayer1 += 5;
+        absoluteMaxSpawnplayer1 += 5;
+        maxSpawnplayer1 += 3;
     }
     else if(caveNumber == 3)
     {
-        absoluteMaxSpawnplayer1 += 10;
-        maxSpawnplayer1 += 5;
+        absoluteMaxSpawnplayer1 += 5;
+        maxSpawnplayer1 += 3;
     }
 }
 
@@ -211,18 +215,18 @@ function UpdatePlayer2Max(unitsLeft : int, caveNumber : int)
 {
     if(caveNumber == 1)
     {
-        absoluteMaxSpawnplayer2 += 10;
-        maxSpawnplayer2 += 5;
+        absoluteMaxSpawnplayer2 += 5;
+        maxSpawnplayer2 += 3;
     }
     else if(caveNumber == 2)
     {
-        absoluteMaxSpawnplayer2 += 10;
-        maxSpawnplayer2 += 5;
+        absoluteMaxSpawnplayer2 += 5;
+        maxSpawnplayer2 += 3;
     }
     else if(caveNumber == 3)
     {
-        absoluteMaxSpawnplayer2 += 10;
-        maxSpawnplayer2 += 5;
+        absoluteMaxSpawnplayer2 += 5;
+        maxSpawnplayer2 += 3;
     }
 }
 
@@ -254,12 +258,6 @@ function UnitDied(unitNumber : int)
             maxSpawnplayer1 = absoluteMaxSpawnplayer1;
         }
         
-        if(numberOfplayer1Prefabs == 0)
-        {
-           playerWhoWon = 2;
-           // Network.Disconnect(200);
-            Application.LoadLevel("MainMenu");
-        }
     }
     else //player2
     {
@@ -277,12 +275,6 @@ function UnitDied(unitNumber : int)
         {
             maxSpawnplayer2 = absoluteMaxSpawnplayer2;
         } 
-        if(numberOfplayer2Prefabs == 0)
-        {
-            playerWhoWon = 1;
-            //Network.Disconnect(200);
-            Application.LoadLevel("MainMenu");
-        }
     }
     
 }
@@ -304,10 +296,15 @@ function OnGUI()
         if(playerWhoWon == 1)
         {
             GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
-            GUILayout.Label("You WON!!!", styleRed);
+            GUILayout.Label("You WON!!!", styleGUI);
             GUILayout.EndArea ();
         }
-        
+        if(playerWhoWon == 2)
+        {
+            GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
+            GUILayout.Label("You LOSE!!!", styleGUI);
+            GUILayout.EndArea ();
+        }
         
         if(player1prefabs[0].GetComponent(PlayerController).movementLock)
         {             
@@ -330,10 +327,15 @@ function OnGUI()
         if(playerWhoWon == 2)
         {
             GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
-            GUILayout.Label("You WON!!!", styleBlue);
+            GUILayout.Label("You WON!!!", styleGUI);
             GUILayout.EndArea ();
         }
-        
+        if(playerWhoWon == 1)
+        {
+            GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
+            GUILayout.Label("You LOSE!!!", styleGUI);
+            GUILayout.EndArea ();
+        }
         
         if(player2prefabs[0].GetComponent(PlayerController).movementLock)
         {             
@@ -356,7 +358,15 @@ function Update()
     {
         var myNewTrans : GameObject;
         var myPrevTrans : GameObject;
-
+        
+        Debug.Log("Spawn view: " + photonView.isMine);
+        if (!photonView.isMine)
+        {
+            //transform.position = Vector3.Lerp(transform.position, this.correctPlayerPos, Time.deltaTime * 5);
+            //transform.rotation = Quaternion.Lerp(transform.rotation, this.correctPlayerRot, Time.deltaTime * 5);
+            //transform.localScale = Vector3.Lerp(transform.localScale, this.correctPlayerScale, Time.deltaTime * 5);
+        }
+        
         // check Spawn for player1
         if(playerID == 1)
         {
@@ -434,4 +444,52 @@ function Update()
     
 }
 
+function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
+{
+    //if(gameStarted == true)
+    //{
+        if (stream.isWriting)
+        {
+            Debug.Log("writting data spawn");
+            if(playerID == 1)
+            {   
+                //stream.SendNext(player1Color);
+                stream.SendNext(numberOfplayer1Prefabs);
+            }
+            else if(playerID == 2)
+            {
+                //stream.SendNext(player2Color);
+                stream.SendNext(numberOfplayer2Prefabs);
+            }
+
+        }
+        else
+        {
+            Debug.Log("getting data spawn");
+            if(playerID == 1)
+            {   
+                //player2Color = stream.ReceiveNext();
+               // Debug.Log("Enemy is " + player2Color);
+                numberOfplayer2Prefabs = stream.ReceiveNext();
+                Debug.Log("Enemy Units: " + numberOfplayer2Prefabs);
+            }
+            else if(playerID == 2)
+            {
+                //player1Color = stream.ReceiveNext();
+                //Debug.Log("Enemy is " + player1Color);
+                numberOfplayer1Prefabs = stream.ReceiveNext();
+                Debug.Log("Enemy Units: " + numberOfplayer1Prefabs);
+            }
+            
+            if(numberOfplayer1Prefabs == 0)
+            {
+               playerWhoWon = 2;
+            }
+            if(numberOfplayer2Prefabs == 0)
+            {
+               playerWhoWon = 1;
+            }
+        }
+   // }
+}
 

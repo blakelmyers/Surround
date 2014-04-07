@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-public class CameraScript2 extends Photon.MonoBehaviour{
+public class CameraScript2  extends Photon.MonoBehaviour{
 
 var cameraTransform : Transform;
 
@@ -69,4 +69,9 @@ function Update()
     
 
 }
+
+function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
+{
+}
+
 }

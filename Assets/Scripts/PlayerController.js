@@ -109,7 +109,7 @@ function Start ()
        if (t.name == "Plane"){ planeObj = t.gameObject;}
    }
    
-   planeObj.renderer.material.color = Color.clear;
+   planeObj.renderer.enabled = false;
    
    spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
    Debug.Log("game started");
@@ -151,6 +151,7 @@ function Update() {
     if(PV.isMine)
     {
         walkSpeed = 80;
+        healthMax_ = 6;
         
         if(speedAvailable)
         {
@@ -165,6 +166,7 @@ function Update() {
         if(speedActive)
         {
             walkSpeed = 160;
+            healthMax_ = 15;
             if(Time.time >= speedTimeCheck)  // 3 seconds of speed has expired
             {
                 speedActive = false;
@@ -391,11 +393,11 @@ if(PV.isMine)
     {
         case HealthStatus.Green:
             health_ = HealthStatus.Yellow;
-            transform.localScale /= 1.5;
+            transform.localScale /= 1.3;
             break;
         case HealthStatus.Yellow:
             health_ = HealthStatus.Red;
-            transform.localScale /= 1.5;
+            transform.localScale /= 1.2;
             break;
         case HealthStatus.Red:
             health_ = HealthStatus.Dead;

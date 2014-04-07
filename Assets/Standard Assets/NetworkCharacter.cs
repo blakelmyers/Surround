@@ -14,7 +14,7 @@ public class NetworkCharacter : Photon.MonoBehaviour
 
     void Update()
     {
-		Debug.Log ("in serialize");
+		//Debug.Log ("in serialize");
         if (!photonView.isMine)
         {
             transform.position = Vector3.Lerp(transform.position, this.correctPlayerPos, Time.deltaTime * 5);
@@ -25,10 +25,10 @@ public class NetworkCharacter : Photon.MonoBehaviour
 
     void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-		Debug.Log ("in serialize");
+		//Debug.Log ("in serialize");
         if (stream.isWriting)
         {
-			Debug.Log("writting data");
+			//Debug.Log("writting data");
             // We own this player: send the others our data
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
@@ -37,7 +37,7 @@ public class NetworkCharacter : Photon.MonoBehaviour
         }
         else
         {
-			Debug.Log("getting data");
+			//Debug.Log("getting data");
             // Network player, receive data
             this.correctPlayerPos = (Vector3)stream.ReceiveNext();
             this.correctPlayerRot = (Quaternion)stream.ReceiveNext();
