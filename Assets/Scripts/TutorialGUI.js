@@ -56,7 +56,7 @@ function OnGUI () {
         if(GUILayout.Button ("Continue"))
         {
             step1 = false;
-            step1a = true;
+            step2 = true;
         }
         GUILayout.EndArea ();
     }
@@ -73,7 +73,7 @@ function OnGUI () {
     }
     if(step2)
     {
-        cameraPosition = Vector3(880, 370, 680);
+        cameraPosition = Vector3(823, 600, 525);
         cameraTransform.position = cameraPosition;
         GUILayout.BeginArea (Rect(300, 20, 300, 300));
         GUILayout.Label("This is your dinosaur and base", style);
@@ -87,42 +87,46 @@ function OnGUI () {
     if(step3)
     {
         GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("To move your dinosaur, click the right mouse button. The Red circle below the dinosaur is the health indicator.  Right now his health is low.  Enter the base area to heal.", style2);
+        GUILayout.Label("The dinosaur loves to follow your mouse.  Use the right mouse button to toogle movement on and off", style2);
+        if(GUILayout.Button ("Continue"))
+        {
+            step3 = false;
+            step5 = true;
+            spawnScript.StartSpawning();
+        }
         GUILayout.EndArea ();
     }
     if(step5)
     {
         GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("The Health is restored to Green", style);
+        GUILayout.Label("The Space bar give you a speed boost and increases your health while speed is active", style2);
         if(GUILayout.Button ("Continue"))
         {
             step5 = false;
-            step5_1 = true; 
-            spawnScript.StartSpawning();
+            step5_1 = true;     
         }
         GUILayout.EndArea ();
     }   
     if(step5_1)
     {
         GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("You will now start spawning units.  In the upper right of the screen is your current Player Type and Spawn data.  In the lower left are two icons.  Right clicking the mouse toggles movement on and off indicated by the green and red. Left clicking locks your units in formation, indicated by the lock icon", style2);
+        GUILayout.Label("In the upper right of the screen is your current Player Type and Spawn data.  In the lower left are two icons.  When the speed boost is available you will see the arrows. Left clicking locks your units in formation, indicated by the lock icon", style2);
         if(GUILayout.Button ("Continue"))
         {
             step5_1 = false;
-            step5b = true;
-            spawnScript.StartSpawning();
+            step6 = true;
         }
         GUILayout.EndArea ();
     }
-    if(step5b)
+    if(step6)
     {
-        cameraPosition = Vector3(823, 600, 525);
+        cameraPosition = Vector3(630, 1311, -30);
         cameraTransform.position = cameraPosition;
         GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("In the upper left corner is an orange fruit, pick it up.", style2);
+        GUILayout.Label("Head toward the cave in the upper left", style2);
         GUILayout.EndArea ();
     }
-    if(step6)
+    if(step5b)
     {
         cameraPosition = Vector3(630, 1311, -30);
         cameraTransform.position = cameraPosition;
@@ -143,14 +147,14 @@ function OnGUI () {
         cameraPosition = Vector3(400, 688, 925);
         cameraTransform.position = cameraPosition;
         GUILayout.BeginArea (Rect(400, 20, 200, 200));
-        GUILayout.Label("The cave turns Red and an extra unit with spawn.  When you control the neutral bases, you will get extra units.  Now attack the enemy.", style2);
+        GUILayout.Label("The cave turns yellow and extra units will spawn.  Now attack the enemy.  Now attack the enemy by running into them.", style2);
         GUILayout.EndArea ();
     }
     if(step9)
     {
         
         GUILayout.BeginArea (Rect(400, 20, 320, 300));
-        GUILayout.Label("Notice the enemies health decrease. Keep colliding until the enemy is dead.  Touch the Blue Base to end the tutorial", style2);
+        GUILayout.Label("Notice the enemies size decrease. Keep colliding until the enemy is dead.  Touch the Blue Base to end the tutorial", style2);
         GUILayout.EndArea ();
     }
     if(step10)

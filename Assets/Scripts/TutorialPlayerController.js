@@ -64,7 +64,7 @@ function Start ()
         if (t.name == "HealthPlane"){ HealthPlane = t.gameObject;}
    }
    
-   HealthPlane.renderer.material.color = Color.red;
+   HealthPlane.renderer.enabled = false;
 
 }
 

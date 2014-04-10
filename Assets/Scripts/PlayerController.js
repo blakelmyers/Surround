@@ -74,7 +74,7 @@ private var speedTime : float = 3;  // 3 seconds
 
 private var speedTimeCheck : float;
 
-private var speedActive : boolean = false;
+public var speedActive : boolean = false;
 
 public var speedAvailable : boolean = true;
 
@@ -82,7 +82,7 @@ private var speedCooldown : boolean = false;
 
 private var speedCooldownTimeCheck : float;
 
-private var speedCooldownTime : float = 3;   // 3 seconds
+private var speedCooldownTime : float = 5;   // 3 seconds
 
 enum HealthStatus {
     Green = 3, 

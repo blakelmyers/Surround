@@ -32,7 +32,7 @@ function Update () {
 
 function OnTriggerEnter(other:Collider){
 	if(other.tag == "Red"  && caveControlledBy != PlayerControlling.Red){
-        Cube.renderer.material.color = Color.red;
+        Cube.renderer.material.color = Color.yellow;
         caveControlledBy = PlayerControlling.Red;
         spawnScript.UpdatePlayer1Max();
         --unitsLeft;

@@ -35,7 +35,8 @@ public var playerID : int;
 var styleRed : GUIStyle;
 var styleGreen : GUIStyle;
 var styleLock : GUIStyle;
-var styleUnlock : GUIStyle;
+var styleSpeed : GUIStyle;
+var styleSpeedOn : GUIStyle;
 
 
 var selectionType : SelectionChoice;
@@ -118,29 +119,29 @@ function OnGUI()
 if(gameStarted == true)
     {
         GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
-        GUILayout.Label("Red Player", styleRed);
+        GUILayout.Label("Yellow Player", styleRed);
         GUILayout.Label("Total Units:   " + absoluteMaxSpawnplayer1.ToString(), styleRed);
         GUILayout.Label("Spawn Limit: " + maxSpawnplayer1.ToString(), styleRed);
         GUILayout.Label("Current Spawn: " + numberOfplayer1Prefabs.ToString(), styleRed);
         GUILayout.EndArea ();
         
-        if(player1prefabs[0].GetComponent(PlayerControllerTest).movementActive)
-        {             
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleGreen);
-        }
-        else
-        {
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleRed);
-        }
+
         
         if(player1prefabs[0].GetComponent(PlayerControllerTest).movementLock)
         {             
             GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
         }
-        else
-        {
-            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleUnlock);
+        if(player1prefabs[0].GetComponent(PlayerControllerTest).speedAvailable)
+        {             
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
         }
+        if(player1prefabs[0].GetComponent(PlayerControllerTest).speedActive)
+        {             
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
+        }            
+                    
+                     
+          
     }
 
 }
@@ -167,6 +168,7 @@ function Update()
                     myNewTrans.tag = "Red";
                     myNewTrans.GetComponent(PlayerControllerTest).spawnNumber = numberOfplayer1Prefabs;
                     myNewTrans.GetComponent(PlayerControllerTest).movementActive = myPrevTrans.GetComponent(PlayerControllerTest).movementActive;
+                    //myNewTrans.GetComponent(PlayerControllerTest).movementLock = myPrevTrans.GetComponent(PlayerControllerTest).movementLock;
                     player1prefabs[numberOfplayer1Prefabs - 1] = myNewTrans;
                 }
             }

@@ -60,7 +60,7 @@ function Start ()
    for (t in transform.GetComponentsInChildren.<Transform>()) {
        if (t.name == "HealthPlane"){ HealthPlane = t.gameObject;}
    }
-   HealthPlane.renderer.material.color = Color.green;
+   HealthPlane.renderer.enabled = false;
    
 }
 
@@ -174,11 +174,11 @@ function ProcessHealth()
     {
         case HealthStatus.Green:
             health_ = HealthStatus.Yellow;
-            HealthPlane.renderer.material.color = Color.yellow;
+            transform.localScale /= 1.3;
             break;
         case HealthStatus.Yellow:
             health_ = HealthStatus.Red;
-            HealthPlane.renderer.material.color = Color.red;
+            transform.localScale /= 1.3;
             break;
         case HealthStatus.Red:
             

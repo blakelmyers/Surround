@@ -72,6 +72,22 @@ var collisionCounter : int = 0;
 
 var HealthPlane : GameObject;
 
+private var normalSpeed : int = 80;
+
+private var speedTime : float = 3;  // 3 seconds
+
+private var speedTimeCheck : float;
+
+public var speedActive : boolean = false;
+
+public var speedAvailable : boolean = true;
+
+private var speedCooldown : boolean = false;
+
+private var speedCooldownTimeCheck : float;
+
+private var speedCooldownTime : float = 5;   // 3 seconds
+
 /*
 enum HealthStatus {
     Green = 3, 
@@ -87,11 +103,11 @@ function Start ()
    for (t in transform.GetComponentsInChildren.<Transform>()) {
        if (t.name == "HealthPlane"){ HealthPlane = t.gameObject;}
    }
-   HealthPlane.renderer.material.color = Color.green;
+   HealthPlane.renderer.enabled = false;
    
    if(firstDino)HealthPlane.renderer.material.color = Color.red;
    
-   if(firstDino)health_ = HealthStatus.Red;
+   
    spawnScript = GameObject.Find("Spawnscript").GetComponent.<SpawnscriptTest>();
    
    tutorialGui = GameObject.Find("GUI").GetComponent.<TutorialGUI>();
@@ -121,6 +137,40 @@ function Update() {
     var checkTerrain : TextureType;
     
 
+        walkSpeed = 80;
+        healthMax_ = 6;
+        
+        if(speedAvailable)
+        {
+            if (Input.GetKey (KeyCode.Space)  && !speedActive)
+            {
+               speedActive = true;
+               speedTimeCheck = Time.time + speedTime;   // set timer for 3 seconds
+               speedAvailable = false;
+            }
+        }
+        
+        if(speedActive)
+        {
+            walkSpeed = 160;
+            healthMax_ = 15;
+            if(Time.time >= speedTimeCheck)  // 3 seconds of speed has expired
+            {
+                speedActive = false;
+                speedCooldown = true;
+                speedCooldownTimeCheck = Time.time + speedCooldownTime;
+            }
+        }
+        
+        if(speedCooldown)
+        {
+            if(Time.time >= speedCooldownTimeCheck)  // 3 seconds of cooldown has expired
+            {
+                speedAvailable = true;
+                speedCooldown = false;
+            }
+        }
+        
 	    if (!isControllable)
 	    {
 		    // kill all inputs if not controllable.
@@ -133,7 +183,7 @@ function Update() {
         }      
         else
         {*/
-            walkSpeed = 80;
+            //walkSpeed = 80;
         //}
         if(checkTerrain == TextureType.Sand)
         {
@@ -142,14 +192,6 @@ function Update() {
         }
         
              
-        if(checkTerrain == TextureType.Blueberry && this.tag == "Blue")
-        {
-            RestoreHealth();     
-        }
-        if(checkTerrain == TextureType.Redberry  && this.tag == "Red")
-        {
-            RestoreHealth();     
-        } 
         if(Input.GetMouseButtonDown(1))
         {
             movementActive = !movementActive;
@@ -219,21 +261,25 @@ function ProcessMovement()
     if (playerPlane.Raycast (ray, hitdist)) 
     {
         // Get the point along the ray that hits the calculated distance.
-        if(grabbedFruit)
-        {
-        transform.position.y = 14;
-        }
-        else
-        {
-        transform.position.y = 7;
-        }
+        switch (health_)
+                {
+                    case HealthStatus.Green:
+                        transform.position.y = 12;
+                        break;
+                    case HealthStatus.Yellow:
+                        transform.position.y = 5;
+                        break;
+                    case HealthStatus.Red:
+                        transform.position.y = -1;
+                        break;
+                }
         
         
         
         var targetPoint = ray.GetPoint(hitdist);
                 
         // Don't move if mouse is with 5 units
-        if(Vector3.Distance(targetPoint, transform.position) < 20 * spawnNumber)
+        if(Vector3.Distance(targetPoint, transform.position) < 25 * spawnNumber)
         {
             _animation.CrossFade("idle");
             
@@ -249,14 +295,19 @@ function ProcessMovement()
  
             // Move the object forward.
             transform.position += transform.forward * walkSpeed * Time.deltaTime;
-           if(grabbedFruit)
-            {
-                transform.position.y = 14;
-            }
-            else
-            {
-                transform.position.y = 7;
-            }        
+           switch (health_)
+                {
+                    case HealthStatus.Green:
+                        transform.position.y = 12;
+                        break;
+                    case HealthStatus.Yellow:
+                        transform.position.y = 5;
+                        break;
+                    case HealthStatus.Red:
+                        transform.position.y = -1;
+                        break;
+                }   
+                    
             _animation.CrossFade("walk");
         }
         
@@ -322,11 +373,11 @@ function DecreaseHealth()
     {
         case HealthStatus.Green:
             health_ = HealthStatus.Yellow;
-            HealthPlane.renderer.material.color = Color.yellow;
+            transform.localScale /= 1.3;
             break;
         case HealthStatus.Yellow:
             health_ = HealthStatus.Red;
-            HealthPlane.renderer.material.color = Color.red;
+            transform.localScale /= 1.3;
             break;
         case HealthStatus.Red:
             health_ = HealthStatus.Dead;

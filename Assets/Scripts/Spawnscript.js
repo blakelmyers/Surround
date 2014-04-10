@@ -56,6 +56,7 @@ var styleOrange : GUIStyle;
 
 var styleLock : GUIStyle;
 var styleSpeed : GUIStyle;
+var styleSpeedOn : GUIStyle;
 
 var selectionType : SelectionChoice;
 var connectionObject : GameObject;
@@ -314,6 +315,10 @@ function OnGUI()
         {             
             GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
         }
+        if(player1prefabs[0].GetComponent(PlayerController).speedActive)
+        {             
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
+        }
     }
     else{
         GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
@@ -345,6 +350,10 @@ function OnGUI()
         if(player2prefabs[0].GetComponent(PlayerController).speedAvailable)
         {             
             GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
+        }
+        if(player2prefabs[0].GetComponent(PlayerController).speedActive)
+        {             
+            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
         }
 
        } 
