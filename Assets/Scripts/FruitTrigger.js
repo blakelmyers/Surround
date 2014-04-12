@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-public var tutorialGui : TutorialGUI;
+public class FruitTrigger extends Photon.MonoBehaviour{
 
 function Start () {
 
@@ -11,10 +11,7 @@ function Update () {
 }
 
 function OnTriggerEnter(other:Collider){
-    if(other.tag == "Red"){
+
         Destroy(this.gameObject);
-    }
-    if(other.tag == "Blue"){
-        renderer.material.color = Color.blue;
-    }
+}
 }

@@ -11,7 +11,9 @@ public var movementLock : boolean = false;
 
 public var spawnNumber : int;
 
-public var grabbedFruit : boolean = false;
+public var fruitBombs : int = 0;
+
+public var pickedUpFruit : boolean = false;
 
 private var _animation : Animation;
 
@@ -65,6 +67,8 @@ private var isControllable = true;
 
 var health_ : HealthStatus;
 var collisionCounter : int = 0;
+
+var collisionCounter2 : int = 0;
 
 private var healthMax_ : int = 6;
 
@@ -152,6 +156,19 @@ function Update() {
     {
         walkSpeed = 80;
         healthMax_ = 6;
+        
+        if(pickedUpFruit)
+        {
+            if (Input.GetKey (KeyCode.F))
+            {
+                PhotonNetwork.Instantiate(this.tag + "Poop", transform.position, transform.rotation, 0);
+                --fruitBombs;
+                if(fruitBombs == 0)
+                {
+                    pickedUpFruit = false;
+                }
+            }
+        }
         
         if(speedAvailable)
         {
@@ -268,12 +285,7 @@ function ProcessMovement()
             transform.position.y = -2;
         }    
         else{
-            if(grabbedFruit)
-            {
-                transform.position.y = 7;
-            }
-            else
-            {
+
                 //set y lock based on size
                 switch (health_)
                 {
@@ -288,7 +300,7 @@ function ProcessMovement()
                         break;
                 }
                 
-            }
+            
         	
         }
         var targetPoint = ray.GetPoint(hitdist);
@@ -310,12 +322,7 @@ function ProcessMovement()
  
             // Move the object forward.
             transform.position += transform.forward * walkSpeed * Time.deltaTime;
-            if(grabbedFruit)
-            {
-                transform.position.y = 15;
-            }
-            else
-            {
+
                 //set y lock based on size
                 switch (health_)
                 {
@@ -330,7 +337,7 @@ function ProcessMovement()
                         break;
                 }
                 
-            }        
+                   
             _animation.CrossFade("walk");
         }
         
@@ -365,16 +372,24 @@ if(PV.isMine)
         }
     }
 
+    if(collisionInfo.tag != (this.tag + "Poop")){
+        if((collisionInfo.tag == "RedPoop") || (collisionInfo.tag == "BluePoop") || (collisionInfo.tag == "GreenPoop") || (collisionInfo.tag == "YellowPoop") || (collisionInfo.tag == "PurplePoop") || (collisionInfo.tag == "OrangePoop")){
+            if(collisionCounter2 % 3 == 0)
+            {
+             DecreaseHealth();
+             }
+             collisionCounter2++;
+        }
     }
     
     if(collisionInfo.tag == "Fruit")
     {
-        if(!grabbedFruit)
-        {
-            transform.localScale *= 2;
-            healthMax_ *= 2;
-        }
-        grabbedFruit = true;
+        //pickedUpFruit = true;
+        if(spawnScript != 0)
+        spawnScript.PickedUpFruit();
+        //++fruitBombs;
+        Debug.Log(fruitBombs);
+    }
     }
 }
 

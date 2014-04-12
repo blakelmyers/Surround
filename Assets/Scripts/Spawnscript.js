@@ -53,6 +53,7 @@ var styleGreenPre : GUIStyle;
 var styleYellow : GUIStyle;
 var stylePurple : GUIStyle;
 var styleOrange : GUIStyle;
+var styleRainbow : GUIStyle;
 
 var styleLock : GUIStyle;
 var styleSpeed : GUIStyle;
@@ -165,6 +166,7 @@ function StartSpawning(){
     startPositionplayer1 = Vector3(1450, 8, 560);
        
     //Instantiate a new object for this player, remember; the player1 is therefore the owner.
+    Debug.Log(playerChoice);
     myNewTrans = GameObject.Find(playerChoice+"(Clone)");
        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer1Prefabs;
        player1prefabs[0] = myNewTrans;
@@ -231,12 +233,22 @@ function UpdatePlayer2Max(unitsLeft : int, caveNumber : int)
     }
 }
 
-function fruitTimer(time : float){
- if(playerID==1)
-     endFruitTime1 = Time.time + 5;
- else
-     endFruitTime2 = Time.time + 5;
- fruitGrab=true;
+function PickedUpFruit(){
+if(playerID == 1){
+    for(var i = 0; i < numberOfplayer1Prefabs; ++i)
+    {
+        player1prefabs[i].GetComponent(PlayerController).fruitBombs += 1;
+        player1prefabs[i].GetComponent(PlayerController).pickedUpFruit = true;
+    }
+}
+else if (playerID == 2)   // player2
+{
+    for(var j = 0; j < numberOfplayer2Prefabs; ++j)
+    {
+        player2prefabs[j].GetComponent(PlayerController).fruitBombs += 1;
+        player2prefabs[j].GetComponent(PlayerController).pickedUpFruit = true;
+    }
+}
 }
 
 function UnitDied(unitNumber : int)
@@ -259,6 +271,14 @@ function UnitDied(unitNumber : int)
             maxSpawnplayer1 = absoluteMaxSpawnplayer1;
         }
         
+        if(numberOfplayer1Prefabs == 0)
+        {
+           playerWhoWon = 2;
+           photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
+        }
+        
+       
+        
     }
     else //player2
     {
@@ -276,8 +296,31 @@ function UnitDied(unitNumber : int)
         {
             maxSpawnplayer2 = absoluteMaxSpawnplayer2;
         } 
+        if(numberOfplayer2Prefabs == 0)
+        {
+           playerWhoWon = 1;
+           photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
+        }
     }
     
+}
+//info : PhotonMessageInfo,
+@RPC
+function PlayerWon( playerNumber : int)
+{
+    Debug.Log("PlayerWon");
+   // if(info.sender.ID != PhotonNetwork.player.ID)
+    //{
+        SetPlayerWhoWon(playerNumber);
+   // }   
+
+}
+    
+function SetPlayerWhoWon(playerNumber : int)
+{
+    Debug.Log("player who won is ");
+    Debug.Log(playerWhoWon);
+    playerWhoWon = playerNumber;
 }
 
 function OnGUI()
@@ -307,17 +350,24 @@ function OnGUI()
             GUILayout.EndArea ();
         }
         
-        if(player1prefabs[0].GetComponent(PlayerController).movementLock)
-        {             
-            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
-        }
-        if(player1prefabs[0].GetComponent(PlayerController).speedAvailable)
-        {             
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
-        }
-        if(player1prefabs[0].GetComponent(PlayerController).speedActive)
-        {             
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
+        if(player2prefabs[0] != 0)
+        { 
+            if(player1prefabs[0].GetComponent(PlayerController).movementLock)
+            {             
+                GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
+            }
+            if(player1prefabs[0].GetComponent(PlayerController).speedAvailable)
+            {             
+                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
+            }
+            if(player1prefabs[0].GetComponent(PlayerController).speedActive)
+            {             
+                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
+            }
+            if(player1prefabs[0].GetComponent(PlayerController).pickedUpFruit)
+            {             
+                GUI.Box (Rect (75,Screen.height - 75,75,75), "", styleRainbow);
+            }
         }
     }
     else{
@@ -342,20 +392,26 @@ function OnGUI()
             GUILayout.EndArea ();
         }
         
-        if(player2prefabs[0].GetComponent(PlayerController).movementLock)
-        {             
-            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
+        if(player2prefabs[0] != 0)
+        { 
+            if(player2prefabs[0].GetComponent(PlayerController).movementLock)
+            {             
+                GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
+            }
+            
+            if(player2prefabs[0].GetComponent(PlayerController).speedAvailable)
+            {             
+                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
+            }
+            if(player2prefabs[0].GetComponent(PlayerController).speedActive)
+            {             
+                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
+            }
+            if(player2prefabs[0].GetComponent(PlayerController).pickedUpFruit)
+            {             
+                GUI.Box (Rect (75,Screen.height - 75,75,75), "", styleRainbow);
+            }
         }
-        
-        if(player2prefabs[0].GetComponent(PlayerController).speedAvailable)
-        {             
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
-        }
-        if(player2prefabs[0].GetComponent(PlayerController).speedActive)
-        {             
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
-        }
-
        } 
     }
 }
@@ -396,18 +452,7 @@ function Update()
                         player1prefabs[numberOfplayer1Prefabs - 1] = myNewTrans;
                     }
                 }
-                if(fruitGrab){//IF FRUIT IS BUGGY ITS CAUSE THIS CODE IS SHITTY
-                 if(Time.time>=endFruitTime1){
-                     for(var i = 0; i<numberOfplayer1Prefabs; i++){
-                         player1prefabs[i].GetComponent(PlayerController).grabbedFruit = false;
-                     }
-                     fruitGrab=false;
-                 }
-                 else{
-                     for(var j = 0; j<numberOfplayer1Prefabs; j++){
-                         player1prefabs[j].GetComponent(PlayerController).grabbedFruit = true;
-                     }
-                 }
+                
              }
            
         }
@@ -434,22 +479,10 @@ function Update()
                     player2prefabs[numberOfplayer2Prefabs - 1] = myNewTrans;
                 }
             }
-            if(fruitGrab){//IF FRUIT IS BUGGY ITS CAUSE THIS CODE IS SHITTY
-             if(Time.time>=endFruitTime2){
-                 for(i = 0; i<numberOfplayer2Prefabs; i++){
-                     player2prefabs[i].GetComponent(PlayerController).grabbedFruit = false;
-                 }
-                 fruitGrab=false;
-             }
-             else{
-                 for(i = 0; i<numberOfplayer2Prefabs; i++){
-                     player2prefabs[i].GetComponent(PlayerController).grabbedFruit = true;
-                 }
-             }
-             }
+            
         }
         
-        }
+        
     
 }
 
@@ -489,15 +522,7 @@ function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
                 numberOfplayer1Prefabs = stream.ReceiveNext();
                 Debug.Log("Enemy Units: " + numberOfplayer1Prefabs);
             }
-            
-            if(numberOfplayer1Prefabs == 0)
-            {
-               playerWhoWon = 2;
-            }
-            if(numberOfplayer2Prefabs == 0)
-            {
-               playerWhoWon = 1;
-            }
+             
         }
    // }
 }
