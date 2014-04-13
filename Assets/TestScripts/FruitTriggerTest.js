@@ -10,7 +10,7 @@ function Update () {
 }
 
 function OnTriggerEnter(other:Collider){
-    if(other.tag == "Red"){
+    if(other.tag == "Yellow"){
         Destroy(this.gameObject);
     }
     if(other.tag == "Blue"){

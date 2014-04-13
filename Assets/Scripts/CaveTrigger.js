@@ -46,8 +46,8 @@ function OnTriggerEnter(other:Collider){
     // Only take control if you dont already have control
     var updateSpawn : boolean = false;
     
-    Debug.Log("hit cave");
-    Debug.Log(other.tag);
+   // Debug.Log("hit cave");
+   // Debug.Log(other.tag);
     
     switch(other.tag)
     {
@@ -97,14 +97,58 @@ function OnTriggerEnter(other:Collider){
         break;
     }
 	if(updateSpawn)
-    {
+    {        
         --unitsLeft;
         
         if(spawnScript.playerID == 1)
             spawnScript.UpdatePlayer1Max(unitsLeft, caveNumber);
-        else
+        else if(spawnScript.playerID == 2)
             spawnScript.UpdatePlayer2Max(unitsLeft, caveNumber);
+            
+        //photonView.RPC("PlayerTookBase", PhotonTargets.Others, caveControlledBy);   
 	}
 	
+}
+
+@RPC
+function PlayerTookBase(hasCave : PlayerControlling)
+{
+    UpdateUnits(hasCave);
+}
+
+function UpdateUnits(hasCave : PlayerControlling)
+{
+    
+    
+    caveControlledBy = hasCave;
+    
+    if(spawnScript.playerID == 1)
+        spawnScript.UpdatePlayer1Max(unitsLeft, caveNumber);
+    else if(spawnScript.playerID == 2)
+        spawnScript.UpdatePlayer2Max(unitsLeft, caveNumber);
+        
+    switch(caveControlledBy)
+    {
+    case PlayerControlling.Red:
+            Cube.renderer.material.color = Color.red;
+        break;
+    case PlayerControlling.Yellow:
+            Cube.renderer.material.color = Color.yellow;
+        break;
+    case PlayerControlling.Blue:
+            Cube.renderer.material.color = Color.blue;
+        break;
+    case PlayerControlling.Green:
+            Cube.renderer.material.color = Color.green;
+        break;
+    case PlayerControlling.Purple:
+            Cube.renderer.material.color = Color.magenta;
+        break;
+    case PlayerControlling.Orange:
+            Cube.renderer.material.color = Color.red;
+        break;
+    default:
+        break;
+    }
 }
 }

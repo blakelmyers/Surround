@@ -37,6 +37,7 @@ var styleGreen : GUIStyle;
 var styleLock : GUIStyle;
 var styleSpeed : GUIStyle;
 var styleSpeedOn : GUIStyle;
+var styleRainbow : GUIStyle;
 
 
 var selectionType : SelectionChoice;
@@ -114,6 +115,14 @@ function UnitDied(unitNumber : int)
 
 }
 
+function PickedUpFruit(){
+    for(var i = 0; i < numberOfplayer1Prefabs; ++i)
+    {
+        player1prefabs[i].GetComponent(PlayerControllerTest).fruitBombs += 1;
+        player1prefabs[i].GetComponent(PlayerControllerTest).pickedUpFruit = true;
+    }
+
+}
 function OnGUI()
 {
 if(gameStarted == true)
@@ -126,22 +135,26 @@ if(gameStarted == true)
         GUILayout.EndArea ();
         
 
-        
-        if(player1prefabs[0].GetComponent(PlayerControllerTest).movementLock)
-        {             
-            GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
-        }
-        if(player1prefabs[0].GetComponent(PlayerControllerTest).speedAvailable)
-        {             
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
-        }
-        if(player1prefabs[0].GetComponent(PlayerControllerTest).speedActive)
-        {             
-            GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
-        }            
-                    
+        if(player1prefabs[0] != 0)
+        { 
+            if(player1prefabs[0].GetComponent(PlayerControllerTest).movementLock)
+            {             
+                GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
+            }
+            if(player1prefabs[0].GetComponent(PlayerControllerTest).speedAvailable)
+            {             
+                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
+            }
+            if(player1prefabs[0].GetComponent(PlayerControllerTest).speedActive)
+            {             
+                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
+            }            
+            if(player1prefabs[0].GetComponent(PlayerControllerTest).pickedUpFruit)
+            {             
+                GUI.Box (Rect (75,Screen.height - 75,75,75), "", styleRainbow);
+            }        
                      
-          
+        }
     }
 
 }

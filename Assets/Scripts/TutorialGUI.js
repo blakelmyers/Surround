@@ -115,15 +115,9 @@ function OnGUI () {
         {
             step5_1 = false;
             step6 = true;
+            cameraPosition = Vector3(823, 600, 525);
+            cameraTransform.position = cameraPosition;
         }
-        GUILayout.EndArea ();
-    }
-    if(step6)
-    {
-        cameraPosition = Vector3(630, 1311, -30);
-        cameraTransform.position = cameraPosition;
-        GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("Head toward the cave in the upper left", style2);
         GUILayout.EndArea ();
     }
     if(step5b)
@@ -131,9 +125,16 @@ function OnGUI () {
         cameraPosition = Vector3(630, 1311, -30);
         cameraTransform.position = cameraPosition;
         GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("The fruit increased your size.", style2);
+        GUILayout.Label("Press F and you will lay a cube", style2);
         GUILayout.EndArea ();
     }
+    if(step6)
+    {
+        
+        GUILayout.BeginArea (Rect(300, 20, 300, 300));
+        GUILayout.Label("The Camera is mapped to WASD", style2);
+        GUILayout.EndArea ();
+    } 
     if(step7)
     {
         cameraPosition = Vector3(630, 675, 670);
@@ -183,9 +184,9 @@ function PickedUpOrange()
 {
     if(step5c)   // Only set this once
     {
-        step5b = false;
+        step6 = false;
         step5c = false;
-        step6 = true;
+        step5b = true;
     }
 }
 
@@ -193,7 +194,7 @@ function OverSand()
 {
     if(step6a)   // Only set this once
     {
-        step6 = false;
+        step5b = false;
         step6a = false;
         step7 = true;
     }

@@ -150,50 +150,77 @@ function GetGameStarted()
     return gameStarted;
 }
 
-function StartSpawning(){
+function StartSpawning()
+{
 
  gameStarted = true;
     var startingCameraPosition : Vector3;
  playerID = PhotonNetwork.player.ID;
-    Debug.Log(playerID);
- if(playerID == 1){
-    player1Color = selectionType.GetComponent(SelectionChoice).selectionValue;
-       cameraForPlayer1.SetActive(true);
-       cameraForPlayer2.SetActive(false);
-       startingCameraPosition = Vector3(1500, 400, 1000);
-       cameraForPlayer1.transform.position = startingCameraPosition;
-    checkTimerplayer1 = Time.time + spawnTimeplayer1;
-    startPositionplayer1 = Vector3(1450, 8, 560);
+    //Debug.Log(playerID);
+    
+    if(playerID == 1){
+        player1Color = selectionType.GetComponent(SelectionChoice).selectionValue;
+        cameraForPlayer1.SetActive(true);
+        cameraForPlayer2.SetActive(false);
+        startingCameraPosition = Vector3(1500, 400, 1000);
+         cameraForPlayer1.transform.position = startingCameraPosition;
+        checkTimerplayer1 = Time.time + spawnTimeplayer1;
+        startPositionplayer1 = Vector3(1450, 8, 560);
        
     //Instantiate a new object for this player, remember; the player1 is therefore the owner.
-    Debug.Log(playerChoice);
-    myNewTrans = GameObject.Find(playerChoice+"(Clone)");
-       myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer1Prefabs;
-       player1prefabs[0] = myNewTrans;
+    //Debug.Log(playerChoice);
+        myNewTrans = GameObject.Find(playerChoice+"(Clone)");
+        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer1Prefabs;
+        player1prefabs[0] = myNewTrans;
        
-       if(!noBaseChange)player1Base.renderer.material.color = baseColor;
- }
- else if (playerID == 2)   // player2
- {
-    player2Color = selectionType.GetComponent(SelectionChoice).selectionValue;
-       cameraForPlayer2.SetActive(true);
-       cameraForPlayer1.SetActive(false);
+        if(!noBaseChange)player1Base.renderer.material.color = baseColor;
+     }
+    else if (playerID == 2)   // player2
+    {
+        player2Color = selectionType.GetComponent(SelectionChoice).selectionValue;
+        cameraForPlayer2.SetActive(true);
+        cameraForPlayer1.SetActive(false);
        
-       startingCameraPosition = Vector3(730, 260, 1550);
-       cameraForPlayer2.transform.position = startingCameraPosition;
-    checkTimerplayer2 = Time.time + spawnTimeplayer2;
-    startPositionplayer2 = Vector3(450, 5, 1500);
-       Debug.Log("start spawngin");
+         startingCameraPosition = Vector3(730, 260, 1550);
+         cameraForPlayer2.transform.position = startingCameraPosition;
+        checkTimerplayer2 = Time.time + spawnTimeplayer2;
+        startPositionplayer2 = Vector3(450, 5, 1500);
+      // Debug.Log("start spawngin");
     //Instantiate a new object for this player, remember; the player1 is therefore the owner.
-    myNewTrans = GameObject.Find(playerChoice+"(Clone)");
-       myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
+        myNewTrans = GameObject.Find(playerChoice+"(Clone)");
+        myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
        player2prefabs[0] = myNewTrans;
        
        if(!noBaseChange)player2Base.renderer.material.color = baseColor;
- }
+       
+        photonView.RPC("PlayerTwoColor", PhotonTargets.Others, playerColor);
     }
 }
 
+
+}
+
+@RPC
+function PlayerOneColor(playerTag : String)
+{
+    if(playerID == 2)
+    {
+        Debug.Log("Color1: " + playerTag);
+        //player1Base.renderer.material.color = playerTag;
+    }
+}
+
+
+@RPC
+function PlayerTwoColor(playerTag : String)
+{
+    if(playerID == 1)
+    {
+        Debug.Log("Color2: " + playerTag);
+        //player2Base.renderer.material.color = playerTag;
+        photonView.RPC("PlayerOneColor", PhotonTargets.Others, baseColor);
+    }
+}
 
 function UpdatePlayer1Max(unitsLeft : int, caveNumber : int)
 {
@@ -350,7 +377,7 @@ function OnGUI()
             GUILayout.EndArea ();
         }
         
-        if(player2prefabs[0] != 0)
+        if(player1prefabs[0] != 0)
         { 
             if(player1prefabs[0].GetComponent(PlayerController).movementLock)
             {             

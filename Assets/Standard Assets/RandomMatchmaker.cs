@@ -78,11 +78,11 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 		}
 			 
 		if(playerID == 2)
-			{
-			waiting = false;
+		{
+				waiting = false;
 				monster = PhotonNetwork.Instantiate(playerChoice, startingPosPlayer2, Quaternion.identity, 0);
 				myPhotonView = monster.GetComponent<PhotonView>();
-			}
+		}
  
     }
 

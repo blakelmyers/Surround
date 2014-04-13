@@ -88,6 +88,11 @@ private var speedCooldownTimeCheck : float;
 
 private var speedCooldownTime : float = 5;   // 3 seconds
 
+public var fruitBombs : int = 0;
+
+public var pickedUpFruit : boolean = false;
+
+public var yellowCube : GameObject;
 /*
 enum HealthStatus {
     Green = 3, 
@@ -139,6 +144,19 @@ function Update() {
 
         walkSpeed = 80;
         healthMax_ = 6;
+        
+        if(pickedUpFruit)
+        {
+            if (Input.GetKey (KeyCode.F))
+            {
+                Instantiate(yellowCube, transform.position, transform.rotation);
+                --fruitBombs;
+                if(fruitBombs == 0)
+                {
+                    pickedUpFruit = false;
+                }
+            }
+        }
         
         if(speedAvailable)
         {
@@ -342,10 +360,11 @@ function OnTriggerEnter(collisionInfo : Collider){
 
  	if(collisionInfo.tag == "Fruit")
     {
+        spawnScript.PickedUpFruit();
         tutorialGui.PickedUpOrange();
         grabbedFruit = true;
-        transform.localScale *= 2;
-        healthMax_ *= 2;
+        //transform.localScale *= 2;
+        //healthMax_ *= 2;
         Debug.Log(healthMax_);
     }
     
