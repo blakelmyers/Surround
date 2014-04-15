@@ -226,17 +226,17 @@ function UpdatePlayer1Max(unitsLeft : int, caveNumber : int)
 {
     if(caveNumber == 1)
     {
-        absoluteMaxSpawnplayer1 += 5;
+        absoluteMaxSpawnplayer1 += 6;
         maxSpawnplayer1 += 3;
     }
     else if(caveNumber == 2)
     {
-        absoluteMaxSpawnplayer1 += 5;
+        absoluteMaxSpawnplayer1 += 6;
         maxSpawnplayer1 += 3;
     }
     else if(caveNumber == 3)
     {
-        absoluteMaxSpawnplayer1 += 5;
+        absoluteMaxSpawnplayer1 += 6;
         maxSpawnplayer1 += 3;
     }
 }
@@ -245,17 +245,17 @@ function UpdatePlayer2Max(unitsLeft : int, caveNumber : int)
 {
     if(caveNumber == 1)
     {
-        absoluteMaxSpawnplayer2 += 5;
+        absoluteMaxSpawnplayer2 += 6;
         maxSpawnplayer2 += 3;
     }
     else if(caveNumber == 2)
     {
-        absoluteMaxSpawnplayer2 += 5;
+        absoluteMaxSpawnplayer2 += 6;
         maxSpawnplayer2 += 3;
     }
     else if(caveNumber == 3)
     {
-        absoluteMaxSpawnplayer2 += 5;
+        absoluteMaxSpawnplayer2 += 6;
         maxSpawnplayer2 += 3;
     }
 }
@@ -265,6 +265,8 @@ if(playerID == 1){
     for(var i = 0; i < numberOfplayer1Prefabs; ++i)
     {
         player1prefabs[i].GetComponent(PlayerController).fruitBombs += 1;
+        Debug.Log("bombs");
+        Debug.Log(player1prefabs[i].GetComponent(PlayerController).fruitBombs);
         player1prefabs[i].GetComponent(PlayerController).pickedUpFruit = true;
     }
 }

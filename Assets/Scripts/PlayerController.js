@@ -282,6 +282,7 @@ function ProcessMovement()
         if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
         {
             walkSpeed = 40;
+            healthMax_ = 6;
             transform.position.y = -2;
         }    
         else{
@@ -306,7 +307,16 @@ function ProcessMovement()
         var targetPoint = ray.GetPoint(hitdist);
                 
         // Don't move if mouse is with 5 units
-        if(Vector3.Distance(targetPoint, transform.position) < 20 * spawnNumber)
+        
+        var multiplierToMouse : int;
+        
+        multiplierToMouse = spawnNumber;
+        if(spawnNumber > 10)
+        {
+            multiplierToMouse = 10;
+        }
+        
+        if(Vector3.Distance(targetPoint, transform.position) < 20 * multiplierToMouse)
         {
             _animation.CrossFade("idle");
             
@@ -385,6 +395,7 @@ if(PV.isMine)
     if(collisionInfo.tag == "Fruit")
     {
         //pickedUpFruit = true;
+        Debug.Log("hit fruit");
         if(spawnScript != 0)
         spawnScript.PickedUpFruit();
         //++fruitBombs;

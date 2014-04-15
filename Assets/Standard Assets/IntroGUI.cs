@@ -6,6 +6,8 @@ public class IntroGUI : MonoBehaviour {
 	private bool introGui = true;
 	public GUIStyle style;
 
+	private Texture btnTexture;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -30,14 +32,13 @@ public class IntroGUI : MonoBehaviour {
 			}
 			GUILayout.EndArea ();
 		}
-
-		Rect rectangle1 = new Rect(0, 0, 100, 100);
-		GUILayout.BeginArea (rectangle1);
-		if(GUILayout.Button ("Skip"))
+		Rect rectangle2 = new Rect(10,10,100,100);
+		string text1 = "Skip To Menu";
+		if (GUI.Button(rectangle2, text1))
 		{
 			introGui = false;
 			Application.LoadLevel("MainMenu");
 		}
-		GUILayout.EndArea ();
+
 	}
 }

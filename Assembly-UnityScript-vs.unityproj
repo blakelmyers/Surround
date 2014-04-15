@@ -64,6 +64,8 @@
      <Compile Include="Assets\Scripts\TutorialEnemy.js" />
      <Compile Include="Assets\Scripts\TutorialGUI.js" />
      <Compile Include="Assets\Scripts\TutorialPlayerController.js" />
+     <Compile Include="Assets\Scripts\WinnerController.js" />
+     <Compile Include="Assets\Scripts\WinningGUI.js" />
      <Compile Include="Assets\TestScripts\CameraScriptTest.js" />
      <Compile Include="Assets\TestScripts\CaveTriggerTest.js" />
      <Compile Include="Assets\TestScripts\FruitTriggerTest.js" />
