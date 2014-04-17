@@ -162,7 +162,7 @@ function StartSpawning()
         player1Color = selectionType.GetComponent(SelectionChoice).selectionValue;
         cameraForPlayer1.SetActive(true);
         cameraForPlayer2.SetActive(false);
-        startingCameraPosition = Vector3(1500, 400, 1000);
+        startingCameraPosition = Vector3(995, 720, 1885);
          cameraForPlayer1.transform.position = startingCameraPosition;
         checkTimerplayer1 = Time.time + spawnTimeplayer1;
         startPositionplayer1 = Vector3(1450, 8, 560);
@@ -181,7 +181,7 @@ function StartSpawning()
         cameraForPlayer2.SetActive(true);
         cameraForPlayer1.SetActive(false);
        
-         startingCameraPosition = Vector3(730, 260, 1550);
+         startingCameraPosition = Vector3(1275, 800, 1930);
          cameraForPlayer2.transform.position = startingCameraPosition;
         checkTimerplayer2 = Time.time + spawnTimeplayer2;
         startPositionplayer2 = Vector3(450, 5, 1500);
@@ -357,12 +357,12 @@ function OnGUI()
     if(gameStarted)
     {
     if(playerID == 1)
-    {
+    { 
         GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
-        GUILayout.Label(playerColor + " Player", styleGUI);
+        //GUILayout.Label(playerColor + " Player", styleGUI);
         GUILayout.Label("Total Units:   " + absoluteMaxSpawnplayer1.ToString(), styleGUI);
-        GUILayout.Label("Spawn Limit:   " + maxSpawnplayer1.ToString(), styleGUI);
-        GUILayout.Label("Current Spawn: " + numberOfplayer1Prefabs.ToString(), styleGUI);
+        //GUILayout.Label("Spawn Limit:   " + maxSpawnplayer1.ToString(), styleGUI);
+        //GUILayout.Label("Current Spawn: " + numberOfplayer1Prefabs.ToString(), styleGUI);
         GUILayout.EndArea ();
         
         // Player 1 won
@@ -370,6 +370,10 @@ function OnGUI()
         {
             GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
             GUILayout.Label("You WON!!!", styleGUI);
+            if(GUILayout.Button ("Continue"))
+            {
+                Application.LoadLevel("WinnerScene");
+            }
             GUILayout.EndArea ();
         }
         if(playerWhoWon == 2)
@@ -383,28 +387,29 @@ function OnGUI()
         { 
             if(player1prefabs[0].GetComponent(PlayerController).movementLock)
             {             
-                GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
+                GUI.Box (Rect (25,Screen.height - 100,50,50), "", styleLock);
             }
             if(player1prefabs[0].GetComponent(PlayerController).speedAvailable)
             {             
-                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
+                GUI.Box (Rect (50,Screen.height - 50,50,50), "", styleSpeed);
             }
             if(player1prefabs[0].GetComponent(PlayerController).speedActive)
             {             
-                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
+                GUI.Box (Rect (50,Screen.height - 50,50,50), "", styleSpeedOn);
             }
             if(player1prefabs[0].GetComponent(PlayerController).pickedUpFruit)
             {             
-                GUI.Box (Rect (75,Screen.height - 75,75,75), "", styleRainbow);
+                GUI.Box (Rect (0,Screen.height - 50,50,50), player1prefabs[0].GetComponent(PlayerController).fruitBombs.ToString(), styleRainbow);
             }
         }
     }
     else{
+    
         GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
-        GUILayout.Label(playerColor + " Player", styleGUI);
+       // GUILayout.Label(playerColor + " Player", styleGUI);
         GUILayout.Label("Total Units:   " + absoluteMaxSpawnplayer2.ToString(), styleGUI);
-        GUILayout.Label("Spawn Limit:   " + maxSpawnplayer2.ToString(), styleGUI);
-        GUILayout.Label("Current Spawn: " + numberOfplayer2Prefabs.ToString(), styleGUI);
+       // GUILayout.Label("Spawn Limit:   " + maxSpawnplayer2.ToString(), styleGUI);
+        //GUILayout.Label("Current Spawn: " + numberOfplayer2Prefabs.ToString(), styleGUI);
         GUILayout.EndArea ();
     
          // Player 1 won
@@ -412,6 +417,10 @@ function OnGUI()
         {
             GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
             GUILayout.Label("You WON!!!", styleGUI);
+            if(GUILayout.Button ("Continue"))
+            {
+                Application.LoadLevel("WinnerScene");
+            }
             GUILayout.EndArea ();
         }
         if(playerWhoWon == 1)
@@ -425,20 +434,19 @@ function OnGUI()
         { 
             if(player2prefabs[0].GetComponent(PlayerController).movementLock)
             {             
-                GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
+                GUI.Box (Rect (25,Screen.height - 100,50,50), "", styleLock);
             }
-            
             if(player2prefabs[0].GetComponent(PlayerController).speedAvailable)
             {             
-                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
+                GUI.Box (Rect (50,Screen.height - 50,50,50), "", styleSpeed);
             }
             if(player2prefabs[0].GetComponent(PlayerController).speedActive)
             {             
-                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
+                GUI.Box (Rect (50,Screen.height - 50,50,50), "", styleSpeedOn);
             }
             if(player2prefabs[0].GetComponent(PlayerController).pickedUpFruit)
             {             
-                GUI.Box (Rect (75,Screen.height - 75,75,75), "", styleRainbow);
+                GUI.Box (Rect (0,Screen.height - 50,50,50), player2prefabs[0].GetComponent(PlayerController).fruitBombs.ToString(), styleRainbow);
             }
         }
        } 

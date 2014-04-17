@@ -124,9 +124,12 @@ function Start ()
       spawnScript.StartSpawning();
    } 
    if(playerID == 1){
+        if(spawnScript.player1prefabs[0].transform)
 		lead = spawnScript.player1prefabs[0].transform;
+        
 	}
 	if(playerID == 2){
+        if(spawnScript.player2prefabs[0].transform)
 		lead = spawnScript.player2prefabs[0].transform;
 	}
     }
@@ -154,12 +157,12 @@ function Update() {
     
     if(PV.isMine)
     {
-        walkSpeed = 80;
+        walkSpeed = 160;
         healthMax_ = 6;
         
         if(pickedUpFruit)
         {
-            if (Input.GetKey (KeyCode.F))
+            if (Input.GetMouseButtonDown(0))
             {
                 PhotonNetwork.Instantiate(this.tag + "Poop", transform.position, transform.rotation, 0);
                 --fruitBombs;
@@ -172,7 +175,7 @@ function Update() {
         
         if(speedAvailable)
         {
-            if (Input.GetKey (KeyCode.Space)  && !speedActive)
+            if (Input.GetMouseButtonDown(1)  && !speedActive)
             {
                speedActive = true;
                speedTimeCheck = Time.time + speedTime;   // set timer for 3 seconds
@@ -182,7 +185,7 @@ function Update() {
         
         if(speedActive)
         {
-            walkSpeed = 160;
+            walkSpeed = 300;
             healthMax_ = 15;
             if(Time.time >= speedTimeCheck)  // 3 seconds of speed has expired
             {
@@ -210,11 +213,12 @@ function Update() {
         checkTerrain = GetTerrainTextureAt(transform.position);
         
         
-        if(Input.GetMouseButtonDown(1))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             movementActive = !movementActive;
         }
-    	if(Input.GetMouseButtonDown(0)){
+        movementActive = true;
+    	if(Input.GetMouseButtonDown(2)){
     		movementLock = !movementLock;
     		offset = lead.position - transform.position;	
     	}
@@ -281,7 +285,7 @@ function ProcessMovement()
         // Get the point along the ray that hits the calculated distance.
         if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
         {
-            walkSpeed = 40;
+            walkSpeed = 60;
             healthMax_ = 6;
             transform.position.y = -2;
         }    
@@ -311,9 +315,9 @@ function ProcessMovement()
         var multiplierToMouse : int;
         
         multiplierToMouse = spawnNumber;
-        if(spawnNumber > 10)
+        if(spawnNumber > 8)
         {
-            multiplierToMouse = 10;
+            multiplierToMouse = 8;
         }
         
         if(Vector3.Distance(targetPoint, transform.position) < 20 * multiplierToMouse)
@@ -356,9 +360,12 @@ function ProcessMovement()
 }
 
 function FollowMovement(){
+if(lead)
+{
 	transform.position = lead.position - offset;
 	transform.rotation = lead.rotation;
 	_animation.CrossFade("walk");
+    }
 }
 
 function FixedUpdate() 

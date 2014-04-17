@@ -62,7 +62,7 @@ function Update()
         }
     }   
     else if(Input.GetKey(KeyCode.X)){
-        if(cameraTransform.position.y < 600)
+        //if(cameraTransform.position.y < 600)
         {
             cameraTransform.position.y += 5;
         }

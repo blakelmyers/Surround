@@ -86,7 +86,7 @@ private var speedCooldown : boolean = false;
 
 private var speedCooldownTimeCheck : float;
 
-private var speedCooldownTime : float = 5;   // 3 seconds
+private var speedCooldownTime : float = 3;   // 3 seconds
 
 public var fruitBombs : int = 0;
 
@@ -147,7 +147,7 @@ function Update() {
         
         if(pickedUpFruit)
         {
-            if (Input.GetKey (KeyCode.F))
+            if (Input.GetMouseButtonDown(0))
             {
                 Instantiate(yellowCube, transform.position, transform.rotation);
                 --fruitBombs;
@@ -160,7 +160,7 @@ function Update() {
         
         if(speedAvailable)
         {
-            if (Input.GetKey (KeyCode.Space)  && !speedActive)
+            if (Input.GetMouseButtonDown(1)  && !speedActive)
             {
                speedActive = true;
                speedTimeCheck = Time.time + speedTime;   // set timer for 3 seconds
@@ -206,15 +206,15 @@ function Update() {
         if(checkTerrain == TextureType.Sand)
         {
             walkSpeed = 40;
-            tutorialGui.OverSand();
+            //tutorialGui.OverSand();
         }
         
              
-        if(Input.GetMouseButtonDown(1))
-        {
-            movementActive = !movementActive;
-        }
-    	if(Input.GetMouseButtonDown(0)){
+        //if(Input.GetMouseButtonDown(1))
+        //{
+        //    movementActive = !movementActive;
+       // }
+    	if(Input.GetMouseButtonDown(2)){
     		movementLock = !movementLock;
     		offset = lead.position - transform.position;	
     	}
@@ -296,8 +296,15 @@ function ProcessMovement()
         
         var targetPoint = ray.GetPoint(hitdist);
                 
-        // Don't move if mouse is with 5 units
-        if(Vector3.Distance(targetPoint, transform.position) < 25 * spawnNumber)
+        var multiplierToMouse : int;
+        
+        multiplierToMouse = spawnNumber;
+        if(spawnNumber > 4)
+        {
+            multiplierToMouse = 4;
+        }
+        
+        if(Vector3.Distance(targetPoint, transform.position) < 25 * multiplierToMouse)
         {
             _animation.CrossFade("idle");
             
@@ -361,7 +368,7 @@ function OnTriggerEnter(collisionInfo : Collider){
  	if(collisionInfo.tag == "Fruit")
     {
         spawnScript.PickedUpFruit();
-        tutorialGui.PickedUpOrange();
+        //tutorialGui.PickedUpOrange();
         grabbedFruit = true;
         //transform.localScale *= 2;
         //healthMax_ *= 2;

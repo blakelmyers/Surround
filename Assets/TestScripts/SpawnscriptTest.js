@@ -127,32 +127,33 @@ function OnGUI()
 {
 if(gameStarted == true)
     {
+    /*
         GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
         GUILayout.Label("Yellow Player", styleRed);
         GUILayout.Label("Total Units:   " + absoluteMaxSpawnplayer1.ToString(), styleRed);
         GUILayout.Label("Spawn Limit: " + maxSpawnplayer1.ToString(), styleRed);
         GUILayout.Label("Current Spawn: " + numberOfplayer1Prefabs.ToString(), styleRed);
         GUILayout.EndArea ();
-        
+        */
 
         if(player1prefabs[0] != 0)
         { 
             if(player1prefabs[0].GetComponent(PlayerControllerTest).movementLock)
             {             
-                GUI.Box (Rect (0,Screen.height - 150,75,75), "", styleLock);
+                GUI.Box (Rect (25,Screen.height - 100,50,50), "", styleLock);
             }
             if(player1prefabs[0].GetComponent(PlayerControllerTest).speedAvailable)
             {             
-                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeed);
+                GUI.Box (Rect (50,Screen.height - 50,50,50), "", styleSpeed);
             }
             if(player1prefabs[0].GetComponent(PlayerControllerTest).speedActive)
             {             
-                GUI.Box (Rect (0,Screen.height - 75,75,75), "", styleSpeedOn);
-            }            
+                GUI.Box (Rect (50,Screen.height - 50,50,50), "", styleSpeedOn);
+            }
             if(player1prefabs[0].GetComponent(PlayerControllerTest).pickedUpFruit)
             {             
-                GUI.Box (Rect (75,Screen.height - 75,75,75), "", styleRainbow);
-            }        
+                GUI.Box (Rect (0,Screen.height - 50,50,50), player1prefabs[0].GetComponent(PlayerControllerTest).fruitBombs.ToString(), styleRainbow);
+            }      
                      
         }
     }
