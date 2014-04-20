@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 
 Project("{428EA67D-6EE5-7020-28AD-01753503828C}") = "Surround", "Assembly-CSharp-firstpass.csproj", "{DFFF0448-15C0-628F-A898-11A9A2576127}"
 EndProject
+Project("{428EA67D-6EE5-7020-28AD-01753503828C}") = "Surround", "Assembly-CSharp.csproj", "{02A5E244-5EDA-CB2D-E3EA-A2E13CD29106}"
+EndProject
 Project("{428EA67D-6EE5-7020-28AD-01753503828C}") = "Surround", "Assembly-CSharp-Editor.csproj", "{111FF100-F516-B2D5-406D-FA79E779F449}"
 EndProject
 Project("{428EA67D-6EE5-7020-28AD-01753503828C}") = "Surround", "Assembly-UnityScript.unityproj", "{6DF534E8-7CC9-0AF2-EE6D-D78E5FD79F83}"
@@ -17,6 +19,10 @@ Global
 		{DFFF0448-15C0-628F-A898-11A9A2576127}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFFF0448-15C0-628F-A898-11A9A2576127}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFFF0448-15C0-628F-A898-11A9A2576127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02A5E244-5EDA-CB2D-E3EA-A2E13CD29106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02A5E244-5EDA-CB2D-E3EA-A2E13CD29106}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02A5E244-5EDA-CB2D-E3EA-A2E13CD29106}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02A5E244-5EDA-CB2D-E3EA-A2E13CD29106}.Release|Any CPU.Build.0 = Release|Any CPU
 		{111FF100-F516-B2D5-406D-FA79E779F449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{111FF100-F516-B2D5-406D-FA79E779F449}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{111FF100-F516-B2D5-406D-FA79E779F449}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -29,7 +35,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-		GlobalSection(MonoDevelopProperties) = preSolution
+						GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

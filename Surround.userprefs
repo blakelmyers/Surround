@@ -1,14 +1,29 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="c:\Users\Aaron Pang\Documents\GitHub\Surround\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PoopTrigger.js">
     <Files>
-      <File FileName="Assets\Scripts\PlayerController.js" Line="222" Column="6" />
-      <File FileName="Assets\Scripts\PlayerController.js" Line="375" Column="2" />
-      <File FileName="Assets\Scripts\Tutorial.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\TutorialPlayerController.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Spawnscript.js" Line="1" Column="1" />
-      <File FileName="c:\Users\Aaron Pang\Documents\GitHub\Surround\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs" Line="93" Column="99" />
+      <File FileName="Assets/Scripts/TutorialGUI.js" Line="142" Column="70" />
+      <File FileName="Assets/Scripts/Spawnscript.js" Line="55" Column="28" />
+      <File FileName="Assets/TestScripts/SpawnscriptTest.js" Line="44" Column="27" />
+      <File FileName="Assets/TestScripts/CaveTriggerTest.js" Line="1" Column="1" />
+      <File FileName="Assets/TestScripts/PlayerControllerTest.js" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CameraScript1.js" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CaveTrigger.js" Line="78" Column="32" />
+      <File FileName="Assets/Scripts/PlayerController.js" Line="165" Column="31" />
+      <File FileName="Assets/Scripts/PoopTrigger.js" Line="6" Column="29" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Assembly-UnityScript" expanded="True">
+            <Node name="Scripts" expanded="True">
+              <Node name="PoopTrigger.js" selected="True" />
+            </Node>
+            <Node name="TestScripts" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
