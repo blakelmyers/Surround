@@ -24,11 +24,11 @@ public class IntroGUI : MonoBehaviour {
 		{
 			Rect rectangle = new Rect(20, (Screen.height/3), Screen.width, Screen.height);
 			GUILayout.BeginArea (rectangle);
-			GUILayout.Label("In a world only big enough for one dinosaur herd....", style);
-			if(GUILayout.Button ("Continue to Tutorial"))
+			GUILayout.Label("66 million years ago the Chicxulub meteor hurtled towards earth...", style);
+			if(GUILayout.Button ("Next"))
 			{
 				introGui = false;
-				Application.LoadLevel("TutorialScene");
+				Application.LoadLevel("SecondGUI");
 			}
 			GUILayout.EndArea ();
 		}
