@@ -191,17 +191,26 @@ function OnGUI () {
     case tutorialSteps.Step9:
     	cameraPosition = Vector3(700, 1100, 450);
         cameraTransform.position = cameraPosition;
-        GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("Look! The blue hippotigertaumus are coming from the north! Attack them!!!", style2);
-        GUILayout.EndArea ();
+        GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 50, 150, 150),"Look the blue hippotigertaumaus are coming from the north! Attack them leave no survivors! \n [space to continue]", style2);
+        if(GameObject.Find("BlueEnemyTest")==null){
+        	stepState = tutorialSteps.Step10;
+        }
         break;
     case tutorialSteps.Step10:
-        cameraPosition = Vector3(400, 688, 925);
-        cameraTransform.position = cameraPosition;
-        GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("Units shrink when they take damage.  Collide with the blue base end the tutorial and start conquering enemy dinosaurs", style2);
-        GUILayout.EndArea ();
+        GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 50, 150, 150),"Each attack will hurt your opponent and yourself, and as you get weaker you get smaller. \n [space to continue]", style2);
+        if(Input.GetKeyDown(KeyCode.Space)){
+        	stepState = tutorialSteps.Step11;
+        }
         break;
+    case tutorialSteps.Step11:
+    	GUILayout.BeginArea(Rect(250, 150, 200,200));
+    	GUILayout.Label("Congratz you have learned all the tools necessary to save the dinos!", style);
+    	if(GUILayout.Button("Exit Tutorial", buttonStyle)){
+    		Application.LoadLevel("MainMenu");
+    	}
+    	GUILayout.EndArea();
     default:
         break;
     }   
