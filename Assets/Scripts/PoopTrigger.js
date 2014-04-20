@@ -2,12 +2,17 @@
 
 public class PoopTrigger extends Photon.MonoBehaviour{
 
-function Start () {
+var poopStart: float;
+var poopTime: float = 7;
 
+function Start () {
+	poopStart = Time.time+poopTime;
 }
 
 function Update () {
-
+	if(Time.time > poopStart){
+		PhotonNetwork.Destroy(this.gameObject);
+	}
 }
 
 function OnTriggerEnter(other:Collider){
