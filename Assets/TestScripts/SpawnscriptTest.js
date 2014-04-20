@@ -38,7 +38,10 @@ var styleLock : GUIStyle;
 var styleSpeed : GUIStyle;
 var styleSpeedOn : GUIStyle;
 var styleRainbow : GUIStyle;
-
+var styleSpeedOff : GUIStyle;
+var styleToolBar : GUIStyle;
+var styleLabel: GUIStyle;
+var styleYellow: GUIStyle;
 
 var selectionType : SelectionChoice;
 var connectionObject : GameObject;
@@ -87,7 +90,7 @@ function UpdatePlayer1Max()
 {
     
         absoluteMaxSpawnplayer1 += 10;
-        maxSpawnplayer1 += 5;
+        maxSpawnplayer1 += 2;
     
 }
 
@@ -135,25 +138,31 @@ if(gameStarted == true)
         GUILayout.Label("Current Spawn: " + numberOfplayer1Prefabs.ToString(), styleRed);
         GUILayout.EndArea ();
         */
-
+		GUI.Box (Rect(0, Screen.height - 70, Screen.width, 70), "", styleToolBar);
+        GUI.Box (Rect(50, Screen.height - 70, 100, 70), "DINOWARS!", styleLabel);
+        GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size/ Herd Capacity \n " + numberOfplayer1Prefabs.ToString() + "/" + maxSpawnplayer1.ToString(), styleYellow);
+        //GUI.Box (Rect (Screen.width/2-35,Screen.height - 70,70,70), "", styleSpeedOff);
+        
         if(player1prefabs[0] != 0)
         { 
             if(player1prefabs[0].GetComponent(PlayerControllerTest).movementLock)
             {             
-                GUI.Box (Rect (25,Screen.height - 100,50,50), "", styleLock);
+                GUI.Box (Rect (Screen.width/2+35,Screen.height - 70,70,70), "", styleLock);
+            }
+            if(!player1prefabs[0].GetComponent(PlayerControllerTest).speedAvailable)
+            {             
+                GUI.Box (Rect (Screen.width/2 - 35,Screen.height - 70,70,70), "", styleSpeedOff);
             }
             if(player1prefabs[0].GetComponent(PlayerControllerTest).speedAvailable)
             {             
-                GUI.Box (Rect (50,Screen.height - 50,50,50), "", styleSpeed);
+                GUI.Box (Rect (Screen.width/2 - 35,Screen.height - 70,70,70), "", styleSpeed);
             }
             if(player1prefabs[0].GetComponent(PlayerControllerTest).speedActive)
             {             
-                GUI.Box (Rect (50,Screen.height - 50,50,50), "", styleSpeedOn);
+               GUI.Box (Rect (Screen.width/2 - 35,Screen.height - 70,70,70), "", styleSpeedOn);
             }
-            if(player1prefabs[0].GetComponent(PlayerControllerTest).pickedUpFruit)
-            {             
-                GUI.Box (Rect (0,Screen.height - 50,50,50), player1prefabs[0].GetComponent(PlayerControllerTest).fruitBombs.ToString(), styleRainbow);
-            }      
+            GUI.Box (Rect (Screen.width/2-35*3,Screen.height - 70,70,70), player1prefabs[0].GetComponent(PlayerControllerTest).fruitBombs.ToString(), styleRainbow);         
+                     
                      
         }
     }
@@ -205,5 +214,7 @@ function Update()
         }
     
 }
+
+
 
 
