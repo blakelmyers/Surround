@@ -16,6 +16,10 @@ private var unlockTimer : float;
 
 private var waitingToUnlock : boolean = false;
 
+
+public var ohnoSound : AudioClip;
+
+
 enum PlayerControlling{
     None,
     Red,
@@ -53,7 +57,8 @@ function Update () {
         if(Time.time >= unlockTimer) 
         {
             waitingToUnlock = false;
-            Cube.renderer.material.color = Color.gray;
+            audio.PlayOneShot(ohnoSound);
+            //Cube.renderer.material.color = Color.gray;
         }
     }
 }

@@ -9,17 +9,36 @@ public var movementActive : boolean = false;
 
 public var movementLock : boolean = false;
 
+public var movementLockFirst : boolean = true;
+
+
 public var spawnNumber : int;
 
 public var fruitBombs : int = 0;
 
 public var pickedUpFruit : boolean = false;
 
+private var firstLava : boolean = true;
+
 private var _animation : Animation;
 
 private var lead: Transform;
 
 private var offset;
+
+public var weeSound : AudioClip;
+
+public var owSound : AudioClip;
+
+public var merSound : AudioClip;
+
+public var hutSound : AudioClip;
+
+public var nomSound : AudioClip;
+
+public var hotSound : AudioClip;
+
+private var lavaCounter : int = 0;
 
 
 /*
@@ -32,9 +51,8 @@ enum CharacterState {
 enum TextureType {
     Grass = 0,
     Sand = 1,
-    Blueberry = 2,
-    Redberry = 3,
-    Orangeberry = 4,
+    Grass1 = 2,
+    Lava = 3
 }
 
 //private var _characterState : CharacterState;
@@ -177,6 +195,7 @@ function Update() {
         {
             if (Input.GetMouseButtonDown(1)  && !speedActive)
             {
+               if(spawnNumber == 1) audio.PlayOneShot(weeSound);
                speedActive = true;
                speedTimeCheck = Time.time + speedTime;   // set timer for 3 seconds
                speedAvailable = false;
@@ -212,14 +231,37 @@ function Update() {
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
         
-        
-        if(Input.GetKeyDown(KeyCode.Space))
+        Debug.Log(checkTerrain);
+        if(checkTerrain == TextureType.Lava)
         {
-            movementActive = !movementActive;
+            Debug.Log("on lava");
+            if(firstLava)
+            {
+                audio.PlayOneShot(hotSound);
+                firstLava = false;
+            }
+            ++lavaCounter;
+            if(lavaCounter > 30)
+            DecreaseHealth();
         }
-        movementActive = true;
+        else
+        {
+            firstLava = true;
+        }
+        
+        if(Input.GetKeyDown(KeyCode.M))
+        {
+            movementActive = false;
+        }
+        
+        if(Input.GetKeyDown(KeyCode.N))
+        {
+            movementActive = true;
+        }
+       // movementActive = true;
     	if(Input.GetMouseButtonDown(2)){
     		movementLock = !movementLock;
+            movementLockFirst = true;
     		offset = lead.position - transform.position;	
     	}
         
@@ -227,6 +269,12 @@ function Update() {
        {
        		if(movementLock){
        			if(spawnNumber==1){
+                    // only play once
+                    if(movementLockFirst)
+                    {
+                        audio.PlayOneShot(hutSound);
+                        movementLockFirst = false;
+                    }
        				ProcessMovement();
        			}else{
        				FollowMovement();
@@ -385,6 +433,7 @@ if(PV.isMine)
                 DecreaseHealth();
                 _animation.CrossFade("Attack");
             }
+            audio.PlayOneShot(merSound);
             collisionCounter++;
         }
     }
@@ -395,6 +444,7 @@ if(PV.isMine)
             {
              DecreaseHealth();
              }
+             audio.PlayOneShot(owSound);
              collisionCounter2++;
         }
     }
@@ -402,6 +452,7 @@ if(PV.isMine)
     if(collisionInfo.tag == "Fruit")
     {
         //pickedUpFruit = true;
+        audio.PlayOneShot(nomSound);
         Debug.Log("hit fruit");
         if(spawnScript != 0)
         spawnScript.PickedUpFruit();

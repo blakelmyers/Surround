@@ -55,6 +55,7 @@ private var collisionFlags : CollisionFlags;
 // the height we jumped from (Used to determine for how long to apply extra jump power after jumping.)
 private var lastJumpStartHeight = 0.0;
 
+public var speedSound : AudioClip;
 
 private var inAirVelocity = Vector3.zero;
 
@@ -163,6 +164,7 @@ function Update() {
             if (Input.GetMouseButtonDown(1)  && !speedActive)
             {
                speedActive = true;
+               audio.PlayOneShot(speedSound);
                speedTimeCheck = Time.time + speedTime;   // set timer for 3 seconds
                speedAvailable = false;
             }
@@ -195,6 +197,8 @@ function Update() {
 		    Input.ResetInputAxes();
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
+        
+        Debug.Log(checkTerrain);
     /*     if(grabbedFruit)
         {
             walkSpeed = 160;
@@ -206,9 +210,16 @@ function Update() {
         if(checkTerrain == TextureType.Sand)
         {
             walkSpeed = 40;
+            
             //tutorialGui.OverSand();
         }
         
+        // actually lava
+        if(checkTerrain == TextureType.Blueberry)
+        {
+            Debug.Log("on lava");
+            DecreaseHealth();
+        }
              
         //if(Input.GetMouseButtonDown(1))
         //{

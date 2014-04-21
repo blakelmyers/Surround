@@ -11,7 +11,6 @@
 public class Spawnscript extends Photon.MonoBehaviour{
 
 public var cameraForPlayer1 : GameObject;
-public var cameraForPlayer2 : GameObject;
 public var cameraDistance : float;
 public var spawnTimeplayer1 : float;
 public var spawnTimeplayer2 : float;
@@ -79,6 +78,10 @@ var player1Color : int;
 var player2Color : int;
 
 var noBaseChange : boolean = false;
+
+public var niceSound : AudioClip;
+
+public var deadSound : AudioClip;
 
 enum PlayerType {
     player1 = 0,
@@ -163,10 +166,6 @@ function StartSpawning()
     
     if(playerID == 1){
         player1Color = selectionType.GetComponent(SelectionChoice).selectionValue;
-        cameraForPlayer1.SetActive(true);
-        cameraForPlayer2.SetActive(false);
-        startingCameraPosition = Vector3(995, 720, 1885);
-         cameraForPlayer1.transform.position = startingCameraPosition;
         checkTimerplayer1 = Time.time + spawnTimeplayer1;
         startPositionplayer1 = Vector3(1450, 8, 560);
        
@@ -181,11 +180,7 @@ function StartSpawning()
     else if (playerID == 2)   // player2
     {
         player2Color = selectionType.GetComponent(SelectionChoice).selectionValue;
-        cameraForPlayer2.SetActive(true);
-        cameraForPlayer1.SetActive(false);
        
-         startingCameraPosition = Vector3(1275, 800, 1930);
-         cameraForPlayer2.transform.position = startingCameraPosition;
         checkTimerplayer2 = Time.time + spawnTimeplayer2;
         startPositionplayer2 = Vector3(450, 5, 1500);
       // Debug.Log("start spawngin");
@@ -227,40 +222,18 @@ function PlayerTwoColor(playerTag : String)
 
 function UpdatePlayer1Max(unitsLeft : int, caveNumber : int)
 {
-    if(caveNumber == 1)
-    {
         absoluteMaxSpawnplayer1 += 6;
         maxSpawnplayer1 += 3;
-    }
-    else if(caveNumber == 2)
-    {
-        absoluteMaxSpawnplayer1 += 6;
-        maxSpawnplayer1 += 3;
-    }
-    else if(caveNumber == 3)
-    {
-        absoluteMaxSpawnplayer1 += 6;
-        maxSpawnplayer1 += 3;
-    }
+        
+        audio.PlayOneShot(niceSound);
 }
 
 function UpdatePlayer2Max(unitsLeft : int, caveNumber : int)
 {
-    if(caveNumber == 1)
-    {
         absoluteMaxSpawnplayer2 += 6;
         maxSpawnplayer2 += 3;
-    }
-    else if(caveNumber == 2)
-    {
-        absoluteMaxSpawnplayer2 += 6;
-        maxSpawnplayer2 += 3;
-    }
-    else if(caveNumber == 3)
-    {
-        absoluteMaxSpawnplayer2 += 6;
-        maxSpawnplayer2 += 3;
-    }
+        
+        audio.PlayOneShot(niceSound);
 }
 
 function PickedUpFruit(){
@@ -286,8 +259,10 @@ else if (playerID == 2)   // player2
 function UnitDied(unitNumber : int)
 {
 
+    
     if(playerID == 1)
     {
+        audio.PlayOneShot(deadSound);
         for (var i = unitNumber; i < numberOfplayer1Prefabs; ++i)
         {
             player1prefabs[i-1] = player1prefabs[i];
@@ -314,6 +289,7 @@ function UnitDied(unitNumber : int)
     }
     else //player2
     {
+        audio.PlayOneShot(deadSound);
         for (var j = unitNumber; j < numberOfplayer2Prefabs; ++j)
         {
             player2prefabs[j-1] = player2prefabs[j];
