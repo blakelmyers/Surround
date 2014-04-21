@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\CaveTriggerTutorial.js" />
      <Compile Include="Assets\Scripts\Connect.js" />
      <Compile Include="Assets\Scripts\FruitTrigger.js" />
+     <Compile Include="Assets\Scripts\IntroGUI.js" />
      <Compile Include="Assets\Scripts\Menu.js" />
      <Compile Include="Assets\Scripts\PlayerController.js" />
      <Compile Include="Assets\Scripts\PoopTrigger.js" />
