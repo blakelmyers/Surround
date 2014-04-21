@@ -37,11 +37,11 @@ var step7Time:float;
 
 function Start () {
 	stepState = storySteps.Step1;
-	step2Time = Time.time+3;
-	step3Time = step2Time+3;
-	step4Time = step3Time+4;
-	step5Time = step4Time+3;
-	step6Time = step5Time+2;
+	step2Time = Time.time+10;
+	step3Time = step2Time+10;
+	step4Time = step3Time+10;
+	step5Time = step4Time+10;
+	step6Time = step5Time+10;
 }
 
 function Update () {
@@ -71,11 +71,11 @@ function OnGUI(){
 					if(GUI.Button (Rect(0, 300, Screen.width, 100),"Start",buttonStyle))
 					{
 						stepState = storySteps.Step2;
-						step2Time = Time.time+3;
-						step3Time = step2Time+4;
-						step4Time = step3Time+5;
-						step5Time = step4Time+4;
-						step6Time = step5Time+3;
+						step2Time = Time.time+10;
+                        step3Time = step2Time+10;
+                        step4Time = step3Time+10;
+                        step5Time = step4Time+10;
+                        step6Time = step5Time+10;
 					}
 					if (GUI.Button (Rect(0, 400, Screen.width, 100),"Skip to Main Menu",buttonStyle))
 					{
