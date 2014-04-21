@@ -16,6 +16,7 @@ private var unlockTimer : float;
 
 private var waitingToUnlock : boolean = false;
 
+var taken : boolean = true;
 
 public var ohnoSound : AudioClip;
 
@@ -76,6 +77,9 @@ function OnTriggerEnter(other:Collider){
         {
             switch(other.tag)
             {
+            case "None":
+            	taken = false;
+            	updateSpawn = true;
             case "Red":
                 if(caveControlledBy != PlayerControlling.Red){
                     Cube.renderer.material.color = Color.red;
@@ -127,56 +131,69 @@ function OnTriggerEnter(other:Collider){
                 
                 waitingToUnlock = true;
                 unlockTimer = Time.time + lockTime;
-                if(spawnScript.playerID == 1)
+                if(spawnScript.playerID == 1){
                     spawnScript.UpdatePlayer1Max(unitsLeft, caveNumber);
-                else if(spawnScript.playerID == 2)
+                	spawnScript.player1Caves += 1;
+                	if(taken){
+                		spawnScript.player2Caves -= 1;
+                	}
+                	spawnScript.sizeChange();
+                }
+                else if(spawnScript.playerID == 2){
                     spawnScript.UpdatePlayer2Max(unitsLeft, caveNumber);
+                    spawnScript.player2Caves += 1;
+                    if(taken){
+                    	spawnScript.player1Caves -= 1;
+                    }
+                    spawnScript.sizeChange();
+                }
                     
                 //photonView.RPC("PlayerTookBase", PhotonTargets.Others, caveControlledBy);   
         	}
+        	
     	}
     
 }
 
-@RPC
-function PlayerTookBase(hasCave : PlayerControlling)
-{
-    UpdateUnits(hasCave);
-}
+/*	@RPC
+	function PlayerTookBase(hasCave : PlayerControlling)
+	{
+	    UpdateUnits(hasCave);
+	}
 
-function UpdateUnits(hasCave : PlayerControlling)
-{
-    
-    
-    caveControlledBy = hasCave;
-    
-    if(spawnScript.playerID == 1)
-        spawnScript.UpdatePlayer1Max(unitsLeft, caveNumber);
-    else if(spawnScript.playerID == 2)
-        spawnScript.UpdatePlayer2Max(unitsLeft, caveNumber);
-        
-    switch(caveControlledBy)
-    {
-    case PlayerControlling.Red:
-            Cube.renderer.material.color = Color.red;
-        break;
-    case PlayerControlling.Yellow:
-            Cube.renderer.material.color = Color.yellow;
-        break;
-    case PlayerControlling.Blue:
-            Cube.renderer.material.color = Color.blue;
-        break;
-    case PlayerControlling.Green:
-            Cube.renderer.material.color = Color.green;
-        break;
-    case PlayerControlling.Purple:
-            Cube.renderer.material.color = Color.magenta;
-        break;
-    case PlayerControlling.Orange:
-            Cube.renderer.material.color = Color.red;
-        break;
-    default:
-        break;
-    }
-}
+	function UpdateUnits(hasCave : PlayerControlling)
+	{
+	    
+	    
+	    caveControlledBy = hasCave;
+	    
+	    if(spawnScript.playerID == 1)
+	        spawnScript.UpdatePlayer1Max(unitsLeft, caveNumber);
+	    else if(spawnScript.playerID == 2)
+	        spawnScript.UpdatePlayer2Max(unitsLeft, caveNumber);
+	        
+	    switch(caveControlledBy)
+	    {
+	    case PlayerControlling.Red:
+	            Cube.renderer.material.color = Color.red;
+	        break;
+	    case PlayerControlling.Yellow:
+	            Cube.renderer.material.color = Color.yellow;
+	        break;
+	    case PlayerControlling.Blue:
+	            Cube.renderer.material.color = Color.blue;
+	        break;
+	    case PlayerControlling.Green:
+	            Cube.renderer.material.color = Color.green;
+	        break;
+	    case PlayerControlling.Purple:
+	            Cube.renderer.material.color = Color.magenta;
+	        break;
+	    case PlayerControlling.Orange:
+	            Cube.renderer.material.color = Color.red;
+	        break;
+	    default:
+	        break;
+	    }
+	}*/
 }

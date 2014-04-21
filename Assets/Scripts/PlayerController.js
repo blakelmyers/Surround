@@ -40,6 +40,8 @@ public var hotSound : AudioClip;
 
 public var fartSound : AudioClip;
 
+public var caveCounter : int = 0;
+
 private var lavaCounter : int = 0;
 
 
@@ -154,6 +156,7 @@ function Start ()
 	}
     }
 }
+
 
 function Awake ()
 {
@@ -474,25 +477,35 @@ function DecreaseHealth()
 {
 if(PV.isMine)
     {
-    Debug.Log("decrease size");
-    Debug.Log(health_);
-    switch (health_)
-    {
-        case HealthStatus.Green:
-            health_ = HealthStatus.Yellow;
-            transform.localScale /= 1.3;
-            break;
-        case HealthStatus.Yellow:
-            health_ = HealthStatus.Red;
-            transform.localScale /= 1.2;
-            break;
-        case HealthStatus.Red:
-            health_ = HealthStatus.Dead;
-            PhotonNetwork.Destroy(this.gameObject);
-            spawnScript.UnitDied(spawnNumber);
-            break;
+	    Debug.Log("decrease size");
+	    Debug.Log(health_);
+	    switch (health_)
+	    {
+	        case HealthStatus.Green:
+	            health_ = HealthStatus.Yellow;
+	            transform.localScale /= 1.3;
+	            break;
+	        case HealthStatus.Yellow:
+	            health_ = HealthStatus.Red;
+	            transform.localScale /= 1.2;
+	            break;
+	        case HealthStatus.Red:
+	            health_ = HealthStatus.Dead;
+	            PhotonNetwork.Destroy(this.gameObject);
+	            spawnScript.UnitDied(spawnNumber);
+	            break;
+	    }
     }
-    }
+}
+
+function changeSize(sizeFactor : double){
+	var scale : Vector3 =  transform.localScale;
+	Debug.Log(scale);
+	Debug.Log(sizeFactor);
+	scale = scale * sizeFactor;
+	Debug.Log(scale);
+	transform.localScale = scale;
+	
 }
 
 function OnControllerColliderHit (hit : ControllerColliderHit )

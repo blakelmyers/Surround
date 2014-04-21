@@ -83,6 +83,10 @@ public var niceSound : AudioClip;
 
 public var deadSound : AudioClip;
 
+public var player1Caves : int = 0;
+
+public var player2Caves : int = 0;
+
 private var goalTime : float;
 private var totalTime : float = 180.0; 
 private var startTime : float;
@@ -555,6 +559,22 @@ function Update()
         
         
     */
+}
+
+function sizeChange()
+{
+		var x = player1Caves * .1;
+		Debug.Log(x);
+	    for(var i = 0; i < numberOfplayer1Prefabs; ++i)
+	    {
+	        player1prefabs[i].GetComponent(PlayerController).changeSize(1+x);
+	    }
+          
+		x = player2Caves * .1;
+	    for(var j = 0; j < numberOfplayer2Prefabs; ++j)
+	    {
+	        player2prefabs[j].GetComponent(PlayerController).changeSize(1+x);
+	    }
 }
 
 function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
