@@ -6,11 +6,13 @@ public class CaveTrigger extends Photon.MonoBehaviour{
 
 private var Cube : GameObject;
 
+private var caveText : GameObject;
+
 public var unitsLeft : int;
 
 public var caveNumber : int;
 
-private var lockTime : float = 15;  // 3 seconds
+private var lockTime : float = 10;  // 3 seconds
 
 private var unlockTimer : float;
 
@@ -40,8 +42,9 @@ function Start () {
      var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
        if (t.name == "Cube"){ Cube = t.gameObject;}
+       if (t.name == "Locked"){ caveText = t.gameObject;}
    }
-
+    
    spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
 }
 
@@ -57,9 +60,9 @@ function Update () {
         if(Time.time >= unlockTimer) 
         {
             waitingToUnlock = false;
-            audio.PlayOneShot(ohnoSound);
-            Cube.renderer.material.color = Color.gray;
-            caveControlledBy = PlayerControlling.None;
+            
+            caveText.GetComponent(TextMesh).text = "U";
+            //caveControlledBy = PlayerControlling.None;
         }
     }
 }
@@ -126,11 +129,25 @@ function OnTriggerEnter(other:Collider){
                 --unitsLeft;
                 
                 waitingToUnlock = true;
+                caveText.GetComponent(TextMesh).text = "L";
                 unlockTimer = Time.time + lockTime;
-                if(spawnScript.playerID == 1)
-                    spawnScript.UpdatePlayer1Max(unitsLeft, caveNumber);
-                else if(spawnScript.playerID == 2)
-                    spawnScript.UpdatePlayer2Max(unitsLeft, caveNumber);
+                
+                if(spawnScript.playerColor == other.tag)
+                {
+                    Debug.Log("update me");
+                    if(spawnScript.playerID == 1)
+                        spawnScript.UpdatePlayer1Max(unitsLeft, caveNumber);
+                    else if(spawnScript.playerID == 2)
+                        spawnScript.UpdatePlayer2Max(unitsLeft, caveNumber);
+                }
+                else
+                {
+                    audio.PlayOneShot(ohnoSound);
+                    if(spawnScript.playerID == 1)
+                        spawnScript.DecreasePlayer1Max(unitsLeft, caveNumber);
+                    else if(spawnScript.playerID == 2)
+                        spawnScript.DecreasePlayer2Max(unitsLeft, caveNumber);
+                }
                     
                 //photonView.RPC("PlayerTookBase", PhotonTargets.Others, caveControlledBy);   
         	}

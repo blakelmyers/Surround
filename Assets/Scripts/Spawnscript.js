@@ -180,7 +180,7 @@ function StartSpawning()
         myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer1Prefabs;
         player1prefabs[0] = myNewTrans;
        
-        if(!noBaseChange)player1Base.renderer.material.color = baseColor;
+        //if(!noBaseChange)player1Base.renderer.material.color = baseColor;
      }
     else if (playerID == 2)   // player2
     {
@@ -194,7 +194,7 @@ function StartSpawning()
         myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
        player2prefabs[0] = myNewTrans;
        
-       if(!noBaseChange)player2Base.renderer.material.color = baseColor;
+       //if(!noBaseChange)player2Base.renderer.material.color = baseColor;
        
         photonView.RPC("PlayerTwoColor", PhotonTargets.Others, playerColor);
     }
@@ -276,6 +276,49 @@ if(playerID == 2)
           player2prefabs[numberOfplayer2Prefabs - 1] = myNewTrans;
       }
       }*/
+}
+
+function DecreasePlayer1Max(unitsLeft : int, caveNumber : int)
+{  
+    Debug.Log("decrease spawn");
+/*
+    switch(maxSpawnplayer1 % numberOfplayer1Prefabs)
+    {
+        case 0:
+            break;
+        case 1:
+            maxSpawnplayer1 -= 1;
+            break;
+        case 2:
+            maxSpawnplayer1 -= 2;
+            break;
+        default:
+            maxSpawnplayer1 -= 3;
+            break;
+    }*/
+}
+
+function DecreasePlayer2Max(unitsLeft : int, caveNumber : int)
+{  
+/*
+    switch(maxSpawnplayer2 % numberOfplayer2Prefabs)
+    {
+        case 0:
+            break;
+        case 1:
+            maxSpawnplayer2 -= 1;
+            break;
+        case 2:
+            maxSpawnplayer2 -= 2;
+            break;
+        default:
+            maxSpawnplayer2 -= 3;
+            break;
+    }
+    
+    
+   //absoluteMaxSpawnplayer1 += 6;
+*/
 }
 
 function PickedUpFruit(){
