@@ -83,6 +83,11 @@ public var niceSound : AudioClip;
 
 public var deadSound : AudioClip;
 
+private var goalTime : float;
+private var totalTime : float = 180.0; 
+private var startTime : float;
+var textTime : String;
+
 enum PlayerType {
     player1 = 0,
     player2 = 1,
@@ -95,7 +100,7 @@ function Awake ()
     
 function Start()
 {
-
+    goalTime = Time.time + totalTime;
     PV = gameObject.GetComponent(PhotonView);
     player1prefabs = new GameObject[50];
     player2prefabs = new GameObject[50];
@@ -221,19 +226,43 @@ function PlayerTwoColor(playerTag : String)
 }
 
 function UpdatePlayer1Max(unitsLeft : int, caveNumber : int)
-{
-        absoluteMaxSpawnplayer1 += 6;
-        maxSpawnplayer1 += 3;
+{  
+        var myNewTrans : GameObject;
+        var myPrevTrans : GameObject;
         
-        audio.PlayOneShot(niceSound);
+      audio.PlayOneShot(niceSound);
+        
+      for(var i = 0; i < 3; ++i)
+      {
+          myPrevTrans = player1prefabs[numberOfplayer1Prefabs - 1];
+          numberOfplayer1Prefabs++;
+                           
+          myNewTrans = PhotonNetwork.Instantiate(playerChoice, myPrevTrans.transform.position + Vector3(25, 0, 0), myPrevTrans.transform.rotation, 0);
+          myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer1Prefabs;
+          myNewTrans.GetComponent(PlayerController).movementActive = myPrevTrans.GetComponent(PlayerController).movementActive;
+          myNewTrans.GetComponent(PlayerController).movementLock = myPrevTrans.GetComponent(PlayerController).movementLock;
+          player1prefabs[numberOfplayer1Prefabs - 1] = myNewTrans;
+      }
 }
 
 function UpdatePlayer2Max(unitsLeft : int, caveNumber : int)
 {
-        absoluteMaxSpawnplayer2 += 6;
-        maxSpawnplayer2 += 3;
+        var myNewTrans : GameObject;
+        var myPrevTrans : GameObject;
         
-        audio.PlayOneShot(niceSound);
+      audio.PlayOneShot(niceSound);
+        
+      for(var i = 0; i < 3; ++i)
+      {
+          myPrevTrans = player2prefabs[numberOfplayer2Prefabs - 1];
+          numberOfplayer2Prefabs++;
+                           
+          myNewTrans = PhotonNetwork.Instantiate(playerChoice, myPrevTrans.transform.position + Vector3(20, 0, 0), myPrevTrans.transform.rotation, 0);
+          myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
+          myNewTrans.GetComponent(PlayerController).movementActive = myPrevTrans.GetComponent(PlayerController).movementActive;
+          myNewTrans.GetComponent(PlayerController).movementLock = myPrevTrans.GetComponent(PlayerController).movementLock;
+          player1prefabs[numberOfplayer2Prefabs - 1] = myNewTrans;
+      }
 }
 
 function PickedUpFruit(){
@@ -337,7 +366,17 @@ function OnGUI()
     {
     if(playerID == 1)
     { 
-    	
+        if(Time.time < goalTime)
+        {
+            var guiTime = goalTime - Time.time; // You probably want to clamp this value to be between the totalTime and zero
+     
+           var minutes : int = guiTime / 60;
+           var seconds : int = guiTime % 60;
+         
+           textTime = String.Format ("{0:00}:{1:00}", minutes, seconds); 
+           GUI.Box (Rect(Screen.width/2 - 50, 0, 100, 30), "", styleToolBar);
+           GUI.Label (Rect (Screen.width/2 - 50, 0, 100, 30), textTime, styleLabel); //changed variable name to textTime -->text is not a good variable name since it has other use already
+        }
         /*GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
         //GUILayout.Label(playerColor + " Player", styleGUI);
         GUILayout.Label("Total Units:   " + absoluteMaxSpawnplayer1.ToString(), styleGUI);
@@ -346,7 +385,7 @@ function OnGUI()
         GUILayout.EndArea ();*/
         GUI.Box (Rect(0, Screen.height - 70, Screen.width, 70), "", styleToolBar);
         GUI.Box (Rect(50, Screen.height - 70, 100, 70), "DINOWARS!", styleLabel);
-        GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size/ Herd Capacity \n " + numberOfplayer1Prefabs.ToString() + "/" + maxSpawnplayer1.ToString(), styleGUI);
+        GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size\n " + numberOfplayer1Prefabs.ToString(), styleGUI);
         // Player 1 won
         if(playerWhoWon == 1)
         {
@@ -388,7 +427,19 @@ function OnGUI()
         }
     }
     else{
-    	GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size/ Herd Capacity \n " + numberOfplayer2Prefabs.ToString() + "/" + maxSpawnplayer2.ToString(), styleGUI);
+        if(Time.time < goalTime)
+        {
+            guiTime = goalTime - Time.time; // You probably want to clamp this value to be between the totalTime and zero
+     
+           minutes  = guiTime / 60;
+           seconds  = guiTime % 60;
+         
+           textTime = String.Format ("{0:00}:{1:00}", minutes, seconds); 
+           GUI.Box (Rect(Screen.width/2 - 50, 0, 100, 30), "", styleToolBar);
+           GUI.Label (Rect (Screen.width/2 - 50, 0, 100, 30), textTime, styleLabel); //changed variable name to textTime -->text is not a good variable name since it has other use already
+        }
+        
+    	GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size\n " + numberOfplayer2Prefabs.ToString(), styleGUI);
     	
         /*GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
        // GUILayout.Label(playerColor + " Player", styleGUI);
@@ -441,19 +492,16 @@ function OnGUI()
 
 function Update()
 {
-
+    if(Time.time > goalTime)
+    {
+        playerWhoWon = 1;
+    }
+ /*
     if(gameStarted == true)
     {
         var myNewTrans : GameObject;
         var myPrevTrans : GameObject;
-        
-        Debug.Log("Spawn view: " + photonView.isMine);
-        if (!photonView.isMine)
-        {
-            //transform.position = Vector3.Lerp(transform.position, this.correctPlayerPos, Time.deltaTime * 5);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, this.correctPlayerRot, Time.deltaTime * 5);
-            //transform.localScale = Vector3.Lerp(transform.localScale, this.correctPlayerScale, Time.deltaTime * 5);
-        }
+       
         
         // check Spawn for player1
         if(playerID == 1)
@@ -506,7 +554,7 @@ function Update()
         }
         
         
-    
+    */
 }
 
 function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)

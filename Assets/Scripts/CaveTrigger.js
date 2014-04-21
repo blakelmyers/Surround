@@ -48,7 +48,7 @@ function Start () {
 function Update () {
 	if(unitsLeft == 0)
     {
-        Cube.renderer.material.color = Color.black;
+       // Cube.renderer.material.color = Color.black;
     }
     
     if(waitingToUnlock)
@@ -58,7 +58,8 @@ function Update () {
         {
             waitingToUnlock = false;
             audio.PlayOneShot(ohnoSound);
-            //Cube.renderer.material.color = Color.gray;
+            Cube.renderer.material.color = Color.gray;
+            caveControlledBy = PlayerControlling.None;
         }
     }
 }
@@ -70,8 +71,7 @@ function OnTriggerEnter(other:Collider){
    // Debug.Log("hit cave");
    // Debug.Log(other.tag);
     
-    if(unitsLeft != 0)
-    {
+
         if(!waitingToUnlock)
         {
             switch(other.tag)
@@ -135,7 +135,7 @@ function OnTriggerEnter(other:Collider){
                 //photonView.RPC("PlayerTookBase", PhotonTargets.Others, caveControlledBy);   
         	}
     	}
-    }
+    
 }
 
 @RPC
