@@ -227,6 +227,12 @@ function PlayerTwoColor(playerTag : String)
 
 function UpdatePlayer1Max(unitsLeft : int, caveNumber : int)
 {  
+
+   absoluteMaxSpawnplayer1 += 6;
+   maxSpawnplayer1 += 3;
+   /*
+if(playerID == 1)
+    {
         var myNewTrans : GameObject;
         var myPrevTrans : GameObject;
         
@@ -243,10 +249,16 @@ function UpdatePlayer1Max(unitsLeft : int, caveNumber : int)
           myNewTrans.GetComponent(PlayerController).movementLock = myPrevTrans.GetComponent(PlayerController).movementLock;
           player1prefabs[numberOfplayer1Prefabs - 1] = myNewTrans;
       }
+      }*/
 }
 
 function UpdatePlayer2Max(unitsLeft : int, caveNumber : int)
 {
+    absoluteMaxSpawnplayer2 += 6;
+    maxSpawnplayer2 += 3;
+    /*
+if(playerID == 2)
+    {
         var myNewTrans : GameObject;
         var myPrevTrans : GameObject;
         
@@ -261,8 +273,9 @@ function UpdatePlayer2Max(unitsLeft : int, caveNumber : int)
           myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
           myNewTrans.GetComponent(PlayerController).movementActive = myPrevTrans.GetComponent(PlayerController).movementActive;
           myNewTrans.GetComponent(PlayerController).movementLock = myPrevTrans.GetComponent(PlayerController).movementLock;
-          player1prefabs[numberOfplayer2Prefabs - 1] = myNewTrans;
+          player2prefabs[numberOfplayer2Prefabs - 1] = myNewTrans;
       }
+      }*/
 }
 
 function PickedUpFruit(){
@@ -385,7 +398,9 @@ function OnGUI()
         GUILayout.EndArea ();*/
         GUI.Box (Rect(0, Screen.height - 70, Screen.width, 70), "", styleToolBar);
         GUI.Box (Rect(50, Screen.height - 70, 100, 70), "DINOWARS!", styleLabel);
-        GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size\n " + numberOfplayer1Prefabs.ToString(), styleGUI);
+        //GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size\n " + numberOfplayer1Prefabs.ToString(), styleGUI);
+        GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size/ Herd Capacity \n " + numberOfplayer1Prefabs.ToString() + "/" + maxSpawnplayer1.ToString(), styleGUI);
+        
         // Player 1 won
         if(playerWhoWon == 1)
         {
@@ -439,7 +454,6 @@ function OnGUI()
            GUI.Label (Rect (Screen.width/2 - 50, 0, 100, 30), textTime, styleLabel); //changed variable name to textTime -->text is not a good variable name since it has other use already
         }
         
-    	GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size\n " + numberOfplayer2Prefabs.ToString(), styleGUI);
     	
         /*GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
        // GUILayout.Label(playerColor + " Player", styleGUI);
@@ -450,7 +464,9 @@ function OnGUI()
 		GUI.Box (Rect(0, Screen.height - 70, Screen.width, 70), "", styleToolBar);
         GUI.Box (Rect(50, Screen.height - 70, 100, 70), "DINOWARS!", styleLabel);
             
-    
+        GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size/ Herd Capacity \n " + numberOfplayer2Prefabs.ToString() + "/" + maxSpawnplayer2.ToString(), styleGUI);
+        //GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size\n " + numberOfplayer2Prefabs.ToString(), styleGUI);
+        
          // Player 1 won
         if(playerWhoWon == 2)
         {
@@ -496,7 +512,7 @@ function Update()
     {
         playerWhoWon = 1;
     }
- /*
+ 
     if(gameStarted == true)
     {
         var myNewTrans : GameObject;
@@ -554,7 +570,7 @@ function Update()
         }
         
         
-    */
+    
 }
 
 function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)

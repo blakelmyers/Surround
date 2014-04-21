@@ -45,19 +45,19 @@ function Start () {
 }
 
 function Update () {
-	if(Time.time>step2Time){
+	if(Time.time>step2Time && stepState < storySteps.Step3){
 		stepState = storySteps.Step3;
 	}
-	if(Time.time>step3Time){
+	if(Time.time>step3Time && stepState < storySteps.Step4){
 		stepState = storySteps.Step4;
 	}
-	if(Time.time>step4Time){
+	if(Time.time>step4Time && stepState < storySteps.Step5){
 		stepState = storySteps.Step5;
 	}
-	if(Time.time>step5Time){
+	if(Time.time>step5Time && stepState < storySteps.Step6){
 		stepState = storySteps.Step6;
 	}
-	if(Time.time>step6Time){
+	if(Time.time>step6Time && stepState < storySteps.Step7){
 		stepState = storySteps.Step7;
 	}
 }
@@ -75,7 +75,7 @@ function OnGUI(){
                         step3Time = step2Time+10;
                         step4Time = step3Time+10;
                         step5Time = step4Time+10;
-                        step6Time = step5Time+10;
+                        step6Time = step5Time+5;
 					}
 					if (GUI.Button (Rect(0, 400, Screen.width, 100),"Skip to Main Menu",buttonStyle))
 					{
@@ -91,6 +91,10 @@ function OnGUI(){
 					}
 					if(GUI.Button(Rect(Screen.width-275, 200, 240, 50), "Click here Continue", inButtonStyle)){
 						stepState = storySteps.Step3;
+                        step3Time = Time.time+10;
+                        step4Time = step3Time+10;
+                        step5Time = step4Time+10;
+                        step6Time = step5Time+5;
 					}
 					break;
 				case storySteps.Step3:
@@ -102,6 +106,9 @@ function OnGUI(){
 					}
 					if(GUI.Button(Rect(0, Screen.height/3+100, Screen.width/2, 50), "Click here Continue", inButtonStyle)){
 						stepState = storySteps.Step4;
+                        step4Time = Time.time+10;
+                        step5Time = step4Time+10;
+                        step6Time = step5Time+5;
 					}
 					break;
 				case storySteps.Step4:
@@ -111,6 +118,8 @@ function OnGUI(){
 					GUI.Box(Rect(Screen.width-270, 300, 270, 150), "", meteor);
 					if(GUI.Button(Rect(0, Screen.height/5+100, Screen.width, 50), "Click here Continue", inButtonStyle)){
 						stepState = storySteps.Step5;
+                        step5Time = Time.time+10;;
+                        step6Time = step5Time+5;
 					}
 					if (GUI.Button (Rect(10, 10, 150, 20),"Skip to Main Menu",smallButtonStyle))
 					{
@@ -126,6 +135,7 @@ function OnGUI(){
 					}
 					if(GUI.Button(Rect(Screen.width/2, Screen.height/3+150, Screen.width/2, 50), "Click here Continue", inButtonStyle)){
 						stepState = storySteps.Step6;
+                        step6Time = Time.time+5;
 					}
 					break;
 				case storySteps.Step6:

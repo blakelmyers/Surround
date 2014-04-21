@@ -41,7 +41,7 @@ function Update()
    if (Input.mousePosition.y < 0 + Boundary)
    {
       cameraTransform.position.z += speed; // move on -Z axis
-   }*/
+   }
     //Debug.Log(cameraTransform.position);
     if(Input.GetKey(KeyCode.A)){
         cameraTransform.position.x += 5;
@@ -67,7 +67,7 @@ function Update()
             cameraTransform.position.y += 5;
         }
     }
-    
+    */
 
 }
 function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
