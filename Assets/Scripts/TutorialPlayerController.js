@@ -8,6 +8,10 @@ public var spawnNumber : int;
 
 private var _animation : Animation;
 
+private var grabbedFruit : boolean = false;
+
+public var secondDino : boolean = false;
+
 var firstHit : boolean = false;
 
 public var tutorialGui : TutorialGUI;
@@ -18,6 +22,7 @@ enum TextureType {
     Blueberry = 2,
     Redberry = 3,
     Orangeberry = 4,
+    Lava = 6, 
 }
 
 
@@ -46,24 +51,21 @@ private var healthCounter : int;
 private var isControllable = true;
 
 var health_ : HealthStatus;
+
 var collisionCounter : int = 0;
-var RedPlane : GameObject;
-var GreenPlane : GameObject;
-var YellowPlane : GameObject;
+
+var HealthPlane : GameObject;
 
 function Start ()
 {
    //health_ = HealthStatus.Green;
    var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
-        if (t.name == "RedPlane"){ RedPlane = t.gameObject;}
-        else if (t.name == "GreenPlane"){ GreenPlane = t.gameObject;}
-        else if (t.name == "YellowPlane"){ YellowPlane = t.gameObject;}
+        if (t.name == "HealthPlane"){ HealthPlane = t.gameObject;}
    }
-   GreenPlane.renderer.enabled = false;
-   RedPlane.renderer.enabled = true;
-   YellowPlane.renderer.enabled = false;
-   //spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
+   
+   HealthPlane.renderer.enabled = false;
+
 }
 
 function Awake ()
@@ -88,20 +90,21 @@ function Update() {
 		    Input.ResetInputAxes();
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
-        Debug.Log(gameObject.tag);
+        
+        if(checkTerrain == TextureType.Redberry)
+        {
+            RestoreHealth();     
+        }
+        
+
         if(checkTerrain == TextureType.Sand)
         {
             walkSpeed = 40;
-            tutorialGui.OverSand();
+            if(!secondDino) tutorialGui.OverSand();
         }
-        //else if(checkTerrain == TextureType.Blueberry  && gameObject.Tag == "Blue")
-        //{
-       //     RestoreHealth();     
-       // }
-        else if(checkTerrain == TextureType.Redberry)
+        else if(grabbedFruit)
         {
-        Debug.Log(checkTerrain);
-            RestoreHealth();     
+            walkSpeed = 160;
         }
         else
         {
@@ -130,16 +133,14 @@ function RestoreHealth()
 {
     healthCounter++;
     
-    tutorialGui.OverBerries();
+    if(!secondDino) tutorialGui.OverBerries();
     
     if(health_ < HealthStatus.Green)
     {
         Debug.Log(health_);
         health_ = HealthStatus.Green;
         healthCounter = 0;
-        GreenPlane.renderer.enabled = true;
-        RedPlane.renderer.enabled = false;
-        YellowPlane.renderer.enabled = false;
+        HealthPlane.renderer.material.color = Color.green;
     }
     
 }
@@ -209,7 +210,7 @@ function OnTriggerEnter(collisionInfo : Collider){
            if(!firstHit)
             {
                 firstHit = true;
-                tutorialGui.HitEnemy();            
+                if(!secondDino) tutorialGui.HitEnemy();            
             }
            if(collisionCounter % 9 == 0)
             {
@@ -217,6 +218,19 @@ function OnTriggerEnter(collisionInfo : Collider){
             }
             collisionCounter++;
         }
+    }
+    
+    if(collisionInfo.tag == "Fruit")
+    {
+        tutorialGui.PickedUpOrange();
+        grabbedFruit = true;
+        Debug.Log(grabbedFruit);
+    }
+    
+    if(collisionInfo.tag == "Cave")
+    {
+    Debug.Log("base");
+        if(!secondDino) tutorialGui.HitBase();
     }
 }
 
@@ -232,15 +246,11 @@ function DecreaseHealth()
     {
         case HealthStatus.Green:
             health_ = HealthStatus.Yellow;
-            GreenPlane.renderer.enabled = false;
-            RedPlane.renderer.enabled = false;
-            YellowPlane.renderer.enabled = true;
+            HealthPlane.renderer.material.color = Color.yellow;
             break;
         case HealthStatus.Yellow:
             health_ = HealthStatus.Red;
-            GreenPlane.renderer.enabled = false;
-            RedPlane.renderer.enabled = true;
-            YellowPlane.renderer.enabled = false;
+            HealthPlane.renderer.material.color = Color.red;
             break;
         case HealthStatus.Red:
             health_ = HealthStatus.Dead;

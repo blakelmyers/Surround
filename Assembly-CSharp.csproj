@@ -46,9 +46,10 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\RandomMatchmaker.cs" />
+     <Compile Include="Assets\TestScripts\PaintRoad.cs" />
      <None Include="Assets\Plugins\release_history.txt" />
      <None Include="Assets\Plugins\Photon3Unity3D.xml" />
+     <None Include="Assets\SF-Toontime\ShyFonts Font License.txt" />
      <None Include="Assets\Photon Unity Networking\readme.txt" />
      <None Include="Assets\Photon Unity Networking\changelog.txt" />
  <Reference Include="Photon3Unity3D">

@@ -2,6 +2,23 @@
 
 var style : GUIStyle;
 var style2 : GUIStyle;
+var buttonStyle: GUIStyle;
+var mouseStyle: GUIStyle;
+var arrowLeftStyle: GUIStyle;
+var instructionBarStyle: GUIStyle;
+var mouseRight: GUIStyle;
+var mouseMid: GUIStyle;
+var mouseLeft: GUIStyle;
+var speedOn:GUIStyle;
+var speedAvailable: GUIStyle;
+var speedOff:GUIStyle;
+var speedLabel: GUIStyle;
+var pooperFruit: GUIStyle;
+public var spawnScript : SpawnscriptTest;
+
+public var playerScript : PlayerControllerTest;
+
+public var fruitScript : FruitTriggerTest;
 
 private var step1 : boolean = false;
 private var step1a : boolean = false;
@@ -10,14 +27,39 @@ private var step3 : boolean = false;
 private var step4 : boolean = false;
 private var step5 : boolean = false;
 private var step5a : boolean = true;
+private var step5_1 : boolean = false;
+private var step5b : boolean = false;
+private var step5c : boolean = true;
 private var step6 : boolean = false;
 private var step6a : boolean = true;
 private var step7 : boolean = false;
+private var step7a : boolean = true;
 private var step8 : boolean = false;
 private var step8a : boolean = true;
 private var step9 : boolean = false;
 private var step9a : boolean = true;
 private var step10 : boolean = false;
+
+enum tutorialSteps{
+    Step1,
+    Step2,
+    Step3,
+    Step4,
+    Step5,
+    Step6,
+    Step7,
+    Step7a,
+    Step7b,
+    Step8,
+    Step8a,
+    Step8b,
+    Step9,
+    Step10,
+    Step11,
+    Step12
+}
+
+public var stepState : tutorialSteps;
 
 var cameraTransform : Transform;
 var cameraPosition : Vector3;
@@ -25,9 +67,15 @@ var cameraPosition : Vector3;
 private var checkTimer : float;
 
 function Start () {
-    step1 = true;
+    stepState = tutorialSteps.Step1;
     cameraPosition = Vector3(500, 1600, -160);
     cameraTransform.position = cameraPosition;
+    
+    spawnScript = GameObject.Find("Spawnscript").GetComponent.<SpawnscriptTest>();
+    
+    playerScript = GameObject.Find("TutorialPrefabTest1").GetComponent.<PlayerControllerTest>();
+    
+    fruitScript = GameObject.Find("RainbowFruitTest").GetComponent.<FruitTriggerTest>();
 }
 
 function OnGUI () {
@@ -39,92 +87,133 @@ function OnGUI () {
     }
     GUILayout.EndVertical();
     
-    if(step1)
+    switch(stepState)
     {
-        GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
-        GUILayout.Label("Welcome to the Surround Tutorial !", style);
-        if(GUILayout.Button ("Continue"))
-        {
-            step1 = false;
-            step1a = true;
-        }
-        GUILayout.EndArea ();
-    }
-    if(step1a)
-    {
-        GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 150, 300, 300));
-        GUILayout.Label("Surround is a casual Real-Time Strategy game where each player controls a group of animals. The goal is to surround the opponent’s animals and eat them. The players are playing against each other in real-time and so in order to win, each player must out maneuver the opponent by using strategy and their wits.", style2);
-        if(GUILayout.Button ("Continue"))
-        {
-            step1a = false;
-            step2 = true;
-        }
-        GUILayout.EndArea ();
-    }
-    if(step2)
-    {
-        cameraPosition = Vector3(685, 675, 605);
+    case tutorialSteps.Step1:
+        cameraPosition = Vector3(630, 1311, -30);
         cameraTransform.position = cameraPosition;
-        GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("These are your dinosaurs and base", style);
-        if(GUILayout.Button ("Continue"))
-        {
-            step2 = false;
-            step3 = true;
+        GUI.Label(Rect(Screen.width/2-125,Screen.height/2-70,300,70), "Welcome to DinoWorld!", style);
+        if(GUI.Button(Rect(Screen.width/2-125,Screen.height/2,300,100), "Click here Continue", buttonStyle)){
+            spawnScript.StartSpawning();
+            stepState = tutorialSteps.Step2;
+            playerScript.movementActive = true;
         }
-        GUILayout.EndArea ();
-    }
-    if(step3)
-    {
-        GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("To move your dinosaurs, click the right mouse button. The Red circle below the dinosaur is the health indicator.  Right now his health is low.  Enter the base area to heal.", style2);
-        GUILayout.EndArea ();
-    }
-    if(step5)
-    {
-        cameraPosition = Vector3(685, 675, 605);
+        break;
+   case tutorialSteps.Step2:
+        cameraPosition = Vector3(700, 1000, 225);
         cameraTransform.position = cameraPosition;
-        GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("The Health is restored to Green", style);
-        if(GUILayout.Button ("Continue"))
-        {
-            step5 = false;
-            step6 = true;
+        GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 0, 150, 150),"\n These are the yellow girnosaurus, and they are trying to survive in the wild!", style2);
+        if(GUI.Button(Rect(Screen.width - 150, 150, 150, 150),"Continue", buttonStyle)){
+        	stepState = tutorialSteps.Step3;
         }
-        GUILayout.EndArea ();
-    }
-    if(step6)
-    {
-        cameraPosition = Vector3(500, 1600, -160);
-        cameraTransform.position = cameraPosition;
-        GUILayout.BeginArea (Rect(300, 20, 300, 300));
-        GUILayout.Label("On the other end of the arena is the opponent.  Make your way over there.", style2);
-        GUILayout.EndArea ();
-    }
-    if(step7)
-    {
-        GUILayout.BeginArea (Rect(400, 20, 200, 200));
-        GUILayout.Label("The Sand slows your speed! Attack the enemy unit by colliding with it", style2);
-        GUILayout.EndArea ();
-    }
-    if(step9)
-    {
-        cameraPosition = Vector3(400, 600, 1030);
-        cameraTransform.position = cameraPosition;
-        GUILayout.BeginArea (Rect(400, 20, 320, 300));
-        GUILayout.Label("Notice the enemies health decrease. Right click again to move the dinosaur and keep colliding until the enemy is dead", style2);
-        GUILayout.EndArea ();
-    }
-    if(step10)
-    {
-        GUILayout.Label("Tutorial Complete", style);
-        if(GUILayout.Button ("Finish"))
-        {
-            step10 = false;
-            Application.LoadLevel("MainMenu");
+        break;
+    case tutorialSteps.Step3:
+    	GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 0, 150, 150),"Its your job to help the girnosauruses survive", style2);
+        if(GUI.Button(Rect(Screen.width - 150, 150, 150, 150),"Continue", buttonStyle)){
+        	stepState = tutorialSteps.Step4;
         }
-        GUILayout.EndArea ();
-    }
+        break;
+    case tutorialSteps.Step4:
+    	GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 50, 150, 150),"You can help the dinos by using the mouse! \n The right mouse button gives your dinos a shot of dino-drenaline! \n[right click]", style2);
+        GUI.Label(Rect(Screen.width - 100, 250, 50, 75), "", mouseRight);
+        if(GUI.Button(Rect(Screen.width - 150, 325, 150, 50),"Continue", buttonStyle)){
+        	stepState = tutorialSteps.Step5;
+        }
+    	break;
+    case tutorialSteps.Step5:
+    	GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 50, 150, 150),"But your dinos can't take too much dino-drenaline...The lightning icon will indicate when your dinos are ready again.", style2);
+        GUI.Label(Rect(Screen.width - 100, 225, 50, 25), "Speed Boost Active", speedLabel);
+        GUI.Label(Rect(Screen.width - 100, 250, 50, 50), "", speedOn);
+        GUI.Label(Rect(Screen.width - 100, 300, 50, 25), "Speed Boost Charged", speedLabel);
+        GUI.Label(Rect(Screen.width - 100, 325, 50, 50), "", speedAvailable);
+        GUI.Label(Rect(Screen.width - 100, 375, 50, 25), "Speed Boost Cooldown", speedLabel);
+        GUI.Label(Rect(Screen.width - 100, 400, 50, 50), "", speedOff);
+        if(GUI.Button(Rect(Screen.width - 150, Screen.height-120, 150, 50),"Continue", buttonStyle)){
+        	stepState = tutorialSteps.Step6;
+        }
+        break;
+     case tutorialSteps.Step6:
+     	GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 0, 150, 150),"The middle mouse button will lock your units into their current formation", style2);
+        GUI.Label(Rect(Screen.width - 100, 250, 50, 75), "", mouseMid);
+        if(GUI.Button(Rect(Screen.width - 150, Screen.height-120, 150, 50),"Continue", buttonStyle)){
+        	stepState = tutorialSteps.Step7;
+        	fruitScript.SpawnFruit();   
+        }
+    	break;
+     case tutorialSteps.Step7:
+    	GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 0, 150, 150),"Throughout the wild, there are these magical rainbow-colored Pooper Fruits! Pick one up!", style2);
+        GUI.Label(Rect(Screen.width - 100, 250, 50, 50), "", pooperFruit);
+        if(fruitScript.pickedUpNumber == 1)
+        {
+            stepState = tutorialSteps.Step7a;
+        }
+        break;
+    case tutorialSteps.Step7a:
+    	GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 0, 150, 150),"The pooper fruits will let leave little gifts behind when you click the left mouse button", style2);
+        GUI.Label(Rect(Screen.width - 100, 250, 50, 50), "", mouseLeft);
+        if(Input.GetMouseButtonDown(0))
+        {
+            stepState = tutorialSteps.Step7b;
+        }
+        break;
+    case tutorialSteps.Step7b:
+    	GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 50, 150, 150),"These little gifts will allow you to mark your territory and if enemy dinos run into them they will get hurt", style2);
+        if(GUI.Button(Rect(Screen.width - 150, Screen.height-120, 150, 50),"Continue", buttonStyle))
+        {
+            stepState = tutorialSteps.Step8;
+        }
+        break;
+    case tutorialSteps.Step8:
+        cameraPosition = Vector3(500, 1311, -30);
+        cameraTransform.position = cameraPosition;
+        GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 50, 150, 150),"Sometimes the dinos want to expand their herd, and the only way to do that is to get more real-estate, conquer the cave near-by by running into it", style2);
+        if(GUI.Button(Rect(Screen.width - 150, Screen.height-120, 150, 50),"Continue", buttonStyle))
+        {
+            stepState = tutorialSteps.Step8a;
+        }
+        break;
+    case tutorialSteps.Step8a:
+    	GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 50, 150, 150),"The bottom left box tells you the size of your current herd, and the herd capacity. \n\n Each new cave you conquer will increase your herd capacity by 3", style2);
+        if(GUI.Button(Rect(Screen.width - 150, Screen.height-120, 150, 50),"Continue", buttonStyle))
+        {
+            stepState = tutorialSteps.Step9;
+        }
+    case tutorialSteps.Step9:
+    	cameraPosition = Vector3(700, 1100, 450);
+        cameraTransform.position = cameraPosition;
+        GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 50, 150, 150),"Look the blue hippotigertaumaus are coming from the north! Attack them leave no survivors! \n [space to continue]", style2);
+        if(GameObject.Find("BlueEnemyTest")==null){
+        	stepState = tutorialSteps.Step10;
+        }
+        break;
+    case tutorialSteps.Step10:
+        GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
+        GUI.Label(Rect(Screen.width - 150, 50, 150, 150),"Each attack will hurt your opponent and yourself, and as you get weaker you get smaller. \n [space to continue]", style2);
+        if(Input.GetKeyDown(KeyCode.Space)){
+        	stepState = tutorialSteps.Step11;
+        }
+        break;
+    case tutorialSteps.Step11:
+    	GUILayout.BeginArea(Rect(250, 150, 200,200));
+    	GUILayout.Label("Congratz you have learned all the tools necessary to save the dinos!", style);
+    	if(GUILayout.Button("Exit Tutorial", buttonStyle)){
+    		Application.LoadLevel("MainMenu");
+    	}
+    	GUILayout.EndArea();
+    default:
+        break;
+    }   
 }
 
 function OverBerries()
@@ -137,11 +226,21 @@ function OverBerries()
     }
 }
 
+function PickedUpOrange()
+{
+    if(step5c)   // Only set this once
+    {
+        step6 = false;
+        step5c = false;
+        step5b = true;
+    }
+}
+
 function OverSand()
 {
     if(step6a)   // Only set this once
     {
-        step6 = false;
+        step5b = false;
         step6a = false;
         step7 = true;
     }
@@ -149,26 +248,32 @@ function OverSand()
 
 function HitEnemy() {
 
-    // stop the follower prefab as well
-    GameObject.Find("YellowPrefab1").GetComponent(TutorialPlayerController).movementActive = false;
-    GameObject.Find("YellowPrefab2").GetComponent(TutorialPlayerController).movementActive = false;
     
     if(step8a)   // Only set this once
     {
-        step7 = false;
+        stepState = tutorialSteps.Step9;
         step8a = false;
-        step9 = true;
+       
+    }
+}
+
+function HitBase() {
+    Debug.Log("base");
+    if(step7a)   // Only set this once
+    {
+        step7a = false;
+        stepState = tutorialSteps.Step8;
     }
 }
 
 function EnemyDied() {
     Debug.Log("enemydied");
-    Application.LoadLevel("MainMenu");
+    
     if(step9a)   // Only set this once
     {
         step9 = false;
         step9a = false;
-        step10 = true;
+        //step10 = true;
     }
 }
 function Update() {

@@ -46,11 +46,17 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\BaseTrigger.js" />
      <Compile Include="Assets\Scripts\CameraScript1.js" />
      <Compile Include="Assets\Scripts\CameraScript2.js" />
+     <Compile Include="Assets\Scripts\CaveTrigger.js" />
+     <Compile Include="Assets\Scripts\CaveTriggerTutorial.js" />
      <Compile Include="Assets\Scripts\Connect.js" />
+     <Compile Include="Assets\Scripts\FruitTrigger.js" />
+     <Compile Include="Assets\Scripts\IntroGUI.js" />
      <Compile Include="Assets\Scripts\Menu.js" />
      <Compile Include="Assets\Scripts\PlayerController.js" />
+     <Compile Include="Assets\Scripts\PoopTrigger.js" />
      <Compile Include="Assets\Scripts\SpawnTutorial.js" />
      <Compile Include="Assets\Scripts\Spawnscript.js" />
      <Compile Include="Assets\Scripts\ThirdPersonController.js" />
@@ -59,8 +65,18 @@
      <Compile Include="Assets\Scripts\TutorialEnemy.js" />
      <Compile Include="Assets\Scripts\TutorialGUI.js" />
      <Compile Include="Assets\Scripts\TutorialPlayerController.js" />
+     <Compile Include="Assets\Scripts\WinnerController.js" />
+     <Compile Include="Assets\Scripts\WinningGUI.js" />
+     <Compile Include="Assets\TestScripts\CameraScriptTest.js" />
+     <Compile Include="Assets\TestScripts\CaveTriggerTest.js" />
+     <Compile Include="Assets\TestScripts\FruitTriggerTest.js" />
+     <Compile Include="Assets\TestScripts\PlayerControllerTest.js" />
+     <Compile Include="Assets\TestScripts\SpawnscriptTest.js" />
+     <Compile Include="Assets\TestScripts\TextureTest.js" />
+     <Compile Include="Assets\TestScripts\cameraTest.js" />
      <None Include="Assets\Plugins\release_history.txt" />
      <None Include="Assets\Plugins\Photon3Unity3D.xml" />
+     <None Include="Assets\SF-Toontime\ShyFonts Font License.txt" />
      <None Include="Assets\Photon Unity Networking\readme.txt" />
      <None Include="Assets\Photon Unity Networking\changelog.txt" />
  <Reference Include="Photon3Unity3D">

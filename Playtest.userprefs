@@ -1,23 +1,28 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs">
     <Files>
-      <File FileName="Assets\Standard Assets\RandomMatchmaker.cs" Line="116" Column="1" />
-      <File FileName="Assets\Scripts\Spawnscript.js" Line="198" Column="45" />
-      <File FileName="Assets\Scripts\TutorialPlayerController.js" Line="1" Column="1" />
-      <File FileName="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\TutorialEnemy.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\TutorialGUI.js" Line="56" Column="344" />
-      <File FileName="Assets\Scripts\SpawnTutorial.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PlayerController.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Connect.js" Line="1" Column="1" />
+      <File FileName="Assets\TestScripts\PlayerControllerTest.js" Line="58" Column="1" />
+      <File FileName="Assets\Scripts\TutorialGUI.js" Line="157" Column="31" />
+      <File FileName="Assets\Scripts\PlayerController.js" Line="238" Column="31" />
+      <File FileName="Assets\Scripts\Spawnscript.js" Line="300" Column="6" />
+      <File FileName="c:\Users\Myers\Documents\Playtest\Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs" Line="93" Column="99" />
+      <File FileName="Assets\TestScripts\FruitTriggerTest.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\FruitTrigger.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CameraScript1.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CameraScript2.js" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\PhotonPlayer.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\SelectionChoice.cs" Line="15" Column="1" />
-      <File FileName="Assets\Scripts\ThirdPersonControllerMainMenu.js" Line="24" Column="78" />
-      <File FileName="Assets\Scripts\Menu.js" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\IntroGUI.cs" Line="8" Column="2" />
+      <File FileName="Assets\Standard Assets\NetworkCharacter.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PoopTrigger.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ThirdPersonController.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\CaveTrigger.js" Line="16" Column="1" />
+      <File FileName="Assets\Standard Assets\RandomMatchmaker.cs" Line="1" Column="1" />
+      <File FileName="Assets\TestScripts\CameraScriptTest.js" Line="1" Column="1" />
+      <File FileName="Assets\TestScripts\PlayerControllerTest.js" Line="480" Column="1" />
+      <File FileName="Assets\TestScripts\SpawnscriptTest.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ThirdPersonControllerMainMenu.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\WinnerController.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\WinningGUI.js" Line="1" Column="1" />
+      <File FileName="Assets\Standard Assets\IntroGUI.cs" Line="1" Column="1" />
+      <File FileName="Assets\TestScripts\TextureTest.js" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

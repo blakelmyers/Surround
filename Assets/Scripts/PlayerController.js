@@ -7,9 +7,40 @@ public class PlayerController extends Photon.MonoBehaviour{
 
 public var movementActive : boolean = false;
 
+public var movementLock : boolean = false;
+
+public var movementLockFirst : boolean = true;
+
+
 public var spawnNumber : int;
 
+public var fruitBombs : int = 0;
+
+public var pickedUpFruit : boolean = false;
+
+private var firstLava : boolean = true;
+
 private var _animation : Animation;
+
+private var lead: Transform;
+
+private var offset;
+
+public var weeSound : AudioClip;
+
+public var owSound : AudioClip;
+
+public var merSound : AudioClip;
+
+public var hutSound : AudioClip;
+
+public var nomSound : AudioClip;
+
+public var hotSound : AudioClip;
+
+public var fartSound : AudioClip;
+
+private var lavaCounter : int = 0;
 
 
 /*
@@ -22,9 +53,8 @@ enum CharacterState {
 enum TextureType {
     Grass = 0,
     Sand = 1,
-    Blueberry = 2,
-    Redberry = 3,
-    Orangeberry = 4,
+    Grass1 = 2,
+    Lava = 3
 }
 
 //private var _characterState : CharacterState;
@@ -41,6 +71,7 @@ private var moveDirection = Vector3.zero;
 // The last collision flags returned from controller.Move
 private var collisionFlags : CollisionFlags; 
 
+var PV: PhotonView;
 
 // the height we jumped from (Used to determine for how long to apply extra jump power after jumping.)
 private var lastJumpStartHeight = 0.0;
@@ -56,9 +87,26 @@ private var isControllable = true;
 
 var health_ : HealthStatus;
 var collisionCounter : int = 0;
-var RedPlane : GameObject;
-var GreenPlane : GameObject;
-var YellowPlane : GameObject;
+
+var collisionCounter2 : int = 0;
+
+private var healthMax_ : int = 6;
+
+private var normalSpeed : int = 80;
+
+private var speedTime : float = 3;  // 3 seconds
+
+private var speedTimeCheck : float;
+
+public var speedActive : boolean = false;
+
+public var speedAvailable : boolean = true;
+
+private var speedCooldown : boolean = false;
+
+private var speedCooldownTimeCheck : float;
+
+private var speedCooldownTime : float = 5;   // 3 seconds
 
 enum HealthStatus {
     Green = 3, 
@@ -69,32 +117,46 @@ enum HealthStatus {
 
 function Start ()
 {
+
+    PV = gameObject.GetComponent(PhotonView);
+    
+    if(!PV.isMine){
+        //We aren't the network owner, disable this script
+        //RPC's and OnSerializeNetworkView will STILL get trough!
+        enabled=false;  
+    }
+    else{
    health_ = HealthStatus.Green;
+
    var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
-        if (t.name == "RedPlane"){ RedPlane = t.gameObject;}
-        else if (t.name == "GreenPlane"){ GreenPlane = t.gameObject;}
-        else if (t.name == "YellowPlane"){ YellowPlane = t.gameObject;}
+       if (t.name == "Plane"){ planeObj = t.gameObject;}
    }
-   GreenPlane.renderer.enabled = true;
-   RedPlane.renderer.enabled = false;
-   YellowPlane.renderer.enabled = false;
+   
+   planeObj.renderer.enabled = false;
    
    spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
+   Debug.Log("game started");
    Debug.Log(spawnScript.GetGameStarted());
    if(spawnScript.GetGameStarted() == false)
    {
+      Debug.Log("startspawning");
       spawnScript.StartSpawning();
    } 
+   if(playerID == 1){
+        if(spawnScript.player1prefabs[0].transform)
+		lead = spawnScript.player1prefabs[0].transform;
+        
+	}
+	if(playerID == 2){
+        if(spawnScript.player2prefabs[0].transform)
+		lead = spawnScript.player2prefabs[0].transform;
+	}
+    }
 }
 
 function Awake ()
 {
-    if(!photonView.isMine){
-		//We aren't the network owner, disable this script
-		//RPC's and OnSerializeNetworkView will STILL get trough!
-		enabled=false;	
-	}
     
 	playerID = PhotonNetwork.player.ID;
     
@@ -113,39 +175,117 @@ function Update() {
 
     var checkTerrain : TextureType;
     
-    if(photonView.isMine)
+    if(PV.isMine)
     {
+        walkSpeed = 160;
+        healthMax_ = 6;
+        
+        if(pickedUpFruit)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                PhotonNetwork.Instantiate(this.tag + "Poop", transform.position, transform.rotation, 0);
+                --fruitBombs;
+                audio.PlayOneShot(fartSound);
+                if(fruitBombs == 0)
+                {
+                    pickedUpFruit = false;
+                }
+            }
+        }
+        
+        if(speedAvailable)
+        {
+            if (Input.GetMouseButtonDown(1)  && !speedActive)
+            {
+               if(spawnNumber == 1) audio.PlayOneShot(weeSound);
+               speedActive = true;
+               speedTimeCheck = Time.time + speedTime;   // set timer for 3 seconds
+               speedAvailable = false;
+            }
+        }
+        
+        if(speedActive)
+        {
+            walkSpeed = 300;
+            healthMax_ = 15;
+            if(Time.time >= speedTimeCheck)  // 3 seconds of speed has expired
+            {
+                speedActive = false;
+                speedCooldown = true;
+                speedCooldownTimeCheck = Time.time + speedCooldownTime;
+            }
+        }
+        
+        if(speedCooldown)
+        {
+            if(Time.time >= speedCooldownTimeCheck)  // 3 seconds of cooldown has expired
+            {
+                speedAvailable = true;
+                speedCooldown = false;
+            }
+        }
+
+        
 	    if (!isControllable)
 	    {
 		    // kill all inputs if not controllable.
 		    Input.ResetInputAxes();
 	    }
         checkTerrain = GetTerrainTextureAt(transform.position);
-        if(checkTerrain == TextureType.Sand)
+        
+        Debug.Log(checkTerrain);
+        if(checkTerrain == TextureType.Lava)
         {
-            walkSpeed = 40;
-        }
-        else if(checkTerrain == TextureType.Blueberry && this.Tag == "Blue")
-        {
-            RestoreHealth();     
-        }
-        else if(checkTerrain == TextureType.Redberry  && this.Tag == "Red")
-        {
-            RestoreHealth();     
+            Debug.Log("on lava");
+            if(firstLava)
+            {
+                audio.PlayOneShot(hotSound);
+                firstLava = false;
+            }
+            ++lavaCounter;
+            if(lavaCounter > 30)
+            DecreaseHealth();
         }
         else
         {
-            walkSpeed = 80;
+            firstLava = true;
         }
-              
-        if(Input.GetMouseButtonDown(1))
+        
+        if(Input.GetKeyDown(KeyCode.M))
         {
-            movementActive = !movementActive;
+            movementActive = false;
         }
-    
+        
+        if(Input.GetKeyDown(KeyCode.N))
+        {
+            movementActive = true;
+        }
+       // movementActive = true;
+    	if(Input.GetMouseButtonDown(2)){
+    		movementLock = !movementLock;
+            movementLockFirst = true;
+    		offset = lead.position - transform.position;	
+    	}
+        
        if (movementActive == true)
        {
-            ProcessMovement();
+       		if(movementLock){
+       			if(spawnNumber==1){
+                    // only play once
+                    if(movementLockFirst)
+                    {
+                        audio.PlayOneShot(hutSound);
+                        movementLockFirst = false;
+                    }
+       				ProcessMovement();
+       			}else{
+       				FollowMovement();
+       			}	
+       		}
+       		else{
+       			ProcessMovement();
+       		}
        }
        else
        {
@@ -158,6 +298,8 @@ function Update() {
 
 function RestoreHealth()
 {
+if(PV.isMine)
+    {
     healthCounter++;
     
     if(health_ < HealthStatus.Green)
@@ -165,11 +307,8 @@ function RestoreHealth()
         Debug.Log(health_);
         health_ = HealthStatus.Green;
         healthCounter = 0;
-        GreenPlane.renderer.enabled = true;
-        RedPlane.renderer.enabled = false;
-        YellowPlane.renderer.enabled = false;
     }
-    
+  }
 }
 
 function GetMovementActive()
@@ -195,14 +334,47 @@ function ProcessMovement()
     if (playerPlane.Raycast (ray, hitdist)) 
     {
         // Get the point along the ray that hits the calculated distance.
-             
+        if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
+        {
+            walkSpeed = 60;
+            healthMax_ = 6;
+            transform.position.y = -2;
+        }    
+        else{
+
+                //set y lock based on size
+                switch (health_)
+                {
+                    case HealthStatus.Green:
+                        transform.position.y = 7;
+                        break;
+                    case HealthStatus.Yellow:
+                        transform.position.y = 1;
+                        break;
+                    case HealthStatus.Red:
+                        transform.position.y = -1;
+                        break;
+                }
+                
+            
+        	
+        }
         var targetPoint = ray.GetPoint(hitdist);
                 
-        // Don't move is mouse is with 5 units
-        if(Vector3.Distance(targetPoint, transform.position) < 20 * spawnNumber)
+        // Don't move if mouse is with 5 units
+        
+        var multiplierToMouse : int;
+        
+        multiplierToMouse = spawnNumber;
+        if(spawnNumber > 8)
+        {
+            multiplierToMouse = 8;
+        }
+        
+        if(Vector3.Distance(targetPoint, transform.position) < 20 * multiplierToMouse)
         {
             _animation.CrossFade("idle");
-            transform.position.y = 1;
+            
             
         }
         else
@@ -215,11 +387,35 @@ function ProcessMovement()
  
             // Move the object forward.
             transform.position += transform.forward * walkSpeed * Time.deltaTime;
-            transform.position.y = 1;        
+
+                //set y lock based on size
+                switch (health_)
+                {
+                    case HealthStatus.Green:
+                        transform.position.y = 7;
+                        break;
+                    case HealthStatus.Yellow:
+                        transform.position.y = 1;
+                        break;
+                    case HealthStatus.Red:
+                        transform.position.y = -1;
+                        break;
+                }
+                
+                   
             _animation.CrossFade("walk");
         }
         
  
+    }
+}
+
+function FollowMovement(){
+if(lead)
+{
+	transform.position = lead.position - offset;
+	transform.rotation = lead.rotation;
+	_animation.CrossFade("walk");
     }
 }
 
@@ -230,14 +426,42 @@ function FixedUpdate()
 }
 
 function OnTriggerEnter(collisionInfo : Collider){
+if(PV.isMine)
+    {
     if(collisionInfo.name != this.name){
-        if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
-           if(collisionCounter % 6 == 0)
+        // Only take damage from other color dinosaur (player 2)
+        if((collisionInfo.tag == "Red") || (collisionInfo.tag == "Blue") || (collisionInfo.tag == "Green") || (collisionInfo.tag == "Yellow") || (collisionInfo.tag == "Purple") || (collisionInfo.tag == "Orange")){
+           if(collisionCounter % healthMax_ == 0)
             {
                 DecreaseHealth();
+                _animation.CrossFade("Attack");
             }
+            audio.PlayOneShot(merSound);
             collisionCounter++;
         }
+    }
+
+    if(collisionInfo.tag != (this.tag + "Poop")){
+        if((collisionInfo.tag == "RedPoop") || (collisionInfo.tag == "BluePoop") || (collisionInfo.tag == "GreenPoop") || (collisionInfo.tag == "YellowPoop") || (collisionInfo.tag == "PurplePoop") || (collisionInfo.tag == "OrangePoop")){
+            if(collisionCounter2 % 3 == 0)
+            {
+             DecreaseHealth();
+             }
+             audio.PlayOneShot(owSound);
+             collisionCounter2++;
+        }
+    }
+    
+    if(collisionInfo.tag == "Fruit")
+    {
+        //pickedUpFruit = true;
+        audio.PlayOneShot(nomSound);
+        Debug.Log("hit fruit");
+        if(spawnScript != 0)
+        spawnScript.PickedUpFruit();
+        //++fruitBombs;
+        Debug.Log(fruitBombs);
+    }
     }
 }
 
@@ -248,26 +472,26 @@ function OnTriggerExit (collisionInfo : Collider) {
 
 function DecreaseHealth()
 {
-    //Debug.Log(health_);
+if(PV.isMine)
+    {
+    Debug.Log("decrease size");
+    Debug.Log(health_);
     switch (health_)
     {
         case HealthStatus.Green:
             health_ = HealthStatus.Yellow;
-            GreenPlane.renderer.enabled = false;
-            RedPlane.renderer.enabled = false;
-            YellowPlane.renderer.enabled = true;
+            transform.localScale /= 1.3;
             break;
         case HealthStatus.Yellow:
             health_ = HealthStatus.Red;
-            GreenPlane.renderer.enabled = false;
-            RedPlane.renderer.enabled = true;
-            YellowPlane.renderer.enabled = false;
+            transform.localScale /= 1.2;
             break;
         case HealthStatus.Red:
             health_ = HealthStatus.Dead;
             PhotonNetwork.Destroy(this.gameObject);
             spawnScript.UnitDied(spawnNumber);
             break;
+    }
     }
 }
 
@@ -321,7 +545,6 @@ function GetDirection () {
 
 function Reset ()
 {
-	gameObject.tag = "Player";
 }
 
 }

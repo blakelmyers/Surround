@@ -5,7 +5,7 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 {
     private PhotonView myPhotonView;
 	private Vector3 startingPosPlayer1 = new Vector3(1450, 8, 560);
-	private Vector3 startingPosPlayer2 = new Vector3(450, 5, 1500);
+	private Vector3 startingPosPlayer2 = new Vector3(740, 5, 1180);
 	private int playerID;
 	private bool connected = false;
 	private bool waiting = false;
@@ -56,6 +56,12 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 		case DinosaurEnum.BlueFat:
 			playerChoice = "BluePrefab";
 			break;
+		case DinosaurEnum.GreenFat:
+			playerChoice = "GreenPrefab";
+			break;
+		case DinosaurEnum.OrangeTall:
+			playerChoice = "OrangePrefab";
+			break;
 		}
 		Debug.Log ("in room");
 		Debug.Log (playerChoice);
@@ -65,16 +71,18 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 			
 		if(playerID == 1)  // Player 1
 		{
-			waiting = true;
+			//waiting = true;
+
+			monster = PhotonNetwork.Instantiate(playerChoice, startingPosPlayer1, Quaternion.identity, 0);
+			myPhotonView = monster.GetComponent<PhotonView>();
 		}
 			 
 		if(playerID == 2)
-			{
-			waiting = false;
+		{
+				waiting = false;
 				monster = PhotonNetwork.Instantiate(playerChoice, startingPosPlayer2, Quaternion.identity, 0);
-			monster.tag = "Blue";
 				myPhotonView = monster.GetComponent<PhotonView>();
-			}
+		}
  
     }
 
@@ -83,11 +91,12 @@ public class RandomMatchmaker : Photon.MonoBehaviour
 		if(player.ID == 2)
 		{
 			if(playerID == 1)  // Player 1 
-			{
-				GameObject monster;
+			{   
+				/*GameObject monster;
 				monster = PhotonNetwork.Instantiate(playerChoice, startingPosPlayer1, Quaternion.identity, 0);
-				monster.tag = "Red";
+				//monster.tag = "Red";
 				myPhotonView = monster.GetComponent<PhotonView>();
+*/
 			}
 		}
 	}

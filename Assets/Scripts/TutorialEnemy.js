@@ -25,9 +25,9 @@ enum HealthStatus {
 
 var health_ : HealthStatus;
 var collisionCounter : int = 0;
-var RedPlane : GameObject;
-var GreenPlane : GameObject;
-var YellowPlane : GameObject;
+
+var HealthPlane : GameObject;
+
 
 //private var _characterState : CharacterState;
 
@@ -58,13 +58,9 @@ function Start ()
    health_ = HealthStatus.Green;
    var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
-        if (t.name == "RedPlane"){ RedPlane = t.gameObject;}
-        else if (t.name == "GreenPlane"){ GreenPlane = t.gameObject;}
-        else if (t.name == "YellowPlane"){ YellowPlane = t.gameObject;}
+       if (t.name == "HealthPlane"){ HealthPlane = t.gameObject;}
    }
-   GreenPlane.renderer.enabled = true;
-   RedPlane.renderer.enabled = false;
-   YellowPlane.renderer.enabled = false;
+   HealthPlane.renderer.enabled = false;
    
 }
 
@@ -158,7 +154,7 @@ function FixedUpdate()
 function OnTriggerEnter(collisionInfo : Collider){
    if(collisionInfo.name != this.name){
         if((collisionInfo.tag == "Red" && this.tag == "Blue") || (collisionInfo.tag == "Blue" && this.tag == "Red")){
-            if(collisionCounter % 12 == 0)
+            if(collisionCounter % 6 == 0)
             {
                 ProcessHealth();
             }
@@ -178,18 +174,14 @@ function ProcessHealth()
     {
         case HealthStatus.Green:
             health_ = HealthStatus.Yellow;
-            GreenPlane.renderer.enabled = false;
-            RedPlane.renderer.enabled = false;
-            YellowPlane.renderer.enabled = true;
+            transform.localScale /= 1.3;
             break;
         case HealthStatus.Yellow:
             health_ = HealthStatus.Red;
-            GreenPlane.renderer.enabled = false;
-            RedPlane.renderer.enabled = true;
-            YellowPlane.renderer.enabled = false;
+            transform.localScale /= 1.3;
             break;
         case HealthStatus.Red:
-            tutorialGui.EnemyDied();
+            
             health_ = HealthStatus.Dead;
             Destroy(this.gameObject);
             break;

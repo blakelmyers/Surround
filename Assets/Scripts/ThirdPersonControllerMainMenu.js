@@ -34,7 +34,7 @@ function OnGUI () {
 
     if(mouseOver)
     {
-        GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/7), 320, 320));
+        GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height-40), 320, 40));
         GUILayout.Label(hoverString, style);
         GUILayout.EndArea ();
     }
