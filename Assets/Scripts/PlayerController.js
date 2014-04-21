@@ -38,6 +38,8 @@ public var nomSound : AudioClip;
 
 public var hotSound : AudioClip;
 
+public var fartSound : AudioClip;
+
 private var lavaCounter : int = 0;
 
 
@@ -184,6 +186,7 @@ function Update() {
             {
                 PhotonNetwork.Instantiate(this.tag + "Poop", transform.position, transform.rotation, 0);
                 --fruitBombs;
+                audio.PlayOneShot(fartSound);
                 if(fruitBombs == 0)
                 {
                     pickedUpFruit = false;
