@@ -71,6 +71,8 @@ function OnTriggerEnter(other:Collider){
     // Only take control if you dont already have control
     var updateSpawn : boolean = false;
     
+    var lockCave : boolean = false;
+    
    // Debug.Log("hit cave");
    // Debug.Log(other.tag);
     
@@ -85,12 +87,20 @@ function OnTriggerEnter(other:Collider){
                     caveControlledBy = PlayerControlling.Red;
                     updateSpawn = true;
                 }
+                else
+                {
+                    lockCave = true;
+                }
                 break;
             case "Yellow":
                 if(caveControlledBy != PlayerControlling.Yellow){
                     Cube.renderer.material.color = Color.yellow;
                     caveControlledBy = PlayerControlling.Yellow;
                     updateSpawn = true;
+                }
+                else
+                {
+                    lockCave = true;
                 }
                 break;
             case "Blue":
@@ -99,12 +109,20 @@ function OnTriggerEnter(other:Collider){
                     caveControlledBy = PlayerControlling.Blue;
                     updateSpawn = true;
                 }
+                else
+                {
+                    lockCave = true;
+                }
                 break;
             case "Green":
                 if(caveControlledBy != PlayerControlling.Green){
                     Cube.renderer.material.color = Color.green;
                     caveControlledBy = PlayerControlling.Green;
                     updateSpawn = true;
+                }
+                else
+                {
+                    lockCave = true;
                 }
                 break;
             case "Purple":
@@ -113,6 +131,10 @@ function OnTriggerEnter(other:Collider){
                     caveControlledBy = PlayerControlling.Purple;
                     updateSpawn = true;
                 }
+                else
+                {
+                    lockCave = true;
+                }
                 break;
             case "Orange":
                 if(caveControlledBy != PlayerControlling.Orange){
@@ -120,9 +142,19 @@ function OnTriggerEnter(other:Collider){
                     caveControlledBy = PlayerControlling.Orange;
                     updateSpawn = true;
                 }
+                else
+                {
+                    lockCave = true;
+                }
                 break;
             default:
                 break;
+            }
+            if(lockCave)
+            {
+                waitingToUnlock = true;
+                caveText.GetComponent(TextMesh).text = "L";
+                unlockTimer = Time.time + lockTime;
             }
         	if(updateSpawn)
             {        

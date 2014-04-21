@@ -281,44 +281,12 @@ if(playerID == 2)
 function DecreasePlayer1Max(unitsLeft : int, caveNumber : int)
 {  
     Debug.Log("decrease spawn");
-/*
-    switch(maxSpawnplayer1 % numberOfplayer1Prefabs)
-    {
-        case 0:
-            break;
-        case 1:
-            maxSpawnplayer1 -= 1;
-            break;
-        case 2:
-            maxSpawnplayer1 -= 2;
-            break;
-        default:
-            maxSpawnplayer1 -= 3;
-            break;
-    }*/
+
 }
 
 function DecreasePlayer2Max(unitsLeft : int, caveNumber : int)
 {  
-/*
-    switch(maxSpawnplayer2 % numberOfplayer2Prefabs)
-    {
-        case 0:
-            break;
-        case 1:
-            maxSpawnplayer2 -= 1;
-            break;
-        case 2:
-            maxSpawnplayer2 -= 2;
-            break;
-        default:
-            maxSpawnplayer2 -= 3;
-            break;
-    }
-    
-    
-   //absoluteMaxSpawnplayer1 += 6;
-*/
+
 }
 
 function PickedUpFruit(){
@@ -555,7 +523,7 @@ function Update()
     {
         playerWhoWon = 1;
     }
- 
+  
     if(gameStarted == true)
     {
         var myNewTrans : GameObject;
