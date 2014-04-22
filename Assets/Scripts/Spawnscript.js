@@ -8,7 +8,12 @@
 #pragma implicit
 #pragma downcast
 
+
+
+
 public class Spawnscript extends Photon.MonoBehaviour{
+
+
 
 public var cameraForPlayer1 : GameObject;
 public var cameraDistance : float;
@@ -21,9 +26,13 @@ public var maxSpawnplayer2 : int = 5;
 public var startPositionplayer1 : Vector3;
 public var startPositionplayer2 : Vector3;
 
+public var playerType : int;
+
 public var cave1 : CaveTrigger;
 public var cave2 : CaveTrigger;
 public var cave3 : CaveTrigger;
+public var cave4 : CaveTrigger;
+public var cave5 : CaveTrigger;
 
 var player1prefabs : GameObject[];
 var player2prefabs : GameObject[];
@@ -34,7 +43,7 @@ private var checkTimerplayer1: float;
 private var checkTimerplayer2: float;
 private var endFruitTime1: float;
 private var endFruitTime2: float;
-private var gameStarted : boolean = false;
+public var gameStarted : boolean = false;
 
 private var fruitGrab: boolean = false;
 
@@ -92,10 +101,13 @@ private var totalTime : float = 180.0;
 private var startTime : float;
 var textTime : String;
 
+
+
 enum PlayerType {
     player1 = 0,
     player2 = 1,
 }
+
 
 function Awake () 
 {
@@ -104,7 +116,7 @@ function Awake ()
     
 function Start()
 {
-    
+    playerType = 0;
     PV = gameObject.GetComponent(PhotonView);
     player1prefabs = new GameObject[50];
     player2prefabs = new GameObject[50];
@@ -122,42 +134,50 @@ function Start()
         baseColor = Color.yellow;
         playerColor = "Yellow";
         styleGUI = styleYellow;
+        playerType = 3;
         break;
     case DinosaurEnum.RedTall:
         playerChoice = "RedPrefab";
         baseColor = Color.red;
         playerColor = "Red";
         styleGUI = styleRed;
+        playerType = 1;
         break;
     case DinosaurEnum.PurpleFat:
         playerChoice = "PurplePrefab";
         baseColor = Color.magenta;
         playerColor = "Purple";
         styleGUI = stylePurple;
+        playerType = 5;
         break;
     case DinosaurEnum.BlueFat:
         playerChoice = "BluePrefab";
         baseColor = Color.blue;
         playerColor = "Blue";
         styleGUI = styleBlue;
+        playerType = 2;
         break;
     case DinosaurEnum.GreenFat:
         playerChoice = "GreenPrefab";
         baseColor = Color.green;
         playerColor = "Green";
         styleGUI = styleGreenPre;
+        playerType = 6;
         break;
     case DinosaurEnum.OrangeTall:
         playerChoice = "OrangePrefab";
         noBaseChange = true;
         playerColor = "Orange";
         styleGUI = styleOrange;
+        playerType = 4;
         break;
     }
 
     cave1 = GameObject.Find("Cave1Prefab").GetComponent.<CaveTrigger>();
     cave2 = GameObject.Find("Cave2Prefab").GetComponent.<CaveTrigger>();
     cave3 = GameObject.Find("Cave3Prefab").GetComponent.<CaveTrigger>();
+    cave4 = GameObject.Find("Cave4Prefab").GetComponent.<CaveTrigger>();
+    cave5 = GameObject.Find("Cave5Prefab").GetComponent.<CaveTrigger>();
 }
 
 function GetGameStarted()
@@ -167,7 +187,11 @@ function GetGameStarted()
 
 function StartSpawning()
 {
-goalTime = Time.time + totalTime;
+    goalTime = Time.time + totalTime;
+
+    player1Caves = 0;
+
+    player2Caves  = 0;
  gameStarted = true;
     var startingCameraPosition : Vector3;
  playerID = PhotonNetwork.player.ID;
@@ -382,17 +406,26 @@ function OnGUI()
         }
         else   // game over determine winner
         {
-            if(player1Caves > player2Caves)
-            {
-               playerWhoWon = 1;
+            var countCaves : int = 0;
+           if(playerType == cave1.caveInt) ++countCaves;
+           if(playerType == cave2.caveInt) ++countCaves;
+           if(playerType == cave3.caveInt) ++countCaves;
+           if(playerType == cave4.caveInt) ++countCaves;
+           if(playerType == cave5.caveInt) ++countCaves;
+           
+           if(countCaves > 2)
+           {
+                if(playerID == 1)
+                {
+                    playerWhoWon =1;
+                 }
+                 else{
+                    playerWhoWon =2;
+                 }
                photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
-            }
-            else
-            {
-               playerWhoWon = 2;
-               photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
-            }
+           }
         }
+        
     if(playerID == 1)
     { 
         
@@ -408,10 +441,10 @@ function OnGUI()
         // Player 1 won
         if(playerWhoWon == 1)
         {
-        	GUI
+        	
             GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
             GUILayout.Label("You WON!!!", styleGUI);
-            if(GUILayout.Button ("Continue"))
+            if(GUILayout.Button ("Enjoy the dancing dinosaurs"))
             {
                 Application.LoadLevel("WinnerScene");
             }
@@ -421,6 +454,10 @@ function OnGUI()
         {
             GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
             GUILayout.Label("You LOSE!!!", styleGUI);
+            if(GUILayout.Button ("You need some training"))
+            {
+                Application.LoadLevel("TutorialScene");
+            }
             GUILayout.EndArea ();
         }
         
@@ -449,7 +486,7 @@ function OnGUI()
     else{
         
         
-    	GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size\n " + numberOfplayer2Prefabs.ToString(), styleGUI);
+    	
     	
         /*GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
        // GUILayout.Label(playerColor + " Player", styleGUI);
@@ -459,6 +496,7 @@ function OnGUI()
         GUILayout.EndArea ();*/
 		GUI.Box (Rect(0, Screen.height - 70, Screen.width, 70), "", styleToolBar);
         GUI.Box (Rect(50, Screen.height - 70, 100, 70), "DINOWARS!", styleLabel);
+        GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size\n " + numberOfplayer2Prefabs.ToString(), styleGUI);
             
     
          // Player 1 won
@@ -466,7 +504,7 @@ function OnGUI()
         {
             GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
             GUILayout.Label("You WON!!!", styleGUI);
-            if(GUILayout.Button ("Continue"))
+            if(GUILayout.Button ("Enjoy the dancing dinosaurs"))
             {
                 Application.LoadLevel("WinnerScene");
             }
@@ -476,6 +514,10 @@ function OnGUI()
         {
             GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
             GUILayout.Label("You LOSE!!!", styleGUI);
+            if(GUILayout.Button ("You need some training"))
+            {
+                Application.LoadLevel("TutorialScene");
+            }
             GUILayout.EndArea ();
         }
         
@@ -502,19 +544,24 @@ function OnGUI()
 
 function Update()
 {
-/*
+
     Debug.Log("player1 caves " + player1Caves.ToString());
     
     Debug.Log("player2 caves " + player2Caves.ToString());
-    */
-    if(player1Caves == 4)
+    
+    if((playerType == cave1.caveInt) &&
+       (playerType == cave2.caveInt) &&
+       (playerType == cave3.caveInt) &&
+       (playerType == cave4.caveInt) &&
+       (playerType == cave5.caveInt))
     {
-       playerWhoWon = 1;
-       photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
-    }
-    if(player2Caves == 4)
-    {
-       playerWhoWon = 2;
+        if(playerID == 1)
+        {
+            playerWhoWon =1;
+         }
+         else{
+            playerWhoWon =2;
+         }
        photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
     }
     if(numberOfplayer1Prefabs ==0){
@@ -596,6 +643,7 @@ function sizeChange1()
 	    for(var i = 0; i < numberOfplayer1Prefabs; ++i)
 	    {
 	        player1prefabs[i].GetComponent(PlayerController).changeSize(1.3);
+            player1prefabs[i].GetComponent(PlayerController).healthMax_ += 3;
 	    }
          
 }
@@ -605,6 +653,7 @@ function sizeChange2()
         for(var j = 0; j < numberOfplayer2Prefabs; ++j)
         {
             player2prefabs[j].GetComponent(PlayerController).changeSize(1.3);
+            player2prefabs[j].GetComponent(PlayerController).healthMax_ += 3;
         }
 }
 
@@ -614,6 +663,7 @@ function sizeDecrease1()
         for(var i = 0; i < numberOfplayer1Prefabs; ++i)
         {
             player1prefabs[i].GetComponent(PlayerController).changeSize(0.7);
+            player1prefabs[i].GetComponent(PlayerController).healthMax_ -= 3;
         }
          
 }
@@ -624,6 +674,7 @@ Debug.Log("Decrease size2");
         for(var j = 0; j < numberOfplayer2Prefabs; ++j)
         {
             player2prefabs[j].GetComponent(PlayerController).changeSize(0.7);
+            player2prefabs[j].GetComponent(PlayerController).healthMax_ -= 3;
         }
 }
 

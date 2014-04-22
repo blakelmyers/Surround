@@ -4,6 +4,13 @@
 
 public var spawnScript : Spawnscript;
 
+
+
+
+public var caveControlledBy : PlayerControlling;
+
+public var caveInt : int;
+
 public class CaveTrigger extends Photon.MonoBehaviour{
 
 private var Cube : GameObject;
@@ -14,12 +21,15 @@ public var unitsLeft : int;
 
 public var caveNumber : int;
 
+private var caveCounter : int = 0;
+
 private var lockTime : float = 10;  // 3 seconds
 
 private var unlockTimer : float;
 
 private var waitingToUnlock : boolean = false;
 
+private var lockedOnFirstHit : boolean = false;
 
 public var ohnoSound : AudioClip;
 
@@ -34,13 +44,12 @@ enum PlayerControlling{
     Green
 }
 
-public var caveControlledBy : PlayerControlling;
 
 function Start () {
      unitsLeft = 3;
 
      caveControlledBy = PlayerControlling.None;
-     
+     caveInt = 0;
      var t : Transform;
    for (t in transform.GetComponentsInChildren.<Transform>()) {
        if (t.name == "Cube"){ Cube = t.gameObject;}
@@ -77,20 +86,30 @@ function OnTriggerEnter(other:Collider){
     
    // Debug.Log("hit cave");
    // Debug.Log(other.tag);
-    var firstHit : boolean = false;
-    if(caveControlledBy == PlayerControlling.None)
+    var alreadyCaptured : boolean = true;
+    
+    if(spawnScript.gameStarted)
     {
-        firstHit = true;
-    }
-
         if(!waitingToUnlock)
         {
+            Debug.Log("controlledby:");
+            Debug.Log(caveControlledBy);
+            if(caveControlledBy == PlayerControlling.None)
+            {
+            alreadyCaptured = false;
+            Debug.Log("first capture");
+            
+            }
+        waitingToUnlock = true;
+        ++caveCounter;
+             Debug.Log("hit cave" +caveCounter);
             switch(other.tag)
             {
             case "Red":
                 if(caveControlledBy != PlayerControlling.Red){
                     Cube.renderer.material.color = Color.red;
                     caveControlledBy = PlayerControlling.Red;
+                    caveInt = 1;
                     updateSpawn = true;
                 }
                 else
@@ -102,6 +121,7 @@ function OnTriggerEnter(other:Collider){
                 if(caveControlledBy != PlayerControlling.Yellow){
                     Cube.renderer.material.color = Color.yellow;
                     caveControlledBy = PlayerControlling.Yellow;
+                    caveInt = 3;
                     updateSpawn = true;
                 }
                 else
@@ -113,6 +133,7 @@ function OnTriggerEnter(other:Collider){
                 if(caveControlledBy != PlayerControlling.Blue){
                     Cube.renderer.material.color = Color.blue;
                     caveControlledBy = PlayerControlling.Blue;
+                    caveInt = 2;
                     updateSpawn = true;
                 }
                 else
@@ -124,6 +145,7 @@ function OnTriggerEnter(other:Collider){
                 if(caveControlledBy != PlayerControlling.Green){
                     Cube.renderer.material.color = Color.green;
                     caveControlledBy = PlayerControlling.Green;
+                    caveInt = 6;
                     updateSpawn = true;
                 }
                 else
@@ -135,6 +157,7 @@ function OnTriggerEnter(other:Collider){
                 if(caveControlledBy != PlayerControlling.Purple){
                     Cube.renderer.material.color = Color.magenta;
                     caveControlledBy = PlayerControlling.Purple;
+                    caveInt = 5;
                     updateSpawn = true;
                 }
                 else
@@ -146,6 +169,7 @@ function OnTriggerEnter(other:Collider){
                 if(caveControlledBy != PlayerControlling.Orange){
                     Cube.renderer.material.color = Color.red;
                     caveControlledBy = PlayerControlling.Orange;
+                    caveInt = 4;
                     updateSpawn = true;
                 }
                 else
@@ -166,7 +190,7 @@ function OnTriggerEnter(other:Collider){
             {        
                 --unitsLeft;
                 
-                waitingToUnlock = true;
+                
                 caveText.GetComponent(TextMesh).text = "Locked";
                 unlockTimer = Time.time + lockTime;
                 
@@ -196,41 +220,55 @@ function OnTriggerEnter(other:Collider){
                     if(spawnScript.playerID == 1){
                         spawnScript.UpdatePlayer1Max(unitsLeft, caveNumber);
                         spawnScript.player1Caves += 1;
-                        if(!firstHit) spawnScript.player2Caves -= 1;
+                        if(alreadyCaptured) 
+                        {  
+                            spawnScript.player2Caves -= 1;
+                            Debug.Log("decrease for player 2");
+                        }
                         spawnScript.sizeChange1();
+                        
                     }
                     else if(spawnScript.playerID == 2){
-                        Debug.Log("first hit " + firstHit);
                         spawnScript.UpdatePlayer2Max(unitsLeft, caveNumber);
                         spawnScript.player2Caves += 1;
-                        if(!firstHit) spawnScript.player1Caves -= 1;
+                        if(alreadyCaptured) 
+                        {  
+                            spawnScript.player1Caves -= 1;
+                            Debug.Log("decrease for player 2");
+                        }
                         spawnScript.sizeChange2();
-                        Debug.Log("increase cave for player 2");
+                        //Debug.Log("increase cave for player 2");
                     }
                 }
                 else  // other player took control
                 {
                     audio.PlayOneShot(ohnoSound);
                     if(spawnScript.playerID == 1){
-                        //spawnScript.DecreasePlayer1Max(unitsLeft, caveNumber);
-                        spawnScript.player1Caves -= 1;
-                        if(!firstHit) spawnScript.player2Caves += 1;
-                        spawnScript.sizeDecrease1();
+                        if(alreadyCaptured) 
+                        {  
+                            spawnScript.player1Caves -= 1;
+                            spawnScript.sizeDecrease1();
+                            Debug.Log("decrease for player 1");
+                        }
+                        spawnScript.player2Caves += 1;
+                        //Debug.Log("decrease cave for player 1");
                      }
                     else if(spawnScript.playerID == 2){
-                    Debug.Log("first hit " + firstHit);
-                        //spawnScript.DecreasePlayer2Max(unitsLeft, caveNumber);
-                        spawnScript.player2Caves -= 1;
-                        if(!firstHit) spawnScript.player1Caves += 1;
-                        spawnScript.sizeDecrease2();
-                        Debug.Log("decrease cave for player 2");
+                        if(alreadyCaptured) 
+                        {  
+                            spawnScript.player2Caves -= 1;
+                            spawnScript.sizeDecrease2();
+                            Debug.Log("decrease for player 2");
+                        }
+                        spawnScript.player1Caves += 1;
+                        //Debug.Log("decrease cave for player 2");
                     }
                 }
                     
                 //photonView.RPC("PlayerTookBase", PhotonTargets.Others, caveControlledBy);   
             }
         }
-    
+    }
 }
 
 /*	@RPC

@@ -92,7 +92,7 @@ var collisionCounter : int = 0;
 
 var collisionCounter2 : int = 0;
 
-private var healthMax_ : int = 6;
+public var healthMax_ : int = 6;
 
 private var normalSpeed : int = 80;
 
@@ -119,7 +119,7 @@ enum HealthStatus {
 
 function Start ()
 {
-
+    healthMax_ = 6;
     PV = gameObject.GetComponent(PhotonView);
     
     if(!PV.isMine){
@@ -181,7 +181,7 @@ function Update() {
     if(PV.isMine)
     {
         walkSpeed = 160;
-        healthMax_ = 6;
+        
         
         if(pickedUpFruit)
         {
@@ -211,7 +211,7 @@ function Update() {
         if(speedActive)
         {
             walkSpeed = 300;
-            healthMax_ = 15;
+            //healthMax_ = 12;
             if(Time.time >= speedTimeCheck)  // 3 seconds of speed has expired
             {
                 speedActive = false;
@@ -340,7 +340,7 @@ function ProcessMovement()
         if(GetTerrainTextureAt(transform.position) == TextureType.Sand)
         {
             walkSpeed = 60;
-            healthMax_ = 6;
+            //healthMax_ = 6;
             transform.position.y = -2;
         }    
         else{
@@ -446,7 +446,7 @@ if(PV.isMine)
 
     if(collisionInfo.tag != (this.tag + "Poop")){
         if((collisionInfo.tag == "RedPoop") || (collisionInfo.tag == "BluePoop") || (collisionInfo.tag == "GreenPoop") || (collisionInfo.tag == "YellowPoop") || (collisionInfo.tag == "PurplePoop") || (collisionInfo.tag == "OrangePoop")){
-            if(collisionCounter2 % 3 == 0)
+            if(collisionCounter2 % healthMax_ == 0)
             {
              DecreaseHealth();
              }
@@ -500,10 +500,10 @@ if(PV.isMine)
 
 function changeSize(sizeFactor : double){
 	var scale : Vector3 =  transform.localScale;
-	Debug.Log(scale);
-	Debug.Log(sizeFactor);
+//	Debug.Log(scale);
+//	Debug.Log(sizeFactor);
 	scale = scale * sizeFactor;
-	Debug.Log(scale);
+//	Debug.Log(scale);
 	transform.localScale = scale;
 	
 }
