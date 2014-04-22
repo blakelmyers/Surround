@@ -104,7 +104,7 @@ function Awake ()
     
 function Start()
 {
-    goalTime = Time.time + totalTime;
+    
     PV = gameObject.GetComponent(PhotonView);
     player1prefabs = new GameObject[50];
     player2prefabs = new GameObject[50];
@@ -167,7 +167,7 @@ function GetGameStarted()
 
 function StartSpawning()
 {
-
+goalTime = Time.time + totalTime;
  gameStarted = true;
     var startingCameraPosition : Vector3;
  playerID = PhotonNetwork.player.ID;
@@ -369,19 +369,33 @@ function OnGUI()
 {
     if(gameStarted)
     {
-    if(playerID == 1)
-    { 
         if(Time.time < goalTime)
         {
-            var guiTime = goalTime - Time.time; // You probably want to clamp this value to be between the totalTime and zero
+            guiTime = goalTime - Time.time; // You probably want to clamp this value to be between the totalTime and zero
      
-           var minutes : int = guiTime / 60;
-           var seconds : int = guiTime % 60;
+           minutes  = guiTime / 60;
+           seconds  = guiTime % 60;
          
            textTime = String.Format ("{0:00}:{1:00}", minutes, seconds); 
            GUI.Box (Rect(Screen.width/2 - 50, 0, 100, 30), "", styleToolBar);
            GUI.Label (Rect (Screen.width/2 - 50, 0, 100, 30), textTime, styleLabel); //changed variable name to textTime -->text is not a good variable name since it has other use already
         }
+        else   // game over determine winner
+        {
+            if(player1Caves > player2Caves)
+            {
+               playerWhoWon = 1;
+               photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
+            }
+            else
+            {
+               playerWhoWon = 2;
+               photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
+            }
+        }
+    if(playerID == 1)
+    { 
+        
         /*GUILayout.BeginArea (Rect (Screen.width - 200,0,200,200));
         //GUILayout.Label(playerColor + " Player", styleGUI);
         GUILayout.Label("Total Units:   " + absoluteMaxSpawnplayer1.ToString(), styleGUI);
@@ -432,17 +446,7 @@ function OnGUI()
         }
     }
     else{
-        if(Time.time < goalTime)
-        {
-            guiTime = goalTime - Time.time; // You probably want to clamp this value to be between the totalTime and zero
-     
-           minutes  = guiTime / 60;
-           seconds  = guiTime % 60;
-         
-           textTime = String.Format ("{0:00}:{1:00}", minutes, seconds); 
-           GUI.Box (Rect(Screen.width/2 - 50, 0, 100, 30), "", styleToolBar);
-           GUI.Label (Rect (Screen.width/2 - 50, 0, 100, 30), textTime, styleLabel); //changed variable name to textTime -->text is not a good variable name since it has other use already
-        }
+        
         
     	GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size\n " + numberOfplayer2Prefabs.ToString(), styleGUI);
     	
@@ -497,11 +501,22 @@ function OnGUI()
 
 function Update()
 {
+        if(player1Caves == 5)
+        {
+           playerWhoWon = 1;
+           photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
+        }
+        if(player2Caves == 5)
+        {
+           playerWhoWon = 2;
+           photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
+        }
+/*
     if(Time.time > goalTime)
     {
         playerWhoWon = 1;
     }
- /*
+ 
     if(gameStarted == true)
     {
         var myNewTrans : GameObject;
@@ -568,7 +583,7 @@ function sizeChange1()
 		Debug.Log(x);
 	    for(var i = 0; i < numberOfplayer1Prefabs; ++i)
 	    {
-	        player1prefabs[i].GetComponent(PlayerController).changeSize(1+x);
+	        player1prefabs[i].GetComponent(PlayerController).changeSize(1.4);
 	    }
          
 }
@@ -578,7 +593,7 @@ function sizeChange2()
         var x = player2Caves * .1;
         for(var j = 0; j < numberOfplayer2Prefabs; ++j)
         {
-            player2prefabs[j].GetComponent(PlayerController).changeSize(1+x);
+            player2prefabs[j].GetComponent(PlayerController).changeSize(1.4);
         }
 }
 

@@ -46,7 +46,7 @@ function Start () {
        if (t.name == "Cube"){ Cube = t.gameObject;}
        if (t.name == "Locked"){ caveText = t.gameObject;}
    }
-    
+     caveText.GetComponent(TextMesh).text = "";
    spawnScript = GameObject.Find("Spawnscript").GetComponent.<Spawnscript>();
 }
 
@@ -63,7 +63,7 @@ function Update () {
         {
             waitingToUnlock = false;
             
-            caveText.GetComponent(TextMesh).text = "U";
+            caveText.GetComponent(TextMesh).text = "";
             //caveControlledBy = PlayerControlling.None;
         }
     }
@@ -155,7 +155,7 @@ function OnTriggerEnter(other:Collider){
             if(lockCave)
             {
                 waitingToUnlock = true;
-                caveText.GetComponent(TextMesh).text = "L";
+                caveText.GetComponent(TextMesh).text = "Locked";
                 unlockTimer = Time.time + lockTime;
             }
             if(updateSpawn)
@@ -163,7 +163,7 @@ function OnTriggerEnter(other:Collider){
                 --unitsLeft;
                 
                 waitingToUnlock = true;
-                caveText.GetComponent(TextMesh).text = "L";
+                caveText.GetComponent(TextMesh).text = "Locked";
                 unlockTimer = Time.time + lockTime;
                 
                 /*
