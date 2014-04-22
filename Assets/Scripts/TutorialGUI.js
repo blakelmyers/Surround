@@ -176,18 +176,16 @@ function OnGUI () {
         cameraTransform.position = cameraPosition;
         GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
         GUI.Label(Rect(Screen.width - 150, 50, 150, 150),"Sometimes the dinos want to expand their herd, and the only way to do that is to get more real-estate, conquer the cave near-by by running into it", style2);
-        if(GUI.Button(Rect(Screen.width - 150, Screen.height-120, 150, 50),"Continue", buttonStyle))
-        {
-            stepState = tutorialSteps.Step8a;
-        }
+
         break;
     case tutorialSteps.Step8a:
     	GUI.Box(Rect(Screen.width - 150, 0, 150, Screen.height),"", instructionBarStyle);
-        GUI.Label(Rect(Screen.width - 150, 50, 150, 150),"The bottom left box tells you the size of your current herd, and the herd capacity. \n\n Each new cave you conquer will increase your herd capacity by 3", style2);
+        GUI.Label(Rect(Screen.width - 150, 50, 150, Screen.height - 200),"The bottom left box tells you the size of your current herd \n\n The dinos in the caves you conquer will join your herd \n\n extra caves get turned into weight rooms so your herd will get beefier when you conquer them.", style2);
         if(GUI.Button(Rect(Screen.width - 150, Screen.height-120, 150, 50),"Continue", buttonStyle))
         {
             stepState = tutorialSteps.Step9;
         }
+        break;
     case tutorialSteps.Step9:
     	cameraPosition = Vector3(700, 1100, 450);
         cameraTransform.position = cameraPosition;
@@ -258,12 +256,8 @@ function HitEnemy() {
 }
 
 function HitBase() {
-    Debug.Log("base");
-    if(step7a)   // Only set this once
-    {
-        step7a = false;
-        stepState = tutorialSteps.Step8;
-    }
+
+        stepState = tutorialSteps.Step8a;
 }
 
 function EnemyDied() {

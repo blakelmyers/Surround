@@ -141,7 +141,7 @@ if(gameStarted == true)
         */
 		GUI.Box (Rect(0, Screen.height - 70, Screen.width, 70), "", styleToolBar);
         GUI.Box (Rect(50, Screen.height - 70, 100, 70), "DINOWARS!", styleLabel);
-        GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size/ Herd Capacity \n " + numberOfplayer1Prefabs.ToString() + "/" + maxSpawnplayer1.ToString(), styleYellow);
+        GUI.Label(Rect (Screen.width - 200,Screen.height - 70,200,70), "Herd Size\n " + numberOfplayer1Prefabs.ToString(), styleYellow);
         if(player1prefabs[0] != 0)
         { 
             if(player1prefabs[0].GetComponent(PlayerControllerTest).movementLock)
