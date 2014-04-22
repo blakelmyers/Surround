@@ -501,6 +501,10 @@ function OnGUI()
 
 function Update()
 {
+/*
+    Debug.Log("player1 caves " + player1Caves.ToString());
+    
+    Debug.Log("player2 caves " + player2Caves.ToString());
         if(player1Caves == 5)
         {
            playerWhoWon = 1;
@@ -511,7 +515,7 @@ function Update()
            playerWhoWon = 2;
            photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
         }
-/*
+
     if(Time.time > goalTime)
     {
         playerWhoWon = 1;
@@ -579,21 +583,18 @@ function Update()
 
 function sizeChange1()
 {
-		var x = player1Caves * .1;
-		Debug.Log(x);
 	    for(var i = 0; i < numberOfplayer1Prefabs; ++i)
 	    {
-	        player1prefabs[i].GetComponent(PlayerController).changeSize(1.4);
+	        player1prefabs[i].GetComponent(PlayerController).changeSize(1.3);
 	    }
          
 }
 
 function sizeChange2()
 {
-        var x = player2Caves * .1;
         for(var j = 0; j < numberOfplayer2Prefabs; ++j)
         {
-            player2prefabs[j].GetComponent(PlayerController).changeSize(1.4);
+            player2prefabs[j].GetComponent(PlayerController).changeSize(1.3);
         }
 }
 
@@ -602,7 +603,7 @@ function sizeDecrease1()
     Debug.Log("Decrease size1");
         for(var i = 0; i < numberOfplayer1Prefabs; ++i)
         {
-            player1prefabs[i].GetComponent(PlayerController).changeSize(0.8);
+            player1prefabs[i].GetComponent(PlayerController).changeSize(0.7);
         }
          
 }
@@ -612,7 +613,7 @@ function sizeDecrease2()
 Debug.Log("Decrease size2");
         for(var j = 0; j < numberOfplayer2Prefabs; ++j)
         {
-            player2prefabs[j].GetComponent(PlayerController).changeSize(0.8);
+            player2prefabs[j].GetComponent(PlayerController).changeSize(0.7);
         }
 }
 

@@ -77,7 +77,11 @@ function OnTriggerEnter(other:Collider){
     
    // Debug.Log("hit cave");
    // Debug.Log(other.tag);
-    
+    var firstHit : boolean = false;
+    if(caveControlledBy == PlayerControlling.None)
+    {
+        firstHit = true;
+    }
 
         if(!waitingToUnlock)
         {
@@ -185,33 +189,42 @@ function OnTriggerEnter(other:Collider){
                 }
                 */
                 
+                // i took control
                 if(spawnScript.playerColor == other.tag)
                 {
-                    Debug.Log("update me");
+                    
                     if(spawnScript.playerID == 1){
                         spawnScript.UpdatePlayer1Max(unitsLeft, caveNumber);
                         spawnScript.player1Caves += 1;
+                        if(!firstHit) spawnScript.player2Caves -= 1;
                         spawnScript.sizeChange1();
                     }
                     else if(spawnScript.playerID == 2){
+                        Debug.Log("first hit " + firstHit);
                         spawnScript.UpdatePlayer2Max(unitsLeft, caveNumber);
                         spawnScript.player2Caves += 1;
+                        if(!firstHit) spawnScript.player1Caves -= 1;
                         spawnScript.sizeChange2();
+                        Debug.Log("increase cave for player 2");
                     }
                 }
-                else
+                else  // other player took control
                 {
                     audio.PlayOneShot(ohnoSound);
                     if(spawnScript.playerID == 1){
                         //spawnScript.DecreasePlayer1Max(unitsLeft, caveNumber);
                         spawnScript.player1Caves -= 1;
+                        if(!firstHit) spawnScript.player2Caves += 1;
                         spawnScript.sizeDecrease1();
-                        }
+                     }
                     else if(spawnScript.playerID == 2){
+                    Debug.Log("first hit " + firstHit);
                         //spawnScript.DecreasePlayer2Max(unitsLeft, caveNumber);
                         spawnScript.player2Caves -= 1;
+                        if(!firstHit) spawnScript.player1Caves += 1;
                         spawnScript.sizeDecrease2();
-                        }
+                        Debug.Log("decrease cave for player 2");
+                    }
                 }
                     
                 //photonView.RPC("PlayerTookBase", PhotonTargets.Others, caveControlledBy);   
