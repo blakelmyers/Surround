@@ -408,6 +408,7 @@ function OnGUI()
         // Player 1 won
         if(playerWhoWon == 1)
         {
+        	GUI
             GUILayout.BeginArea (Rect((Screen.width/2)-150, (Screen.height/2) - 50, 300, 300));
             GUILayout.Label("You WON!!!", styleGUI);
             if(GUILayout.Button ("Continue"))
@@ -505,17 +506,26 @@ function Update()
     Debug.Log("player1 caves " + player1Caves.ToString());
     
     Debug.Log("player2 caves " + player2Caves.ToString());
-        if(player1Caves == 5)
-        {
-           playerWhoWon = 1;
-           photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
-        }
-        if(player2Caves == 5)
-        {
-           playerWhoWon = 2;
-           photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
-        }
-
+    */
+    if(player1Caves == 4)
+    {
+       playerWhoWon = 1;
+       photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
+    }
+    if(player2Caves == 4)
+    {
+       playerWhoWon = 2;
+       photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
+    }
+    if(numberOfplayer1Prefabs ==0){
+    	playerWhoWon = 2;
+       	photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
+    }
+    if(numberOfplayer2Prefabs ==0){
+    	playerWhoWon = 1;
+       	photonView.RPC("PlayerWon", PhotonTargets.Others, playerWhoWon);
+    }
+	/*
     if(Time.time > goalTime)
     {
         playerWhoWon = 1;
