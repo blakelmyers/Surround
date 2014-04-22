@@ -184,7 +184,7 @@ function StartSpawning()
         myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer1Prefabs;
         player1prefabs[0] = myNewTrans;
        
-        if(!noBaseChange)player1Base.renderer.material.color = baseColor;
+        //if(!noBaseChange)player1Base.renderer.material.color = baseColor;
      }
     else if (playerID == 2)   // player2
     {
@@ -198,7 +198,7 @@ function StartSpawning()
         myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
        player2prefabs[0] = myNewTrans;
        
-       if(!noBaseChange)player2Base.renderer.material.color = baseColor;
+       //if(!noBaseChange)player2Base.renderer.material.color = baseColor;
        
         photonView.RPC("PlayerTwoColor", PhotonTargets.Others, playerColor);
     }
@@ -258,6 +258,7 @@ function UpdatePlayer2Max(unitsLeft : int, caveNumber : int)
         
       for(var i = 0; i < 3; ++i)
       {
+            Debug.Log(numberOfplayer2Prefabs);
           myPrevTrans = player2prefabs[numberOfplayer2Prefabs - 1];
           numberOfplayer2Prefabs++;
                            
@@ -265,7 +266,7 @@ function UpdatePlayer2Max(unitsLeft : int, caveNumber : int)
           myNewTrans.GetComponent(PlayerController).spawnNumber = numberOfplayer2Prefabs;
           myNewTrans.GetComponent(PlayerController).movementActive = myPrevTrans.GetComponent(PlayerController).movementActive;
           myNewTrans.GetComponent(PlayerController).movementLock = myPrevTrans.GetComponent(PlayerController).movementLock;
-          player1prefabs[numberOfplayer2Prefabs - 1] = myNewTrans;
+          player2prefabs[numberOfplayer2Prefabs - 1] = myNewTrans;
       }
 }
 
@@ -561,7 +562,7 @@ function Update()
     */
 }
 
-function sizeChange()
+function sizeChange1()
 {
 		var x = player1Caves * .1;
 		Debug.Log(x);
@@ -569,12 +570,35 @@ function sizeChange()
 	    {
 	        player1prefabs[i].GetComponent(PlayerController).changeSize(1+x);
 	    }
-          
-		x = player2Caves * .1;
-	    for(var j = 0; j < numberOfplayer2Prefabs; ++j)
-	    {
-	        player2prefabs[j].GetComponent(PlayerController).changeSize(1+x);
-	    }
+         
+}
+
+function sizeChange2()
+{
+        var x = player2Caves * .1;
+        for(var j = 0; j < numberOfplayer2Prefabs; ++j)
+        {
+            player2prefabs[j].GetComponent(PlayerController).changeSize(1+x);
+        }
+}
+
+function sizeDecrease1()
+{
+    Debug.Log("Decrease size1");
+        for(var i = 0; i < numberOfplayer1Prefabs; ++i)
+        {
+            player1prefabs[i].GetComponent(PlayerController).changeSize(0.8);
+        }
+         
+}
+
+function sizeDecrease2()
+{
+Debug.Log("Decrease size2");
+        for(var j = 0; j < numberOfplayer2Prefabs; ++j)
+        {
+            player2prefabs[j].GetComponent(PlayerController).changeSize(0.8);
+        }
 }
 
 function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
